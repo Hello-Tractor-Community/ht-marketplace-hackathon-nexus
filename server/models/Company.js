@@ -69,13 +69,13 @@ const companySchema = new mongoose.Schema({
     listingCategories: [{
         type: String,
         enum: [
-            'Tractors', 'Servicing'
+            'Tractors',
         ]
     }],
     targetCustomers: [{
         type: String,
         enum: [
-            'Farmers', 'Tractor Owners'
+            'Farmers', 'Other'
         ]
     }],
     companyMetrics: {

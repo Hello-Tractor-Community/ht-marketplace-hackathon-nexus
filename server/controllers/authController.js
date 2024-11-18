@@ -84,11 +84,6 @@ const checkVerification = asyncHandler(async (req, res, next) => {
             path: 'companyAssociations.company',
             model: 'Company',
             select: 'companyName companyType registrationStatus'
-        })
-        .populate({
-            path: 'operatorDetails',
-            model: 'Operator',
-            select: 'certifications yearsOfExperience primarySkills rating available location'
         });
 
     if (!user) {
@@ -110,20 +105,7 @@ const checkVerification = asyncHandler(async (req, res, next) => {
         permissions: assoc.permissions
     }));
 
-    // Get operator details if the user has the operator role
-    let operatorDetails = null;
-    if (user.platformRoles.includes('operator') && user.operatorDetails) {
-        operatorDetails = {
-            id: user.operatorDetails._id,
-            certifications: user.operatorDetails.certifications,
-            yaersOfExperience: user.operatorDetails.yaersOfExperience,
-            rating: user.operatorDetails.rating,
-            available: user.operatorDetails.available,
-            location: user.operatorDetails.location
-        };
-    }
-
-    // Prepare response data
+        // Prepare response data
     const data = {
         isVerified,
         verifiedAt,
@@ -135,8 +117,7 @@ const checkVerification = asyncHandler(async (req, res, next) => {
         user: {
             _id: user._id,
             companyAssociations,
-            platformRoles: user.platformRoles,
-            operatorDetails // Include operator details if present
+            platformRoles: user.platformRoles,            
         }
     };
 
@@ -377,19 +358,7 @@ const loginUser = async (req, res) => {
                 permissions: assoc.permissions
             }));
 
-            // Get operator details if the user has the operator role
-            let operatorDetails = null;
-            if (user.platformRoles.includes('operator') && user.operatorDetails) {
-                operatorDetails = {
-                    id: user.operatorDetails._id,
-                    certifications: user.operatorDetails.certifications,
-                    yaersOfExperience: user.operatorDetails.yaersOfExperience,
-                    rating: user.operatorDetails.rating,
-                    available: user.operatorDetails.available,
-                    location: user.operatorDetails.location
-                };
-            }
-            res.json({
+                res.json({
                 success: true,
                 data: {
                     companyDetails: latestCompany ? {
@@ -405,7 +374,7 @@ const loginUser = async (req, res) => {
                         security: user.security,
                         platformRoles: user.platformRoles,
                         companyAssociations,
-                        operatorDetails
+                       
                     },
                     token
                 }

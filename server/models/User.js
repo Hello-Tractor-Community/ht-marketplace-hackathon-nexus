@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
     // Platform-level roles
     platformRoles: [{
         type: String,
-        enum: ['buyer', 'seller', 'admin', 'dealer', 'operator'],
+        enum: ['buyer', 'seller', 'admin'],
         default: ['buyer']
     }],
     

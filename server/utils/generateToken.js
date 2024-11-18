@@ -6,52 +6,27 @@ const generateToken = (user, options = {}) => {
     const payload = {
         _id: user._id,
         email: user.email,
-        role: user.role,
         firstName: user.firstName,
         lastName: user.lastName,
-        isEmailVerified: options.isVerified || user.isEmailVerified,
+        platformRoles: user.platformRoles,
+        isEmailVerified: user.security.emailVerified,
         accountStatus: user.accountStatus
     };
 
-    // Add role-specific information
-    switch (user.role) {
-        case 'artisan':
-            // Include only IDs for reference - full objects would make token too large
-            if (user.craftProfile) {
-                payload.craftProfile = {
-                    _id: user.craftProfile._id,
-                    primaryCraftSkill: user.craftProfile.primaryCraftSkill
-                };
-            }
-            
-            if (user.businessProfile) {
-                payload.business = {
-                    _id: user.businessProfile._id,
-                    businessName: user.businessProfile.businessName,
-                    businessType: user.businessProfile.businessType,
-                    isVerified: user.businessProfile.registrationDetails?.isVerified
-                };
-            }
-            break;
+    // Add role-specific information based on platform roles
+    if (user.platformRoles.includes('seller')) {
+        // Include company associations for sellers
+        payload.companyAssociations = user.companyAssociations.map(assoc => ({
+            company: assoc.company,
+            role: assoc.role,
+            permissions: assoc.permissions,
+            status: assoc.status
+        }));
+    }
 
-        case 'shop_admin':
-            if (user.businessProfile) {
-                payload.business = {
-                    _id: user.businessProfile._id,
-                    businessName: user.businessProfile.businessName,
-                    isVerified: user.businessProfile.registrationDetails?.isVerified
-                };
-            }
-            break;
-
-        case 'platform_admin':
-            // Add any platform-admin specific claims
-            payload.adminLevel = 'platform';
-            break;
-
-        case 'customer':
-            // Add any customer-specific claims if needed
-            break;
+    if (user.platformRoles.includes('admin')) {
+        // Add admin-specific claims
+        payload.isAdmin = true;
     }
 
     // Add any custom claims from options

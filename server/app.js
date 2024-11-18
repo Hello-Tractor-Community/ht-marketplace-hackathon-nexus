@@ -26,10 +26,9 @@ const { connectWithRetry, closeConnection } = require('./config/db');
 
 // Route Imports
 const authRoutes = require('./routes/authRoutes');
-const businessRoutes = require('./routes/businessRoutes');
-const productRoutes = require('./routes/productRoutes');
-const businessOnboardingRoutes = require('./routes/businessOnboardingRoutes');
-const chapaRoutes = require('./routes/chapaRoutes');
+const companyRoutes = require('./routes/companyRoutes');
+const listingRoutes = require('./routes/listingRoutes');
+const companyOnboardingRoutes = require('./routes/companyOnboardingRoutes');
 
 // Middleware Imports
 const errorHandler = require('./middleware/errorHandler');
@@ -97,18 +96,13 @@ const performanceMiddleware = () => {
 const configureRoutes = () => {
     // API Endpoints
     app.use('/api/v1/auth', authRoutes);
-    app.use('/api/v1/business', businessRoutes);
-    app.use('/api/v1/products', productRoutes);
-    app.use('/api/v1/onboarding', businessOnboardingRoutes);
-    app.use('/transaction', chapaRoutes);
+    app.use('/api/v1/company', companyRoutes);
+    app.use('/api/v1/listings', listingRoutes);
+    app.use('/api/v1/onboarding', companyOnboardingRoutes);
 
     // Base Routes
     app.get('/', (req, res) => {
-        res.send('<h1>NayeDesigns Server</h1>');
-    });
-
-    app.get('/test-redirect', (req, res) => {
-        res.redirect(`${CLIENT_URL}/orderConfirmation`);
+        res.send('<h1>hello tractor commerce server</h1>');
     });
 
     // Catch-all route
@@ -131,9 +125,9 @@ const connectMongoDB = () =>{
 const configureTelegramBot = () => {
     const bot = new Telegraf(process.env.BOT_TOKEN);
     
-    bot.start((ctx) => ctx.reply('Welcome to nayeDesigns E-commerce Store!'));
+    bot.start((ctx) => ctx.reply('Welcome to hello tractor commerce store!'));
     bot.command('shop', (ctx) => {
-        ctx.reply('Hi! Please visit our shop: https://naye-fullstack.onrender.com');
+        ctx.reply('Hi! Please visit our shop: https://hello-tractor-commerce.onrender.com');
     });
     
     return bot;
