@@ -1,0 +1,58 @@
+.placeholder-component {
+  padding: 1rem;
+  margin: 1rem 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.placeholder-component h1 {
+  font-family: "Arial", sans-serif;
+  font-size: 24px;
+  margin-bottom: 1rem;
+}
+.placeholder-component .content {
+  margin-bottom: 1rem;
+}
+.placeholder-component .content ul {
+  list-style-type: none;
+  padding: 0;
+}
+.placeholder-component .content ul li {
+  margin-bottom: 0.5rem;
+  font-family: "Helvetica", sans-serif;
+}
+.placeholder-component .content .details-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #75a358;
+  text-decoration: none;
+  font-family: "Helvetica", sans-serif;
+  transition: all 0.3s ease;
+}
+.placeholder-component .content .details-link:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+.placeholder-component .action-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  background-color: #222;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-family: "Helvetica", sans-serif;
+  transition: all 0.3s ease;
+}
+.placeholder-component .action-button:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+@media (max-width: 437px) {
+  .placeholder-component {
+    padding: 0.5rem;
+  }
+}/*# sourceMappingURL=PlaceHolder.css.map */

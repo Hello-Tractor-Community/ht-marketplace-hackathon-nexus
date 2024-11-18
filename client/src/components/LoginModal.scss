@@ -1,0 +1,109 @@
+// src/components/LoginModal/LoginModal.scss
+@import '../assets/styles/abstract/variables';
+@import '../assets/styles/abstract/mixins';
+
+.login-modal {
+  &__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+
+  &__content {
+    background-color: $background-color;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    width: 400px;
+    max-width: 90%;
+    padding: map-get($spacing, 'lg');
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: map-get($spacing, 'md');
+
+    h2 {
+      font-size: map-get($font-sizes, 'xl');
+      font-weight: 600;
+    }
+
+    &__close-btn {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: map-get($font-sizes, '2x1');
+      color: $secondary-color;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: map-get($spacing, 'sm');
+
+    input {
+      padding: map-get($spacing, 'sm') map-get($spacing, 'md');
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      font-size: map-get($font-sizes, 'base');
+    }
+
+    .btn {
+      &--primary {
+        background-color: $accent-color;
+        color: $background-color;
+      }
+
+      &--secondary {
+        background-color: $secondary-color;
+        color: $background-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: map-get($spacing, 'sm');
+      }
+
+      &--link {
+        background-color: transparent;
+        color: $secondary-color;
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__divider {
+    display: flex;
+    align-items: center;
+    color: $secondary-color;
+    font-size: map-get($font-sizes, 'sm');
+
+    &::before,
+    &::after {
+      content: '';
+      flex-grow: 1;
+      border-top: 1px solid $border-color;
+    }
+
+    & > span {
+      padding: 0 map-get($spacing, 'sm');
+    }
+  }
+
+  &__social{
+    display: flex;
+    gap: map-get($spacing, 'sm' )
+  }
+  &__register{
+    display: flex;
+    margin: auto;
+  }
+}

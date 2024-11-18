@@ -1,0 +1,162 @@
+@import '../../assets/styles/settings.scss';
+
+.shipping-screen {
+    .header-container {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      
+  
+      .back-button {
+        margin-right: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+  
+        .ionicon {
+          font-size: 24px;
+          color: #75A358;
+        }
+      }
+    }
+  
+    .container {
+      padding: 20px;
+     
+  
+      .title {
+        font-size: 24px;
+        font-family: 'Oswald', sans-serif;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      .address-container{
+        display: flex;
+       
+        gap: $large-spacing;
+        width: 80%;
+        margin: auto;
+        
+
+        .registered-address-container {
+          display: flex;
+          align-items: flex-start;
+          margin-bottom: 20px;
+          gap: 20px;
+       
+    
+          .default-address-text {
+            // flex: 1;
+        
+    
+            .default-address-title {
+              font-weight: bold;
+            
+            }
+          }
+        }
+    
+        .form-container {
+          margin-bottom: 20px;
+          width: 40%;
+    
+          input {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+          }
+        }
+      }
+     
+      .cta-shipping{
+        display: flex;
+       
+        gap: calc($large-spacing *2);
+        width: 70%;
+        margin: auto;
+        
+      }
+  
+      .summary-container {
+        margin-bottom: 20px;
+        background-color: #E8E8E8;
+        padding: 10px;
+        border-radius: 5px;
+        display: flex;
+        gap: $small-spacing;
+  
+        .summary-text {
+          font-size: 16px;
+          margin-bottom: 5px;
+          span{
+            font-weight: bold;
+          }
+        }
+      }
+
+      .button-container{
+        
+        width: 30%;
+      }
+  
+      .button-continue{
+        background-color: #75A358;
+        color: white;
+        // padding: 15px;
+        border-radius: 5px;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  @include mobile {
+    .shipping-screen{
+      .container{
+        .address-container{
+          flex-direction: column;
+          .form-container{
+            width: 90%;
+            margin: auto;
+          }
+        }
+        .cta-shipping{
+          padding-left: 1rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          width: 80%;
+          margin: auto;
+          gap: 0;
+         
+
+          .summary-container{
+            width: 100%;
+          }
+          .button-container{
+            width: 90%;
+       
+            margin: auto;
+           
+
+            .button-continue{
+              width: 80%;
+              margin: auto;
+              margin-left: 10%;
+              height: 60px;
+            padding: 1rem 0.5rem;
+          
+           
+            }
+          }
+        }
+      }
+    }
+  }

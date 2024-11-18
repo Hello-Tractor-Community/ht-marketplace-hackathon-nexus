@@ -1,0 +1,132 @@
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  // min-height: 100vh;
+  padding: 1rem;
+}
+
+/* Promo Section */
+.landing-page .promo-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.landing-page .promo-section .promo-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1.5rem;
+  
+}
+
+.landing-page .promo-section .promo-text {
+  color: #75a358;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+/* Login Section */
+.landing-page .login-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: #f2f2f2;
+  position: relative;
+  z-index: 1;
+}
+
+.landing-page .login-section .logo {
+  position: static;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 1rem;
+}
+
+.landing-page .login-section .bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.landing-page .login-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.landing-page .login-section .input-field {
+  width: 100%;
+  max-width: 250px;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.landing-page .login-section .login-button,
+.landing-page .login-section .skip-button {
+  width: 100%;
+  max-width: 250px;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.landing-page .login-section .signup-text {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.landing-page .login-section .signup-link {
+  color: #456134;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+/* Media Queries */
+@media (min-width: 768px) {
+  .landing-page {
+    flex-direction: row;
+  }
+
+  .landing-page .promo-section,
+  .landing-page .login-section {
+    flex: 1;
+    padding: 2rem;
+  }
+
+  .landing-page .login-section .logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+
+  .landing-page .login-section h2 {
+    font-size: 2rem;
+  }
+
+  .landing-page .login-section .input-field,
+  .landing-page .login-section .login-button,
+  .landing-page .login-section .skip-button {
+    max-width: 300px;
+  }
+
+  .landing-page .promo-section .promo-text {
+    font-size: 1.5rem;
+  }
+}

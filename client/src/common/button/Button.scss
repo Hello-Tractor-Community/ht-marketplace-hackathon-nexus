@@ -1,0 +1,119 @@
+@import '../../assets/styles/abstract/variables';
+@import '../../assets/styles/abstract/mixins';
+
+.btn {
+    @include flex(row, center, center);
+    padding: map-get($spacing, 'sm') map-get($spacing, 'lg');
+    border-radius: 4px;
+    font-family: $font-primary;
+    font-size: map-get($font-sizes, 'base');
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        &:hover {
+            transform: none;
+        }
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba($secondary-color, 0.2);
+    }
+
+    // Primary variant
+    &--primary {
+        background-color: $background-color;
+        color: $accent-color;
+        @include shadow(1);
+
+        &:hover {
+            background-color: darken($background-color, 5%);
+            transform: translateY(-1px);
+            @include shadow(2);
+        }
+
+        &:active {
+            transform: translateY(0);
+            @include shadow(1);
+        }
+    }
+
+    // Secondary variant (in case you need it)
+    &--secondary {
+        background-color: $secondary-color;
+        color: white;
+        @include shadow(1);
+
+        &:hover {
+            background-color: darken($secondary-color, 5%);
+            transform: translateY(-1px);
+            @include shadow(2);
+        }
+
+        &:active {
+            transform: translateY(0);
+            @include shadow(1);
+        }
+    }
+    &--tertiary {
+        background-color: none;
+        color: #1877F2;
+        @include shadow(1);
+
+        &:hover {
+            // background-color: darken(#4285F4, 5%);
+            transform: translateY(-1px);
+            @include shadow(2);
+        }
+
+        &:active {
+            transform: translateY(0);
+            @include shadow(1);
+        }
+    }
+
+    &--quaternary {
+        background-color: #4285F4; // Fallback color for older browsers
+        background-image: linear-gradient(
+            to right,
+            #4285F4,  // Blue
+            #EA4335,  // Red
+            #FBBC05,  // Yellow
+            #34A853   // Green
+        );
+        color: white;
+        @include shadow(1);
+
+        &:hover {
+            background-color: darken(#4285F4, 5%);
+            transform: translateY(-1px);
+            @include shadow(2);
+        }
+
+        &:active {
+            transform: translateY(0);
+            @include shadow(1);
+        }
+    }
+
+    // Outline variant (in case you need it)
+    &--outline {
+        background-color: transparent;
+        border: 2px solid $background-color;
+        color: $background-color;
+
+        &:hover {
+            background-color: rgba($background-color, 0.05);
+            transform: translateY(-1px);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+}

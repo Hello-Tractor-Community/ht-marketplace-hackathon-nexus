@@ -1,0 +1,53 @@
+// src/assets/styles/abstract/_variables.scss
+// Colors
+$primary-color: #222;
+$secondary-color: #75a358;
+$secondary-color-accent: #b40a70;
+$background-color: #fff;
+$text-color: #222;
+$light-text-color: #888;
+$accent-color: #75a358;
+$border-color: #ccc;
+$hover-color: #444;
+$hover-color-btn: #b9e411;
+
+
+// Typography
+$font-primary: 'Inter', sans-serif;
+$font-secondary: 'Poppins', sans-serif;
+
+$font-sizes: (
+  'xs': 0.75rem,    // 12px
+  'sm': 0.875rem,   // 14px
+  'base': 1rem,     // 16px
+  'lg': 1.125rem,   // 18px
+  'xl': 1.25rem,    // 20px
+  '2xl': 1.5rem,    // 24px
+  '3xl': 1.875rem,  // 30px
+  '4xl': 2.25rem    // 36px
+);
+
+// Breakpoints
+$breakpoints: (
+  'sm': 640px,
+  'md': 768px,
+  'lg': 1024px,
+  'xl': 1280px,
+  '2xl': 1536px
+);
+
+// Spacing
+$spacing: (
+  'xs': 0.25rem,    // 4px
+  'sm': 0.5rem,     // 8px
+  'base': 1rem,     // 16px
+  'lg': 1.5rem,     // 24px
+  'xl': 2rem,       // 32px
+  '2xl': 2.5rem,    // 40px
+  '3xl': 3rem,       // 48px
+  '4xl': 3.5rem,       // 56px
+  '5xl': 4rem,       // 64px
+  '6xl': 4.5rem,       // 72px
+  '7xl': 5rem,       // 72px
+);
+

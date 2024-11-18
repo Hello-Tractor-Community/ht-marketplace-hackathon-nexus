@@ -1,0 +1,52 @@
+.promptContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  padding: 20px;
+}
+
+.subPromptContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.subPromptContainer .prompt {
+  border: 1ps solid #75a358;
+  padding: 15px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+.subPromptContainer .prompt:nth-child(2n) {
+  color: #75a358;
+}
+.subPromptContainer .prompt:nth-child(2n+1) {
+  color: #b40a70;
+}
+.subPromptContainer .prompt:hover {
+  background-color: #75a358;
+}
+.subPromptContainer .title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+  text-transform: uppercase;
+}
+
+@media (max-width: 437px) {
+  .promptContainer {
+    width: 90%;
+    margin: auto;
+  }
+}/*# sourceMappingURL=Prompt.css.map */

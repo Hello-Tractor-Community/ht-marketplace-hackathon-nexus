@@ -1,0 +1,114 @@
+@import '../../assets/styles/abstract/variables';
+@import '../../assets/styles/abstract/mixins';
+
+.subNicheContainer {
+    gap: 20px;
+    padding: 20px;
+    width: 90%;
+    max-width: 1536px;
+    height: 64px;
+    margin-inline: auto;
+    position: relative;
+    overflow: hidden;
+
+    .prompt-gifts {
+    
+      padding: 15px;
+      min-width: 192px;    
+      font-size: 18px;
+      font-weight: bold;
+      color: $text-color;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      left: max(calc(192px * 8), 100%);
+      animation-name: scrollLeft;
+      animation-duration: 42s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;  
+      background: transparent;
+    }
+
+    
+  button.prompt-gifts:nth-child(2n):before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    background: url('../../assets/images/sub_niches/magentish.png') no-repeat center;
+    background-size: contain;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    opacity: 0.5;
+  }
+  button.prompt-gifts:nth-child(2n+1):before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    background: url('../../assets/images/sub_niches/greenish.png') no-repeat center;
+    background-size: contain;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    opacity: 0.5;
+  }
+  .prompt-gifts { 
+    
+    color: $text-color;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+ 
+  
+  .prompt-gifts0 {
+    animation-delay: calc(42s / 8 * (8 - 0) * -1);
+  }
+
+  .prompt-gifts1 {
+    animation-delay: calc(42s / 8 * (8 - 1) * -1);
+  }
+  
+  .prompt-gifts2 {
+    animation-delay: calc(42s / 8 * (8 - 2) * -1);
+  }
+  
+  .prompt-gifts3 {
+    animation-delay: calc(42s / 8 * (8 - 3) * -1);
+  }
+  
+  .prompt-gifts4 {
+    animation-delay: calc(42s / 8 * (8 - 4) * -1);
+  }
+  
+  .prompt-gifts5 {
+    animation-delay: calc(42s / 8 * (8 - 5) * -1);
+  }
+  
+  .prompt-gifts6 {
+    animation-delay: calc(42s / 8 * (8 - 6) * -1);
+  }
+  
+  .prompt-gifts7 {
+    animation-delay: calc(42s / 8 * (8 - 7) * -1);
+  }
+   
+  }
+
+  @keyframes scrollLeft {
+    to {
+      left: -192px;
+    }
+  }
+  
+
+
+
+  
+  
+ 
+  

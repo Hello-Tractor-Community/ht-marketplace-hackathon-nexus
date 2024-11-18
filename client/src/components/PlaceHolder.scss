@@ -1,0 +1,55 @@
+@import '../assets/styles/abstract/mixins';
+@import '../assets/styles/abstract/variables';
+@import '../assets/styles/settings.scss';
+
+.placeholder-component {
+  padding: $spacing-unit;
+  margin: $spacing-unit 0;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+
+  h1 {
+    font-family: $heading-font-family;
+    font-size: 24px;
+    margin-bottom: $spacing-unit;
+  }
+
+  .content {
+    margin-bottom: $spacing-unit;
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+
+      li {
+        margin-bottom: $small-spacing;
+        font-family: $body-font-family;
+      }
+    }
+
+    .details-link {
+      display: inline-block;
+      margin-top: $spacing-unit;
+      color: $secondary-color;
+      text-decoration: none;
+      font-family: $body-font-family;
+      @include hover-effect;
+    }
+  }
+
+  .action-button {
+    @include button-reset;
+    background-color: $primary-color;
+    color: $background-color;
+    padding: $small-spacing $spacing-unit;
+    border-radius: $border-radius;
+    font-family: $body-font-family;
+    @include hover-effect;
+  }
+}
+
+@include mobile {
+  .placeholder-component {
+    padding: $small-spacing;
+  }
+}

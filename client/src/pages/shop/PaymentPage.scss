@@ -1,0 +1,235 @@
+@import '../../assets/styles/settings.scss';
+
+
+    .mainContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center; 
+      position: relative;
+
+      .message-transaction{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        background-color: $primary-color;
+        color: $secondary-color;
+        padding: 10px;
+        font-size: $base-font-size;
+      }
+
+      .container {
+        padding: 20px;
+        display: flex;
+        width: 80%;
+       
+        margin: auto;
+        gap: calc($spacing-unit*4);
+        flex-direction: row;
+      
+        justify-content: center;
+        align-items: flex-start;
+    
+        .title {
+          font-size: 24px;
+          font-family: 'Oswald, sans-serif';
+          margin-bottom: 20px;
+        }
+    
+        .paymentMethodsContainer {
+          margin-bottom: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          height: 30%;
+    
+          button {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-width: 1px;
+            border-color: #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            justify-content: center;
+            cursor: pointer;
+            height: 80px;
+            width: 200px;
+    
+            &.selectedPaymentMethod {
+              border-color: #75A358;
+              background-color: #e6f3e6;
+            }
+  
+            .paymentIcon {
+              max-height: 80px;
+              max-width: 80px;
+              object-fit: contain;
+            }
+            img{
+              max-height: 80px;
+              max-width: 80px;
+            }
+    
+            
+          }
+          
+        }
+    
+        .ctaPayContainer{
+        
+          width: 50%;
+          .orderSummaryContainer {
+            margin-bottom: 20px;
+      
+            .orderSummaryTitle {
+              font-size: 18px;
+              font-weight: bold;
+              margin-bottom: 10px;
+            }
+      
+            .orderItem {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 5px;
+      
+              .orderItemName {
+                flex: 1;
+              }
+      
+              .orderItemQuantity,
+              .orderItemPrice {
+                flex: 0.5;
+                text-align: right;
+              }
+            }
+      
+            .totalContainer {
+              display: flex;
+              justify-content: space-between;
+              margin-top: 10px;
+              font-weight: bold;
+      
+              .totalText,
+              .totalAmount {
+                font-size: 18px;
+              }
+            }
+          }
+      
+          .payNowButton {
+            background-color: #75A358;
+            padding: 15px;
+            border-radius: 5px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  
+    .headerContainer {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 10px;
+  
+      .backButton {
+        margin-right: 10px;
+        cursor: pointer;
+        background: none;
+        border: none;
+      }
+    }
+  
+
+  
+
+  @include mobile {
+
+       .mainContainer{
+      .container {
+        width: 90%;       
+        margin: auto;
+        gap: calc($spacing-unit*0.5);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        h2{
+          margin-left: $spacing-unit;
+        }
+          .paymentMethodsContainer {
+              
+              display: flex;
+              flex-direction: column;            
+              gap: calc($spacing-unit/2);
+              height: 40%;
+                     
+              .paymentMethodButton {
+                height: 60px;
+                width: 200px;
+        
+                &.selectedPaymentMethod {
+                  border-color: #75A358;
+                  background-color: #e6f3e6;
+                }
+      
+                .paymentIcon {
+                  max-height: 100%;
+                  max-width: 80%;
+                  object-fit: contain;
+                }
+               
+        
+                
+              }
+              
+            }
+            .ctaPayContainer{
+              
+              width: 90%;
+              margin: auto;
+            .payNowButton {
+              background-color: #75A358;
+             
+              border-radius: 5px;
+              color: white;
+              font-size: 18px;
+  
+              width: 80%;
+              margin: auto;
+              margin-left: 10%;
+              height: 60px;
+              padding: 1rem 0.5rem;
+             
+              font-weight: bold;
+              cursor: pointer;
+            }
+          }
+  
+  
+          }
+      .message-transaction{
+        position: absolute;
+        top: 70%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        background-color: $primary-color;
+        color: $secondary-color;
+        padding: 10px;
+        font-size: calc($base-font-size * 1.5);
+        width: 80%;
+        height: 100px;
+        margin: auto;
+      }
+    }
+    
+  }
+  

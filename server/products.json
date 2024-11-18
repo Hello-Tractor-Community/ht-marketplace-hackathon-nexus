@@ -1,0 +1,9 @@
+[
+    { "id": 1, "name": "Clothing 1", "price": 10, "description": "Clothing description 1", "imageUrl": "/images/1.jpg" },
+    { "id": 2, "name": "Clothing 2", "price": 20, "description": "Clothing description 2", "imageUrl": "/images/2.jpg" },
+    { "id": 3, "name": "Clothing 3", "price": 10, "description": "Clothing description 3", "imageUrl": "/images/3.jpg" },
+    { "id": 4, "name": "Shoes 1", "price": 20, "description": "Shoes description 1", "imageUrl": "/images/4.jpg" },
+    { "id": 5, "name": "Shoes 2", "price": 10, "description": "Shoes description 2", "imageUrl": "/images/5.jpg" },
+    { "id": 6, "name": "Wall decor 1", "price": 10, "description": "Wall decor description 1", "imageUrl": "/images/6.jpg" }
+  ]
+  
