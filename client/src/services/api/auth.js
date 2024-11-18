@@ -1,8 +1,5 @@
 // auth.js
 
-
-// src/services/api/auth.js
-import { addBusinessAssociation } from '../../store/slices/authSlice';
 import api from './config';
 
 const TOKEN_KEY = 'token';
@@ -47,7 +44,7 @@ export const authService = {
     try {
       const response = await api.post('/auth/login', credentials);
       console.log("response in login service..", response);
-      const { token, user, businessDetails } = response.data.data;
+      const { token, user, companyDetails } = response.data.data;
       const success = response.data.success;
 
 
@@ -57,7 +54,7 @@ export const authService = {
       }
 
       authService.setAuthData(token, user);
-      return {token, user, businessDetails, success};
+      return {token, user, companyDetails, success};
     } catch (error) {
       authService.clearAuthData(); // Clear any partial data on error
       throw error.response?.data || error.message;
@@ -90,7 +87,7 @@ export const authService = {
     }
   },
 
-  addBusinessAssociation: async (associationData) => {
+  addCompanyAssociation: async (associationData) => {
     try {
       const token = authService.getToken(); // Retrieve stored token
       if (!token) throw new Error('Authentication token is missing.');
@@ -98,10 +95,10 @@ export const authService = {
       // Set the authorization header if not already set
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-      const response = await api.post('/auth/business-association', associationData);
+      const response = await api.post('/auth/company-association', associationData);
       return response.data;
     } catch (error) {
-      console.error('Failed to add business association:', error);
+      console.error('Failed to add company association:', error);
       throw error.response?.data || error.message;
     }
   },

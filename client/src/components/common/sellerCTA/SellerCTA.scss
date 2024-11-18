@@ -1,0 +1,40 @@
+// File path: src/components/Business.module.scss
+@import '../../../assets/styles/abstract/variables';
+@import '../../../assets/styles/abstract/mixins';
+@import '../../../assets/styles/settings.scss';
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .description {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .button-business {
+    background-color: $secondary-color-accent;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .button-business:hover {
+    background-color: $hover-color;
+    color: $hover-color-btn;
+  }
+  

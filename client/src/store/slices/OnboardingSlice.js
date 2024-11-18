@@ -1,7 +1,7 @@
 // src/store/slices/OnboardingSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { onboardingService } from '../../services/api/onboarding';
-import { businessService } from '../../services/api/business';
+import { companyService } from '../../services/api/company';
 
 export const startOnboarding = createAsyncThunk(
   'onboarding/start',
@@ -30,16 +30,16 @@ export const reviewOnboarding = createAsyncThunk(
 
 export const completeOnboarding = createAsyncThunk(
   'onboarding/complete',
-  async (businessId) => {
-    const response = await businessService.completeOnboarding(businessId);
+  async (companyId) => {
+    const response = await companyService.completeOnboarding(companyId);
     return response;
   }
 );
 
-export const updateBusiness = createAsyncThunk(
-  'onboarding/updateBusiness',
-  async ({ businessId, updates }) => {
-    const response = await businessService.updateBusiness(businessId, updates);
+export const updateCompany = createAsyncThunk(
+  'onboarding/updateCompany',
+  async ({ companyId, updates }) => {
+    const response = await companyService.updateCompany(companyId, updates);
     return response;
   }
 );
@@ -124,18 +124,18 @@ const onboardingSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message;
       })
-      .addCase(updateBusiness.pending, (state) => {
+      .addCase(updateCompany.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(updateBusiness.fulfilled, (state, action) => {
+      .addCase(updateCompany.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        // Update any relevant business details in the onboarding state
+        // Update any relevant company details in the onboarding state
         state.primaryCraftSkill = action.payload.primaryCraftSkill;
         state.secondaryCraftSkills = action.payload.secondaryCraftSkills;
         state.preferredCommunicationMethod = action.payload.preferredCommunicationMethod;
         state.availabilityForSupport = action.payload.availabilityForSupport;
       })
-      .addCase(updateBusiness.rejected, (state, action) => {
+      .addCase(updateCompany.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
       });

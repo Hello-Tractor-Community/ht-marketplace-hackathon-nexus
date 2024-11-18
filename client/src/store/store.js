@@ -1,6 +1,6 @@
 // src/store/store.js
 import { configureStore } from '@reduxjs/toolkit';
-import businessReducer from './slices/BusinessSlice';
+import businessReducer from './slices/companySlice';
 import authReducer from './slices/authSlice';
 import onboardingReducer from './slices/OnboardingSlice'; // New onboarding slice
 

@@ -1,0 +1,85 @@
+@import '../../../assets/styles/abstract/variables';
+@import '../../../assets/styles/abstract/mixins';
+
+.registration-form {
+
+  max-width: 900px;
+  margin: auto;
+
+  padding: map-get($spacing, 'xl');
+  
+  h2 {
+    margin-bottom: map-get($spacing, 'xl');
+    font-size: map-get($font-sizes, '3xl');
+    text-align: center;
+  }
+
+  h3 {
+    margin: map-get($spacing, 'lg') 0 map-get($spacing, 'base');
+    font-size: map-get($font-sizes, 'xl');
+    color: $secondary-color;
+  }
+
+  form {
+    @include shadow(1);
+    background: white;
+    padding: map-get($spacing, 'xl');
+    border-radius: 8px;
+
+    // Grid layout for form sections
+    .form-section {
+      @include grid(1, map-get($spacing, 'lg'));
+      margin-bottom: map-get($spacing, 'xl');
+
+      @include respond-to('md') {
+        @include grid(2, map-get($spacing, 'xl'));
+      }
+
+      @include respond-to('lg') {
+        @include grid(3, map-get($spacing, 'xl'));
+      }
+    }
+
+    // Full-width elements
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    // Form controls styling
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: map-get($spacing, 'sm');
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      font-family: $font-primary;
+      
+      &:focus {
+        outline: none;
+        border-color: $secondary-color;
+        box-shadow: 0 0 0 2px rgba($secondary-color, 0.1);
+      }
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    // Error message
+    &__error {
+      background-color: rgba($accent-color, 0.1);
+      color: darken($accent-color, 20%);
+      padding: map-get($spacing, 'base');
+      border-radius: 4px;
+      margin-bottom: map-get($spacing, 'lg');
+    }
+
+    // Button container
+    .button-container {
+      @include flex(row, center, center);
+      margin-top: map-get($spacing, 'xl');
+    }
+  }
+}

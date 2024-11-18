@@ -12,43 +12,22 @@ import AppProvider from './pages/features/AppContext';
 import ScrollToTop from './components/ScrollToTop';
 
 // Import your components
-import LandingPage from './pages/public/landing/LandingPage';
-import ProductPage from './pages/shop/ProductPage';
-import Home from './pages/public/home/Home';
-import ProductDetailPage from './pages/shop/ProductDetailPage';
-import CartPage from './pages/shop/CartPage';
-import UpsellPage from './pages/shop/UpsellPage';
-import ShippingPage from './pages/shop/ShippingPage';
-import PaymentPage from './pages/shop/PaymentPage';
-import OrderConfirmationPage from './pages/shop/OrderConfirmationPage';
-import CreatePage from './pages/public/create/CreatePage';
-import BusinessRegister from './pages/public/business/BusinessRegister';
-import RoleRoute from './common/protectedRoute/RoleRoute';
+import LandingPage from './components/pages/public/landing/LandingPage';
+import ProductPage from './components/pages/shop/ProductPage';
+import Home from './components/pages/public/home/Home';
+import ProductDetailPage from './components/pages/shop/ProductDetailPage';
+import RoleRoute from './components/common/protectedRoute/RoleRoute';
 
 // Auth Components
-import UserLogin from './features/auth/UserLogin';
-import UserRegister from './features/auth/UserRegister';
-import BusinessLogin from './features/auth/BusinessLogin';
-
-
-import OnboardingForm from './features/onboardingForm/OnboardingForm';
-
-import EmailVerification from './features/emailVerification/EmailVerification';
-import EmailConfirmation from './features/emailVerification/EmailConfirmation';
+import UserLogin from './components/features/auth/UserLogin';
+// import UserRegister from './components/features/auth/UserRegister';
+import UserRegister from './components/features/auth/BuyerRegister';
+import EmailVerification from './components/features/emailVerification/EmailVerification';
+import EmailConfirmation from './components/features/emailVerification/EmailConfirmation';
 // Protected Components
-import ProtectedRoute from './common/protectedRoute/ProtectedRoute';
+import ProtectedRoute from './components/common/protectedRoute/ProtectedRoute';
 
-import OnboardingRoute from './common/onboardingRoute/OnboardingRoute';
-
-// User Dashboard
-// import UserDashboard from './pages/user/dashboard/UserDashboard';
-
-// Business Admin Pages
-import BusinessDashboard from './pages/admin/dashboard/BusinessDashboard';
-import DocumentUpload from './pages/admin/documentUpload/DocumentUpload';
-import PlaceHolder from './components/PlaceHolder';
-
-import ErrorPage from './pages/error/ErrorPage';
+import ErrorPage from './components/pages/error/ErrorPage';
 import './App.css';
 
 function RedirectHandler() {
@@ -79,94 +58,64 @@ const AppContent = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/product/*" element={<ProductPage />} />
             <Route path="/productDetail/*" element={<ProductDetailPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/upsell" element={<UpsellPage />} />
-            <Route path="/shipping" element={<ShippingPage />} />
-            <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/orderConfirmation" element={<OrderConfirmationPage />} />
-            <Route path='/create' element={<CreatePage />} />
-
-            <Route path="/business">
-              <Route path="login" element={<BusinessLogin />} />
-              <Route path="register" element={<BusinessRegister />} />
+            <Route path="/favs" element={<Favourites />} />
+            <Route path="/user">
+              <Route path="login" element={<UserLogin />} />
+              <Route path="register" element={<UserRegister />} />
             </Route>
-
             {/* Semi-protected onboarding route */}
             <Route
               path="/email-verification"
               element={
-
                 <EmailVerification />
-
               }
             />
-
             <Route
               path="/email-confirmation"
               element={
-
                 <EmailConfirmation />
-
+              }
+            />
+  
+            {/* Protected Business Admin Routes */}
+            <Route
+              path="/seller/*"
+              element={
+                <ProtectedRoute>
+                  <RoleRoute roles={['seller']}>
+                    <Routes>
+                      <Route path="portal" element={<SellerPortal />} />
+                      {/* <Route path="seller" element={<SellerPortal />} /> */}
+                  </Routes>
+                  </RoleRoute>
+                </ProtectedRoute>
               }
             />
 
-            <Route
-              path = "/place-holder"
-              element = {
-                <PlaceHolder />
-              }
-              />
-            {/* Protected user route */}
-            {/* <Route
-              path="/business/dashboard"
+          <Route 
+              path="/buyer-portal/*" 
               element={
                 <ProtectedRoute>
-                  <BusinessDashboard />
+                  <RoleRoute roles={['buyer']}>
+                  <BuyerPortal />
+                  </RoleRoute>
                 </ProtectedRoute>
-              }
-            /> */}
+              } 
+            />
 
-            {/* Protected Business Admin Routes */}
+            {/* Protected Super Admin Routes */}
             <Route
               path="/admin/*"
               element={
                 <ProtectedRoute>
-                  <RoleRoute roles={['business_admin']}>
+                  <RoleRoute roles={['admin']}>
                     <Routes>
-                      <Route path="dashboard" element={<BusinessDashboard />} />
-                      <Route path="onboarding" element={<OnboardingForm />} />
-                      <Route path="documents" element={<DocumentUpload />} />
+                      <Route path="portal" element={<AdminPortal />} />                     
                     </Routes>
                   </RoleRoute>
                 </ProtectedRoute>
               }
             />
-
-{/* <Route 
-    path="/customer-portal/*" 
-    element={
-      <ProtectedRoute>
-         <RoleRoute roles={['customer']}>
-        <CustomerPortal />
-        </RoleRoute>
-      </ProtectedRoute>
-    } 
-  /> */}
-
-            {/* Protected Super Admin Routes */}
-            {/* <Route
-              path="/superadmin/*"
-              element={
-                <ProtectedRoute>
-                  <RoleRoute roles={['super_admin']}>
-                    <Routes>
-                      <Route path="dashboard" element={<SuperAdminDashboard />} />
-                      <Route path="verifications" element={<BusinessVerification />} />
-                    </Routes>
-                  </RoleRoute>
-                </ProtectedRoute>
-              }
-            /> */}
 
             <Route path='*' element={<ErrorPage />} />
           </Routes>

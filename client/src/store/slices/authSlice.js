@@ -1,7 +1,7 @@
 // src/store/slices/authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { authService } from '../../services/api/auth';
-import { businessService } from '../../services/api/business';
+import { companyService } from '../../services/api/company';
 
 const initializeAuthState = () => {
   try {
@@ -12,7 +12,7 @@ const initializeAuthState = () => {
         isAuthenticated: false,
         isVerified: false,
         verifiedAt: null,
-        businessDetails: null,
+        companyDetails: null,
         error: null,
         loading: false,
         authLoading: false  // Added initial state
@@ -25,7 +25,7 @@ const initializeAuthState = () => {
       isAuthenticated: !!hasToken && !!currentUser, // More strict check
       isVerified: currentUser?.isVerified ?? false,
       verifiedAt: currentUser?.verifiedAt ?? null,
-      businessDetails: currentUser?.businessDetails ?? null,
+      companyDetails: currentUser?.companyDetails ?? null,
       loading: false,
       authLoading: false,
       error: null
@@ -37,7 +37,7 @@ const initializeAuthState = () => {
       isAuthenticated: false,
       isVerified: false,
       verifiedAt: null,
-      businessDetails: null,
+      companyDetails: null,
       loading: false,
       authLoading: false,
       error: null
@@ -45,10 +45,10 @@ const initializeAuthState = () => {
   }
 };
 
-export const loginBusiness = createAsyncThunk(
-  'auth/loginBusiness',
+export const loginCompany = createAsyncThunk(
+  'auth/loginCompany',
   async (credentials) => {
-    const response = await businessService.loginBusiness(credentials);
+    const response = await companyService.loginCompany(credentials);
     return response;
   }
 );
@@ -74,12 +74,12 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const addBusinessAssociation = createAsyncThunk(
-  'auth/addBusinessAssociation',
+export const addCompanyAssociation = createAsyncThunk(
+  'auth/addCompanyAssociation',
   async (associationData) => {
     console.log("Inside registerUser..");
     // console.log(UserData);
-    const response = await authService.addBusinessAssociation(associationData);
+    const response = await authService.addCompanyAssociation(associationData);
 
     return response;
   }
@@ -108,10 +108,10 @@ export const checkEmailVerification = createAsyncThunk(
       return {
         isVerified: response.data.isVerified,
         verifiedAt: response.data.verifiedAt,
-        businessDetails: response.data.businessDetails || null,
+        companyDetails: response.data.companyDetails || null,
         user: {
           _id: response.data.user._id,
-          businessAssociations: response.data.user.businessAssociations,
+          companyAssociations: response.data.user.companyAssociations,
           security: response.data.user.security,
           platformRoles: response.data.user.platformRoles
         }
@@ -152,8 +152,8 @@ const authSlice = createSlice({
         };
       }
 
-      // Set businessDetails separately
-      state.businessDetails = action.payload.businessDetails || null;
+      // Set companyDetails separately
+      state.companyDetails = action.payload.companyDetails || null;
     },
     setEmail: (state, action) => {
       state.email = action.payload;
@@ -178,19 +178,19 @@ const authSlice = createSlice({
         state.error = action.error.message;
         state.authLoading = false;
       })
-      // Business login cases
-      .addCase(loginBusiness.pending, (state) => {
+      // Company login cases
+      .addCase(loginCompany.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.authLoading = true;
       })
-      .addCase(loginBusiness.fulfilled, (state, action) => {
+      .addCase(loginCompany.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
         state.isAuthenticated = true;
         state.authLoading = false;
       })
-      .addCase(loginBusiness.rejected, (state, action) => {
+      .addCase(loginCompany.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
         state.authLoading = false;
@@ -232,8 +232,8 @@ const authSlice = createSlice({
           };
         }
         
-        // Set businessDetails separately
-        state.businessDetails = action.payload.businessDetails || null;
+        // Set companyDetails separately
+        state.companyDetails = action.payload.companyDetails || null;
       
       })
       .addCase(checkEmailVerification.rejected, (state, action) => {

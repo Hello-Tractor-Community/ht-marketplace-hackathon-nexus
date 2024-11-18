@@ -1,0 +1,70 @@
+// File path: src/components/PromptContainer.module.scss
+@import '../assets/styles/abstract/mixins';
+@import '../assets/styles/abstract/variables';
+@import '../assets/styles/settings.scss';
+.promptContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  padding: 20px;
+  
+}
+
+.subPromptContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  .prompt {
+    border: 1ps solid $secondary-color;
+    padding: 15px;
+    border-radius: 50px;
+    // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    font-weight: bold;
+   
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  .prompt:nth-child(2n){
+    color: $secondary-color;
+  }
+
+  .prompt:nth-child(2n+1){
+    color: $secondary-color-accent;
+  }
+  
+  .prompt:hover {
+    background-color: $secondary-color;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+    text-transform: uppercase;
+  }
+}
+
+@include mobile{
+  .promptContainer{
+    width: 90%;
+    margin: auto;
+
+  
+   
+  }
+
+ 
+}
+
+

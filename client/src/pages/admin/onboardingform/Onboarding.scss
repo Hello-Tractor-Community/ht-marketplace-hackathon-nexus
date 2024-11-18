@@ -1,7 +1,0 @@
-@import '../../../assets/styles/abstract/variables';
-@import '../../../assets/styles/abstract/mixins';
-
-.onboarding-form {
-    margin-top: map-get($spacing, '7xl' );
-    padding: map-get($spacing, 'xl');
-}

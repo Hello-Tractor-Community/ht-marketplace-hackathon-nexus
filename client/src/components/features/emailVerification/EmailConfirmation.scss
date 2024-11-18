@@ -1,0 +1,7 @@
+@import '../../assets/styles/abstract/variables';
+@import '../../assets/styles/abstract/mixins';
+
+.email-confirmation-page {
+  
+    padding: map-get($spacing, 'xl');
+}
