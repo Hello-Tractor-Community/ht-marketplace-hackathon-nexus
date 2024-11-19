@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FaFacebookF, FaGoogle, FaUserCircle } from 'react-icons/fa';
-import { MdBusinessCenter } from 'react-icons/md';
 import Button from './Button';
+import { MdBusinessCenter } from 'react-icons/md';
 import { checkEmailVerification, setEmailVerified } from '../../../store/slices/authSlice';
 import { registerUser, loginUser, loginBusiness,logout } from '../../../store/slices/authSlice';
 
+import './AuthButton.scss';
 
 // AuthButton Component - Replaces your current Login button
 const AuthButton = () => {
@@ -17,13 +18,15 @@ const AuthButton = () => {
   const user = useSelector(state => state.auth.user);
   
 
-  const handleDropdownClick = () => setShowDropdown(!showDropdown);
-  
   const handleAuthTypeSelect = (type) => {
     setAuthType(type);
-    setShowLoginModal(true);
+    console.log("authType..", authType);
     setShowDropdown(false);
   };
+  // const handleDropdownClick = () => setShowDropdown(!showDropdown);
+
+  const handleLogin = () => setShowLoginModal(true);
+  
 
   const handleCloseModal = () => {
     setShowLoginModal(false);
@@ -38,14 +41,14 @@ const AuthButton = () => {
         <>
           <Button 
             variant="secondary" 
-            onClick={handleDropdownClick}
+            onClick={handleLogin}
             className="flex items-center gap-2"
           >
             <FaUserCircle />
             Login
           </Button>
 
-          {showDropdown && (
+          {/* {showDropdown && (
             <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
               <div className="py-1">
                 <button
@@ -64,12 +67,13 @@ const AuthButton = () => {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
 
           {showLoginModal && (
             <EnhancedLoginModal 
               authType={authType}
               onClose={handleCloseModal}
+              handleAuthTypeSelect={handleAuthTypeSelect}
             />
           )}
         </>
@@ -79,7 +83,7 @@ const AuthButton = () => {
 };
 
 // Enhanced Login Modal Component
-const EnhancedLoginModal = ({ authType, onClose }) => {
+const EnhancedLoginModal = ({ authType, onClose, handleAuthTypeSelect }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
@@ -88,10 +92,12 @@ const EnhancedLoginModal = ({ authType, onClose }) => {
     firstName: '',
     lastName: '',
     phone: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    platformRoles: ''
   });
   const [isRegisterMode, setIsRegisterMode] = useState(false);
-
+  
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -113,7 +119,7 @@ const EnhancedLoginModal = ({ authType, onClose }) => {
             email: formData.email,
             phone: formData.phone,
             password: formData.password,
-            platformRoles: [authType]
+            platformRoles: formData.platformRoles
           }));
     
           const { success, data } = response.payload;
@@ -204,7 +210,7 @@ const EnhancedLoginModal = ({ authType, onClose }) => {
       <div className="login-modal__content">
         <div className="login-modal__header">
           <h2>
-            {isRegisterMode ? 'Register' : 'Login'} as {authType === 'business' ? 'Business' : 'Customer'}
+            {isRegisterMode ? 'Register' : 'Login'}
           </h2>
           <button className="login-modal__close-btn" onClick={onClose}>
             &times;
@@ -252,15 +258,39 @@ const EnhancedLoginModal = ({ authType, onClose }) => {
     className="w-full px-3 py-2 border rounded mt-2"
   />
 
-  {isRegisterMode && (
-    <input
+{isRegisterMode && (
+  <>
+      <input
       type="password"
       placeholder="Confirm Password"
       value={formData.confirmPassword}
       onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
       className="w-full px-3 py-2 border rounded mt-2"
     />
-  )}
+    <div className="flex space-x-1 my-1">
+      <Button
+         onClick={() => {
+          setFormData({ ...formData, platformRoles: 'buyer' });
+          handleAuthTypeSelect('buyer');
+        }}
+        className={`px-4 py-2 rounded ${formData.platformRoles === 'buyer' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+      >
+        I'm a buyer
+      </Button>
+      <Button
+           onClick={() => {
+            setFormData({ ...formData, platformRoles: 'seller' });
+            handleAuthTypeSelect('seller');
+          }}
+        className={`px-4 py-2 rounded ${formData.platformRoles === 'seller' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+      >
+        I'm a seller
+      </Button>
+    </div>
+
+  </>
+)}
+
 
   <Button type="submit" variant="primary" className="w-full mt-4">
     {isRegisterMode ? 'Register' : 'Login'}
