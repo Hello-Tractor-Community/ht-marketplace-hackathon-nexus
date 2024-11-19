@@ -15,7 +15,7 @@
   h3 {
     margin: map-get($spacing, 'lg') 0 map-get($spacing, 'base');
     font-size: map-get($font-sizes, 'xl');
-    color: $secondary-color;
+    color: $secondary;
   }
 
   form {
@@ -49,14 +49,14 @@
     textarea {
       width: 100%;
       padding: map-get($spacing, 'sm');
-      border: 1px solid $border-color;
+      border: 1px solid $border;
       border-radius: 4px;
-      font-family: $font-primary;
+      font-family: $font-body;
       
       &:focus {
         outline: none;
-        border-color: $secondary-color;
-        box-shadow: 0 0 0 2px rgba($secondary-color, 0.1);
+        border-color: $border;
+        box-shadow: 0 0 0 2px $border;
       }
     }
 
@@ -67,8 +67,8 @@
 
     // Error message
     &__error {
-      background-color: rgba($accent-color, 0.1);
-      color: darken($accent-color, 20%);
+      background-color: rgba(hsl($accent), 0.1);
+      color: darken(hsl($accent), 20%);
       padding: map-get($spacing, 'base');
       border-radius: 4px;
       margin-bottom: map-get($spacing, 'lg');

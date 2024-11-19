@@ -18,14 +18,7 @@ const Home = ({ history }) => {
         <div className="home">
             <NavBar history={history} />
             <CartItem />
-            <Search />
-           
-            <div className="body-cta">
-                <div className="gradient">
-                    <p>Explore our unique collections, perfect for your farming needs.</p>
-                </div>
-            </div>
-      
+            <Search />        
             <About />
         </div>
     );

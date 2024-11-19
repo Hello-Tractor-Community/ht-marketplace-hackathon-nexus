@@ -17,7 +17,7 @@
   }
 
   &__content {
-    background-color: $background-color;
+    background-color: $background;
     border-radius: 8px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     width: 400px;
@@ -41,7 +41,7 @@
       border: none;
       cursor: pointer;
       font-size: map-get($font-sizes, '2x1');
-      color: $secondary-color;
+      color: $secondary;
     }
   }
 
@@ -52,20 +52,20 @@
 
     input {
       padding: map-get($spacing, 'sm') map-get($spacing, 'md');
-      border: 1px solid $border-color;
+      border: 1px solid $border;
       border-radius: 4px;
       font-size: map-get($font-sizes, 'base');
     }
 
     .btn {
       &--primary {
-        background-color: $accent-color;
-        color: $background-color;
+        background-color: $accent;
+        color: $background;
       }
 
       &--secondary {
-        background-color: $secondary-color;
-        color: $background-color;
+        background-color: $secondary;
+        color: $background;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -74,7 +74,7 @@
 
       &--link {
         background-color: transparent;
-        color: $secondary-color;
+        color: $secondary;
         font-weight: 500;
       }
     }
@@ -83,14 +83,14 @@
   &__divider {
     display: flex;
     align-items: center;
-    color: $secondary-color;
+    color: $secondary;
     font-size: map-get($font-sizes, 'sm');
 
     &::before,
     &::after {
       content: '';
       flex-grow: 1;
-      border-top: 1px solid $border-color;
+      border-top: 1px solid $border;
     }
 
     & > span {

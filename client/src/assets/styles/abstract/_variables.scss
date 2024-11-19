@@ -1,20 +1,34 @@
 // src/assets/styles/abstract/_variables.scss
+// @import './mixins';
 // Colors
-$primary-color: #222;
-$secondary-color: #75a358;
-$secondary-color-accent: #b40a70;
-$background-color: #fff;
-$text-color: #222;
-$light-text-color: #888;
-$accent-color: #75a358;
-$border-color: #ccc;
-$hover-color: #444;
-$hover-color-btn: #b9e411;
+$background: 218 65% 100%;
+$foreground: 218 69% 2%;
+$muted: 188 35% 92%;
+$muted-foreground: 188 11% 36%;
+$popover: 0 0% 99%;
+$popover-foreground: 218 69% 1%;
+$card: 0 0% 99%;
+$card-foreground: 218 69% 1%;
+$border: 218 10% 95%;
+$input: 218 10% 95%;
+$primary: 13.8 100% 60.78%;
+$primary-foreground: 218 47% 99%;
+$secondary: 300 43.28% 26.27%;
+$secondary-foreground: 0 0% 100%;
+$accent: 193.47 73.13% 39.41%;
+$accent-foreground: 248 47% 99%;
+$destructive: 13 98% 27%;
+$destructive-foreground: 13 98% 87%;
+$ring: 218 47% 39%;
+$radius: 0.5rem;
 
 
 // Typography
-$font-primary: 'Inter', sans-serif;
-$font-secondary: 'Poppins', sans-serif;
+$font-header: 'Rooney', serif; // For headers
+$font-subheading: 'Avenir', sans-serif; // For subheadings
+$font-body: 'Avenir', sans-serif; // For body text
+$font-cta: 'Avenir', sans-serif; // Default for CTAs
+
 
 $font-sizes: (
   'xs': 0.75rem,    // 12px
@@ -51,3 +65,81 @@ $spacing: (
   '7xl': 5rem,       // 72px
 );
 
+
+// Typography Mixins with Design Tokens
+@mixin header-font {
+  font-family: $font-header;
+  font-weight: 700;
+  font-size: map-get($font-sizes, '4xl'); // Example size for headers
+  line-height: 1.2;
+  color: hsl($foreground); // Foreground color for headers
+}
+
+@mixin subheading-font {
+  font-family: $font-subheading;
+  font-weight: 600;
+  font-size: map-get($font-sizes, '2xl'); // Example size for subheadings
+  line-height: 1.3;
+  color: hsl($foreground); // Foreground color for subheadings
+}
+
+@mixin body-font {
+  font-family: $font-body;
+  font-weight: 400;
+  font-size: map-get($font-sizes, 'base'); // Default size for body text
+  line-height: 1.6;
+  color: hsl($muted-foreground); // Muted foreground for readability
+}
+
+@mixin cta-font {
+  font-family: $font-cta;
+  font-weight: 600;
+  font-size: map-get($font-sizes, 'lg'); // Slightly larger for CTAs
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: hsl($primary-foreground); // Primary foreground color
+  background-color: hsl($primary); // Primary background color
+  padding: 0.75rem 1.5rem;
+  border-radius: $radius; // Tokenized border radius
+  transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background-color: hsl($ring); // Highlight ring color on hover
+    color: hsl($foreground); // Ensure text contrast
+  }
+}
+
+
+// Header Styles
+h1, h2, h3, h4, h5, h6 {
+  @include header-font;
+}
+
+h2, h3, h4 {
+  @include subheading-font;
+}
+
+// Body Text
+body {
+  @include body-font;
+  background-color: hsl($background); // Background color
+}
+
+// CTA Buttons
+.cta {
+  @include cta-font;
+  border: 1px solid hsl($border); // Subtle border
+}
+
+.cta:hover {
+  background-color: hsl($accent); // Accent color on hover
+  color: hsl($accent-foreground); // Ensure text contrast
+}
+
+// Card Component
+.card {
+  background-color: hsl($card);
+  color: hsl($card-foreground);
+  border-radius: $radius;
+  padding: 1rem;
+}

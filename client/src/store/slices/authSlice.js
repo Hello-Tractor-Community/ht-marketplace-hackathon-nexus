@@ -57,7 +57,7 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials) => {
     const response = await authService.loginUser(credentials);
-    console.log("Login thunk response..",response)
+    console.log("Login thunk response..",response);
     return response;
   }
 );

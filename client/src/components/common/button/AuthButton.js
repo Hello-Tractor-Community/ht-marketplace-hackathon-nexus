@@ -34,7 +34,7 @@ const AuthButton = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="loginmodal">
       {isAuthenticated ? (
         <ProfileButton user={user} />
       ) : (
