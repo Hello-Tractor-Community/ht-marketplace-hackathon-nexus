@@ -48,7 +48,6 @@ const verifyEmail = asyncHandler(async (req, res, next) => {
 });
 
 
-
 // @desc    Check email verification status
 // @route   GET /api/v1/auth/check-verification
 // @access  Private
@@ -164,6 +163,8 @@ const resendVerification = asyncHandler(async (req, res, next) => {
             message: `Please verify your email by clicking: ${verificationUrl}`
         });
 
+        console.log("Email sent.")
+
         res.status(200).json({
             success: true,
             message: 'Verification email resent successfully'
@@ -194,29 +195,55 @@ const registerUser = asyncHandler(async (req, res, next) => {
         password,
         platformRoles: roles,
         companyAssociations: [],
-        operatorDetails: {}
+        operatorDetails: {},
+        security: {}
     });
 
-    if (user) {
-        console.log("User created successfully.");
-        const token = generateToken(user._id);
-        res.status(201).json({
-            success: true,
-            data: {
-                user: {
-                    _id: user._id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    platformRoles: user.platformRoles
-                },
-                token
-            }
-        });
-    } else {
+    if (!user) {
         return next(new ErrorResponse('Failed to create user', 500));
     }
+
+    console.log("User created successfully.");
+    
+    const verificationToken = user.getVerificationToken();
+    await user.save();
+
+    // Create verification url
+    const verificationUrl = `${req.protocol}://${req.get('host')}/api/v1/auth/verify/${verificationToken}`;
+
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: 'Email Verification',
+            message: `Please verify your email by clicking: ${verificationUrl}`
+        });
+
+        console.log("Email sent.");
+    } catch (err) {
+        user.verificationToken = undefined;
+        user.verificationTokenExpire = undefined;
+        await user.save();
+
+        return next(new ErrorResponse('Email could not be sent', 500));
+    }
+
+    const token = generateToken(user._id);
+
+    res.status(201).json({
+        success: true,
+        data: {
+            user: {
+                _id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                platformRoles: user.platformRoles
+            },
+            token
+        }
+    });
 });
+
 
 // Add company association to user
 const addCompanyAssociation = async (req, res) => {

@@ -80,11 +80,15 @@ const AuthButton = () => {
 
 // Enhanced Login Modal Component
 const EnhancedLoginModal = ({ authType, onClose }) => {
-  
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+    confirmPassword: ''
   });
   const [isRegisterMode, setIsRegisterMode] = useState(false);
 
@@ -93,10 +97,82 @@ const EnhancedLoginModal = ({ authType, onClose }) => {
     
     try {
       if (isRegisterMode) {
-        await dispatch(registerUser({
-          ...formData,
-          userType: authType
-        }));
+        if (formData.password !== formData.confirmPassword) {
+          alert('Passwords do not match');
+          return;
+        }
+        // await dispatch(registerUser({
+        //   ...formData,
+        //   userType: authType
+        // }));
+        try {
+          // 1. Register the user first
+          const response = await dispatch(registerUser({
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+            password: formData.password,
+            platformRoles: [authType]
+          }));
+    
+          const { success, data } = response.payload;
+    
+          console.log("Inside AuthButton..");
+          
+    
+          console.log("sucess..", success);
+          console.log("data..", data);
+    
+          // Check if we have a successful response with user data
+          if (!success || !data?.user?._id) {
+            throw new Error(data.error || 'User registration failed');
+          }
+          console.log('User registration successful:', data);
+          const { user, token } = data;
+          // console.log("user id.. and type of", user._id, typeof user._id);
+        
+          // // Introduce a delay before registering the business
+          // await new Promise(resolve => setTimeout(resolve, 1000)); // 2000 ms delay (2 seconds)
+          // // 2. Register the business
+          // const businessResult = await dispatch(registerBusiness({
+          //   owner: user._id, // Use the user ID from the response
+          //   role: formData.businessRole,
+          //   businessName: formData.businessName,
+          //   businessType: formData.businessType,
+          //   registrationDetails: {
+          //     taxId: formData.taxId,
+          //     businessRegistrationNumber: formData.registrationNumber
+          //   },
+          //   location: {
+          //     country: formData.country,
+          //     state: formData.state,
+          //     city: formData.city,
+          //     address: formData.address,
+          //     postalCode: formData.postalCode
+          //   }
+          // })).unwrap();
+    
+          // console.log("Business Result..", businessResult);
+    
+          // if (!businessResult.success || !businessResult.data?.business?._id) {
+          //   throw new Error(businessResult.error || 'Business registration failed');
+          // }
+          // console.log("Business registration successful:", businessResult.data);
+        
+          //  authService.removeToken();
+          // 4. Navigate to email verification
+          navigate('/email-verification', {
+            state: {
+              email: formData.email,
+              userId: data?.user?._id
+            }
+          });
+    
+        } catch (error) {
+          console.error('Registration failed:', error);
+          alert(error.message || 'Registration failed. Please try again.');
+        }
       } else {
         const loginAction = authType === 'business' 
           ? loginUser
@@ -136,62 +212,111 @@ const EnhancedLoginModal = ({ authType, onClose }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="login-modal__body">
-          <input
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={(e) => setFormData({...formData, email: e.target.value})}
-            className="w-full px-3 py-2 border rounded"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) => setFormData({...formData, password: e.target.value})}
-            className="w-full px-3 py-2 border rounded mt-2"
-          />
+  {isRegisterMode && (
+    <>
+      <input
+        type="text"
+        placeholder="First Name"
+        value={formData.firstName}
+        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+        className="w-full px-3 py-2 border rounded"
+      />
+      <input
+        type="text"
+        placeholder="Last Name"
+        value={formData.lastName}
+        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+        className="w-full px-3 py-2 border rounded mt-2"
+      />
+      <input
+        type="text"
+        placeholder="Phone"
+        value={formData.phone}
+        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+        className="w-full px-3 py-2 border rounded mt-2"
+      />
+    </>
+  )}
+  <input
+    type="email"
+    placeholder="Email"
+    value={formData.email}
+    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+    className="w-full px-3 py-2 border rounded"
+  />
+  <input
+    type="password"
+    placeholder="Password"
+    value={formData.password}
+    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+    className="w-full px-3 py-2 border rounded mt-2"
+  />
 
-          <Button 
-            type="submit" 
-            variant="primary"
-            className="w-full mt-4"
-          >
-            {isRegisterMode ? 'Register' : 'Login'}
-          </Button>
+  {isRegisterMode && (
+    <input
+      type="password"
+      placeholder="Confirm Password"
+      value={formData.confirmPassword}
+      onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+      className="w-full px-3 py-2 border rounded mt-2"
+    />
+  )}
 
-          {!isRegisterMode && (
-            <>
-              <div className="login-modal__divider">
-                <span>or</span>
-              </div>
-              
-              <div className="login-modal__social">
-                <Button variant="quaternary" onClick={() => {}}>
-                  <FaGoogle />
-                  <span>Continue with Google</span>
-                </Button>
-                <Button variant="tertiary" onClick={() => {}}>
-                  <FaFacebookF />
-                  <span>Continue with Facebook</span>
-                </Button>
-              </div>
-            </>
-          )}
+  <Button type="submit" variant="primary" className="w-full mt-4">
+    {isRegisterMode ? 'Register' : 'Login'}
+  </Button>
 
-          <div className="login-modal__toggle mt-4 text-center">
-            <p>
-              {isRegisterMode 
-                ? 'Already have an account?' 
-                : "Don't have an account?"}
-            </p>
-            <Button
-              variant="link"
-              onClick={() => setIsRegisterMode(!isRegisterMode)}
-            >
-              {isRegisterMode ? 'Login' : 'Register'}
-            </Button>
-          </div>
-        </form>
+  {!isRegisterMode && (
+    <>
+      <div className="login-modal__divider">
+        <span>or</span>
+      </div>
+
+      <div className="login-modal__social">
+        <Button variant="quaternary" onClick={() => {}}>
+          <FaGoogle />
+          <span>Continue with Google</span>
+        </Button>
+        <Button variant="tertiary" onClick={() => {}}>
+          <FaFacebookF />
+          <span>Continue with Facebook</span>
+        </Button>
+      </div>
+    </>
+  )}
+
+  {isRegisterMode && (
+    <>
+      <div className="login-modal__divider">
+        <span>or</span>
+      </div>
+
+      <div className="login-modal__social">
+        <Button variant="quaternary" onClick={() => {}}>
+          <FaGoogle />
+          <span>Register with Google</span>
+        </Button>
+        <Button variant="tertiary" onClick={() => {}}>
+          <FaFacebookF />
+          <span>Register with Facebook</span>
+        </Button>
+      </div>
+    </>
+  )}
+
+  <div className="login-modal__toggle mt-4 text-center">
+    <p>
+      {isRegisterMode ? 'Already have an account?' : "Don't have an account?"}
+    </p>
+    <Button
+      variant="link"
+      onClick={() => setIsRegisterMode(!isRegisterMode)}
+    >
+      {isRegisterMode ? 'Login' : 'Register'}
+    </Button>
+  </div>
+</form>
+
       </div>
     </div>
   );

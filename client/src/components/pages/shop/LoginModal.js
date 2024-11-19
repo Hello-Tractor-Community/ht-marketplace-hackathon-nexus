@@ -1,6 +1,6 @@
 // src/components/LoginModal/LoginModal.js
 import React, { useState } from 'react';
-import { loginUser } from '../../../store/slices/authSlice';
+import { loginUser, registerUser } from '../../../store/slices/authSlice';
 import Button from '../../common/button/Button';
 import { FaFacebookF, FaGoogle } from 'react-icons/fa';
 import { useDispatch} from 'react-redux';
@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import './LoginModal.scss';
 
 const LoginModal = ({ onClose, onRegister }) => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -49,6 +49,42 @@ const LoginModal = ({ onClose, onRegister }) => {
       alert(error.message || 'Login failed. Please try again.');
     }
   };
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      alert('Make sure to insert all values.');
+      return;
+    }
+
+    try {
+      // 1. Register the user first
+      const response = await dispatch(registerUser({
+        email: email,
+        password: password
+      }));
+
+    //   console.log("response login..",response);
+
+      const success = response.payload.success;
+
+      const user = response.payload.user;
+
+    //   console.log("sucess..", success);
+    //   console.log("data..", user);
+
+      // Check if we have a successful response with user data
+      if (!success || !user?._id) {
+        throw new Error(user.error || 'User login failed');
+      }
+     
+      navigate('/place-holder');
+
+    } catch (error) {
+      console.error('Login failed:', error);
+      alert(error.message || 'Login failed. Please try again.');
+    }
+  };
 
   const handleGoogleLogin = () => {
     // Implement Google login logic here
@@ -60,9 +96,6 @@ const LoginModal = ({ onClose, onRegister }) => {
     console.log('Logging in with Facebook');
   };
 
-  const handleRegister = () => {
-    onRegister();
-  };
 
   return (
     <div className="login-modal__overlay">

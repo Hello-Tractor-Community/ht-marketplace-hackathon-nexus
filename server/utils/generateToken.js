@@ -9,30 +9,29 @@ const generateToken = (user, options = {}) => {
         firstName: user.firstName,
         lastName: user.lastName,
         platformRoles: user.platformRoles,
-        isEmailVerified: user.security.emailVerified,
         accountStatus: user.accountStatus
     };
 
     // Add role-specific information based on platform roles
-    if (user.platformRoles.includes('seller')) {
-        // Include company associations for sellers
-        payload.companyAssociations = user.companyAssociations.map(assoc => ({
-            company: assoc.company,
-            role: assoc.role,
-            permissions: assoc.permissions,
-            status: assoc.status
-        }));
-    }
+    // if (user.platformRoles.includes('seller')) {
+    //     // Include company associations for sellers
+    //     payload.companyAssociations = user.companyAssociations.map(assoc => ({
+    //         company: assoc.company,
+    //         role: assoc.role,
+    //         permissions: assoc.permissions,
+    //         status: assoc.status
+    //     }));
+    // }
 
-    if (user.platformRoles.includes('admin')) {
-        // Add admin-specific claims
-        payload.isAdmin = true;
-    }
+    // if (user.platformRoles.includes('admin')) {
+    //     // Add admin-specific claims
+    //     payload.isAdmin = true;
+    // }
 
     // Add any custom claims from options
-    if (options.additionalClaims) {
-        payload.customClaims = options.additionalClaims;
-    }
+    // if (options.additionalClaims) {
+    //     payload.customClaims = options.additionalClaims;
+    // }
 
     return jwt.sign(
         payload,

@@ -13,7 +13,7 @@ const EmailVerification = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const [verificationStatus, setVerificationStatus] = useState('pending');
-  const [businessDetails, setBusinessDetails] = useState(null);
+  const [companyDetails, setCompanyDetails] = useState(null);
   // const [user, setUser] = useState(null);
   const { isAuthenticated, user, authLoading } = useSelector((state) => state.auth);
   const [checkingVerification, setCheckingVerification] = useState(false);
@@ -78,19 +78,19 @@ const EmailVerification = () => {
         console.log("EmailVerification result..", result);
         if (result.isVerified) {
           setVerificationStatus('success');
-          setBusinessDetails(result.businessDetails);
+          setCompanyDetails(result.companyDetails);
           // setUser(result.user);
           // Update the auth state to mark the user as authenticated and verified
           console.log("email to be verified..");
           dispatch(setEmailVerified({
             verifiedAt: result.verifiedAt,
             user: result.user,
-            businessDetails: result.businessDetails
+            companyDetails: result.companyDetails
           }));
           console.log("Email verified, updated state:", {
             verifiedAt: result.verifiedAt,
             user: result.user,
-            businessDetails: result.businessDetails
+            companyDetails: result.companyDetails
           });
         }
       } catch (error) {
@@ -113,42 +113,42 @@ const EmailVerification = () => {
 
   
   const handleContinue = async () => {
-    const isBusinessAdmin = user?.businessAssociations?.some(
+    const isCompanyAdmin = user?.companyAssociations?.some(
       assoc => ['owner', 'founder', 'manager'].includes(assoc.role) &&
         assoc.status === 'active'
     );
 
     console.log("Email verification..");
-    console.log('isBusinessAdmin..', isBusinessAdmin);
+    console.log('isCompanyAdmin..', isCompanyAdmin);
     console.log('user..', user);
-    console.log('businessDetails..', businessDetails);
+    console.log('companyDetails..', companyDetails);
 
     // Wait for any pending state updates
     await Promise.resolve();
 
-    if (businessDetails && isBusinessAdmin) {
+    if (companyDetails && isCompanyAdmin) {
       console.log("should now navigate!");
 
       navigate('/admin/dashboard', {
         state: {
-          businessDetails,
+          companyDetails,
           verificationStatus: 'completed',
           user
         },
         replace: true
       });
-    } else if (businessDetails) {
-      // If they have business details but aren't admin level
+    } else if (companyDetails) {
+      // If they have company details but aren't admin level
       navigate('/home', {
         state: {
-          businessDetails,
+          companyDetails,
           verificationStatus: 'completed',
           user
         },
         replace: true
       });
     } else {
-      // Fallback route if no business details are available
+      // Fallback route if no company details are available
       navigate('/home', { replace: true });
     }
   };
@@ -202,10 +202,10 @@ const EmailVerification = () => {
           <div className="verification-success">
             <h2>Email Verified Successfully!</h2>
             <p>Your email has been verified and your account is now active.</p>
-            {businessDetails && (
-              <div className="business-details">
-                <p>Business Name: {businessDetails.businessName}</p>
-                <p>Your Role: {businessDetails.role}</p>
+            {companyDetails && (
+              <div className="company-details">
+                <p>Company Name: {companyDetails.companyName}</p>
+                <p>Your Role: {companyDetails.role}</p>
               </div>
             )}
             <Button onClick={handleContinue}>Continue to Onboarding</Button>
