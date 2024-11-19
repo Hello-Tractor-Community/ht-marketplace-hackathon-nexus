@@ -1,13 +1,13 @@
 // listingRoutes.js
 const express = require('express');
 const router = express.Router();
-const { protect, authorize, verifyBusiness } = require('../middleware/auth');
+const { protect, authorize, verifyCompany } = require('../middleware/auth');
 const { checkOnboardingStatus } = require('../middleware/validation');
 const {
     createListing,
-    updateListing,
     getListings,
     getListingById,
+    updateListing,
     deleteListing,
     searchListings,
     updateListingStatus,
@@ -29,7 +29,7 @@ router.get('/:id', getListingById);
 router.use(protect);
 
 // Business owner routes
-router.use(verifyBusiness);
+router.use(verifyCompany);
 router.use(checkOnboardingStatus);
 
 router.post('/', createListing);

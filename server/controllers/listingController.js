@@ -385,6 +385,10 @@ const getNewArrivals = asyncHandler(async (req, res) => {
     });
 });
 
+const getListingsByBusiness = asyncHandler(async (req, res) => {
+    pass
+});
+
 module.exports = {
     createListing,
     getListings,
@@ -395,5 +399,6 @@ module.exports = {
     updateListingStatus,
     updateListingInventory,
     getFeaturedListings,
+    getListingsByBusiness,
     getNewArrivals
 };
