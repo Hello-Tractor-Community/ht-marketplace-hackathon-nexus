@@ -11,7 +11,11 @@ const {
     resendVerification,
     checkVerification,
     addCompanyAssociation,
-    addOperatorDetails
+    addOperatorDetails,
+    googleAuth,
+    googleCallback,
+    facebookAuth,
+    facebookCallback
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 
@@ -23,6 +27,11 @@ router.post('/login', loginUser);
 router.post('/logout', logoutUser);
 router.get('/verify/:token', verifyEmail);
 
+// Social authentication routes
+router.get('/google', googleAuth);
+router.get('/google/callback', googleCallback);
+router.get('/facebook', facebookAuth);
+router.get('/facebook/callback', facebookCallback);
 
 // Protected routes
 router.use(protect);  // Apply protection to all routes below
@@ -34,6 +43,7 @@ router.get('/check-verification', (req, res, next) => {
 router.get('/profile', getUserProfile);
 router.put('/profile', updateUserProfile);
 router.post('/verify/resend', resendVerification);
+
 
 
 module.exports = router;

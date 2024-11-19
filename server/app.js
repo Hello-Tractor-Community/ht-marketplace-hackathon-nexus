@@ -14,6 +14,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const session = require('express-session');
+const passport = require('./config/passport');
+
 
 // Performance Imports
 const compression = require('compression');
@@ -48,12 +50,17 @@ const securityMiddleware = () => {
     app.use(mongoSanitize()); // Prevent NoSQL injections
     app.use(xss()); // Prevent XSS attacks
     app.use(hpp()); // Prevent HTTP Parameter Pollution
-    
+
+       
     // CORS Configuration
     app.use(cors({
         origin: CLIENT_URL,
         credentials: true
     }));
+
+    // Passport Configuration
+    app.use(passport.initialize());
+    app.use(passport.session());
     
     // Rate Limiting
     app.use('/api/', rateLimit({

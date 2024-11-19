@@ -6,7 +6,7 @@ import Button from './Button';
 import { MdBusinessCenter } from 'react-icons/md';
 import { checkEmailVerification, setEmailVerified } from '../../../store/slices/authSlice';
 import { registerUser, loginUser, loginBusiness,logout } from '../../../store/slices/authSlice';
-
+import api from './config';
 import './AuthButton.scss';
 
 // AuthButton Component - Replaces your current Login button
@@ -86,6 +86,7 @@ const AuthButton = () => {
 const EnhancedLoginModal = ({ authType, onClose, handleAuthTypeSelect }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -205,6 +206,14 @@ const EnhancedLoginModal = ({ authType, onClose, handleAuthTypeSelect }) => {
     }
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = '/api/v1/auth/google';
+  };
+
+  const handleFacebookLogin = () => {
+    window.location.href = '/api/v1/auth/facebook';
+  };
+
   return (
     <div className="login-modal__overlay">
       <div className="login-modal__content">
@@ -303,11 +312,11 @@ const EnhancedLoginModal = ({ authType, onClose, handleAuthTypeSelect }) => {
       </div>
 
       <div className="login-modal__social">
-        <Button variant="quaternary" onClick={() => {}}>
+        <Button variant="quaternary" onClick={handleGoogleLogin}>
           <FaGoogle />
           <span>Continue with Google</span>
         </Button>
-        <Button variant="tertiary" onClick={() => {}}>
+        <Button variant="tertiary" onClick={handleFacebookLogin}>
           <FaFacebookF />
           <span>Continue with Facebook</span>
         </Button>

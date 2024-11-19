@@ -215,4 +215,53 @@ userSchema.methods.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
+userSchema.methods.linkSocialAccount = function(provider, userId, accessToken) {
+    // Check if account already linked
+    const existingAccount = this.socialMediaAccounts.find(
+        account => account.provider === provider
+    );
+    
+    if (existingAccount) {
+        existingAccount.userId = userId;
+        existingAccount.accessToken = accessToken;
+    } else {
+        this.socialMediaAccounts.push({
+            provider,
+            userId,
+            accessToken
+        });
+    }
+    
+    return this.save();
+};
+
+userSchema.statics.findOrCreateBySocialMedia = async function(profile) {
+    let user = await this.findOne({
+        'socialMediaAccounts.provider': profile.provider,
+        'socialMediaAccounts.userId': profile.id
+    });
+
+    if (!user) {
+        user = new this({
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            email: profile.email,
+            socialMediaAccounts: [{
+                provider: profile.provider,
+                userId: profile.id,
+                accessToken: profile.accessToken
+            }],
+            accountStatus: 'active',
+            security: {
+                emailVerified: true,
+                emailVerifiedAt: new Date()
+            }
+        });
+
+        await user.save();
+    }
+
+    return user;
+};
+
 module.exports = mongoose.model('User', userSchema);
