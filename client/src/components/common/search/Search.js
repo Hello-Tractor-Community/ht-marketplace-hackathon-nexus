@@ -1,7 +1,7 @@
-// src/pages/public/Search/Search.js
+// src/components/common/Search/Search.js
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import SearchForm from '../../../components/features/search/SearchForm';
+import SearchForm from './SearchForm';
 import Card from '../../../components/common/card/Card';
 import { searchInstitutes } from '../../../store/slices/InstituteSlice';
 import './Search.scss';

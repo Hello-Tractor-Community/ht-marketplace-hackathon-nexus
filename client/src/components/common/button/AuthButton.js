@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FaFacebookF, FaGoogle, FaUserCircle } from 'react-icons/fa';
 import { MdBusinessCenter } from 'react-icons/md';
-import Button from '../common/button/Button';
+import Button from './Button';
 import { checkEmailVerification, setEmailVerified } from '../../../store/slices/authSlice';
 import { registerUser, loginUser, loginBusiness,logout } from '../../../store/slices/authSlice';
 

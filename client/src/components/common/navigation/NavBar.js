@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../../../assets/images/logo/HT_LOGO ICON_RGB_Orange.png.png';
+import logo from '../../../assets/images/logo/logo.png';
 import Button from '../button/Button';
 import LoginModal from '../../pages/shop/LoginModal';
 import AuthButton from '../button/AuthButton';

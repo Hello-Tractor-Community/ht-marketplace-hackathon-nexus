@@ -8,8 +8,8 @@ import {
 } from 'react-router-dom';
 
 import AppWrapper from './AppWrapper';
-import AppProvider from './pages/features/AppContext';
-import ScrollToTop from './components/ScrollToTop';
+import AppProvider from './store/AppContext';
+import ScrollToTop from './components/common/navigation/ScrollToTop';
 
 // Import your components
 import LandingPage from './components/pages/public/landing/LandingPage';
