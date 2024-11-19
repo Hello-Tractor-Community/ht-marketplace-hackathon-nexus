@@ -1,10 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { AppContext } from '../features/AppContext';
+import { useNavigate } from 'react-router-dom';
+
+import { AppContext } from '../../../store/AppContext';
 
 import NavBar from '../../common/navigation/NavBar';
-import CartItem from '../../components/CartItem';
-import { useNavigate } from 'react-router-dom';
-import QuantityErrorModal from '../../components/QuantityErrorModal';
+import CartItem from './CartItem';
+
+import QuantityErrorModal from './QuantityErrorModal';
 
 import './CartPage.scss';
 

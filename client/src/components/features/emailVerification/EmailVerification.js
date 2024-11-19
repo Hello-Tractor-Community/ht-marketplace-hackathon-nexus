@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { checkEmailVerification, setEmailVerified } from '../../store/slices/authSlice';
+import { checkEmailVerification, setEmailVerified } from '../../../store/slices/authSlice';
 import Button from '../../common/button/Button';
-import { authService } from '../../services/api/auth';
-import NavBar from '../../common/navbar/NavBar';
+import { authService } from '../../../services/api/auth';
+import NavBar from '../../common/navigation/NavBar';
 import './EmailVerification.scss';
 import { setupListeners } from '@reduxjs/toolkit/query';
 

@@ -8,17 +8,17 @@ const About = () => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/product');
+    navigate('/listing');
   };
 
   return (
     <div className='container'>
       <h2 className='title'>About Us</h2>
       <p className='description'>
-        Welcome to our company. We specialize in bringing your creative designs to life on a variety of products.
+        Welcome to hello tractor commerce. We specialize in finding you the right deals for your second hand tractor needs.
       </p>
       <button className='button-about' onClick={handleNavigate}>
-        View Products
+        View Listings
       </button>
     </div>
   );

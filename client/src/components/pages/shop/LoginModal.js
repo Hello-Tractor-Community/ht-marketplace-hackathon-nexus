@@ -1,7 +1,7 @@
 // src/components/LoginModal/LoginModal.js
 import React, { useState } from 'react';
 import { loginUser } from '../../../store/slices/authSlice';
-import Button from '../common/button/Button';
+import Button from '../../common/button/Button';
 import { FaFacebookF, FaGoogle } from 'react-icons/fa';
 import { useDispatch} from 'react-redux';
 import { useNavigate } from 'react-router-dom';

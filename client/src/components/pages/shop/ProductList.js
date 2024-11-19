@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import StarRating from './StarRating';
-import './ProductList.css';
+import './ProductList.scss';
 
 const sectionTitles = {
   fashion: 'Fashion',

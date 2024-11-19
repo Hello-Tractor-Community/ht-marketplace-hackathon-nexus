@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './upload-widget.css'; // Import CSS file for styling
-import { useAppContext } from './AppContext';
+import './upload-widget.scss'; // Import CSS file for styling
+
 import { FaCopy } from 'react-icons/fa';
 
 import axios from 'axios';
@@ -12,7 +12,7 @@ const API_URL = 'https://api-netconn.brosfe.com';
 
 
 const UploadWidgetClaudinary = ({folderName}) => {
-    const { currentLanguage } = useAppContext();
+   
     const [cloudinaryUploadSuccess, setCloudinaryUploadSuccess] = useState(false);
     const [copyURL, setCopyURL] = useState(false);
     const [fetchedImageUrl, setFetchedImageUrl] = useState({});
@@ -137,7 +137,7 @@ const UploadWidgetClaudinary = ({folderName}) => {
 
     return (
         < >
-            {currentLanguage === 'English' && (
+            
 
                 <div className='cloudinary-container'
                 >
@@ -181,15 +181,8 @@ const UploadWidgetClaudinary = ({folderName}) => {
 
                 </div>
 
-            )}
-            {currentLanguage === 'አማርኛ' && (
-                <div className='sub-container'>
+            
 
-                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                        <h1>መነሻ ገጽ</h1>
-                    </div>
-                </div>
-            )}
         </>
     );
 };

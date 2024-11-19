@@ -1,5 +1,5 @@
 import React from 'react';
-import './QuantityErrorModal.css';
+import './QuantityErrorModal.scss';
 
 const QuantityErrorModal = ({ visible, onClose, cartEmpty }) => {
   if (!visible) return null;

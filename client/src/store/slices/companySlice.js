@@ -1,59 +1,59 @@
-// src/store/slices/businessSlice.js
+// src/store/slices/companySlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { businessService } from '../../services/api/company';
+import { companyService } from '../../services/api/company';
 
-export const registerBusiness = createAsyncThunk(
-  'business/registerBusiness',
-  async (businessData, { getState }) => {
+export const registerCompany = createAsyncThunk(
+  'company/registerCompany',
+  async (companyData, { getState }) => {
     const { user } = getState().auth;
-    console.log("business slice user:", user);
+    console.log("company slice user:", user);
    
     try {
-      // Register the new business
-      console.log("registerBusiness Thunk");
-      console.log("Business data:", businessData);
+      // Register the new company
+      console.log("registerCompany Thunk");
+      console.log("Company data:", companyData);
       console.log("User:", user);
-      const businessResponse = await businessService.registerBusiness({
-        ...businessData,
-        owner: businessData.owner,
-        role: businessData.role
+      const companyResponse = await companyService.registerCompany({
+        ...companyData,
+        owner: companyData.owner,
+        role: companyData.role
       });
 
-      console.log("business slice response:", businessResponse);
+      console.log("company slice response:", companyResponse);
 
-      return businessResponse.data;
+      return companyResponse.data;
     } catch (error) {
       throw error.response?.data || error.message;
     }
   }
 );
 
-export const searchBusiness = createAsyncThunk(
-  'business/search',
+export const searchCompany = createAsyncThunk(
+  'company/search',
   async (searchTerm) => {
-    const response = await businessService.searchBusiness(searchTerm);
+    const response = await companyService.searchCompany(searchTerm);
     return response.data;
   }
 );
 
-export const onboardBusiness = createAsyncThunk(
-  'business/onboard',
-  async (businessData) => {
-    const response = await businessService.registerBusiness(businessData);
+export const onboardCompany = createAsyncThunk(
+  'company/onboard',
+  async (companyData) => {
+    const response = await companyService.registerCompany(companyData);
     return response.data;
   }
 );
 
 export const uploadDocuments = createAsyncThunk(
-  'business/uploadDocuments',
-  async ({ documents, businessId }) => {
-    const response = await businessService.uploadDocuments(documents, businessId);
+  'company/uploadDocuments',
+  async ({ documents, companyId }) => {
+    const response = await companyService.uploadDocuments(documents, companyId);
     return response.data;
   }
 );
 
-const businessSlice = createSlice({
-  name: 'business',
+const companySlice = createSlice({
+  name: 'company',
   initialState: {
     items: [],
     loading: false,
@@ -79,42 +79,42 @@ const businessSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Search cases
-      .addCase(registerBusiness.pending, (state) => {
+      .addCase(registerCompany.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerBusiness.fulfilled, (state, action) => {
+      .addCase(registerCompany.fulfilled, (state, action) => {
         state.loading = false;
         state.items = action.payload.data;
       })
-      .addCase(registerBusiness.rejected, (state, action) => {
+      .addCase(registerCompany.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(searchBusiness.pending, (state) => {
+      .addCase(searchCompany.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(searchBusiness.fulfilled, (state, action) => {
+      .addCase(searchCompany.fulfilled, (state, action) => {
         state.loading = false;
         state.items = action.payload;
       })
-      .addCase(searchBusiness.rejected, (state, action) => {
+      .addCase(searchCompany.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
       // Onboarding cases
-      .addCase(onboardBusiness.pending, (state) => {
+      .addCase(onboardCompany.pending, (state) => {
         state.onboardingStatus.loading = true;
         state.onboardingStatus.error = null;
       })
-      .addCase(onboardBusiness.fulfilled, (state, action) => {
+      .addCase(onboardCompany.fulfilled, (state, action) => {
         state.onboardingStatus.loading = false;
         state.onboardingStatus.completed = true;
-        // Optionally add the new business to items array
+        // Optionally add the new company to items array
         state.items.push(action.payload);
       })
-      .addCase(onboardBusiness.rejected, (state, action) => {
+      .addCase(onboardCompany.rejected, (state, action) => {
         state.onboardingStatus.loading = false;
         state.onboardingStatus.error = action.error.message;
       })
@@ -135,5 +135,5 @@ const businessSlice = createSlice({
   }
 });
 
-export const { clearErrors } = businessSlice.actions;
-export default businessSlice.reducer;
+export const { clearErrors } = companySlice.actions;
+export default companySlice.reducer;

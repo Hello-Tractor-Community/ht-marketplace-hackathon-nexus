@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { authService } from '../../services/api/auth';
-import {setEmailVerified } from '../../store/slices/OnboardingSlice';
-import NavBar from '../../common/navbar/NavBar';
+import { authService } from '../../../services/api/auth';
+import {setEmailVerified } from '../../../store/slices/OnboardingSlice';
+import NavBar from '../../common/navigation/NavBar';
 import './EmailConfirmation.scss';
 
 const EmailConfirmation = () => {

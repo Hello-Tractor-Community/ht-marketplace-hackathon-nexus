@@ -16,6 +16,7 @@ import LandingPage from './components/pages/public/landing/LandingPage';
 import ProductPage from './components/pages/shop/ProductPage';
 import Home from './components/pages/public/home/Home';
 import ProductDetailPage from './components/pages/shop/ProductDetailPage';
+import Favourites from './components/pages/shop/Favourites';
 import RoleRoute from './components/common/protectedRoute/RoleRoute';
 
 // Auth Components
@@ -26,8 +27,12 @@ import EmailVerification from './components/features/emailVerification/EmailVeri
 import EmailConfirmation from './components/features/emailVerification/EmailConfirmation';
 // Protected Components
 import ProtectedRoute from './components/common/protectedRoute/ProtectedRoute';
-
 import ErrorPage from './components/pages/error/ErrorPage';
+
+//Portals
+import BuyerPortal from './components/pages/portal/buyer/BuyerPortal';
+import SellerPortal from './components/pages/portal/seller/portal/SellerPortal';
+import AdminPortal from './components/pages/portal/admin/AdminPortal';
 import './App.css';
 
 function RedirectHandler() {
@@ -56,8 +61,8 @@ const AppContent = () => {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/product/*" element={<ProductPage />} />
-            <Route path="/productDetail/*" element={<ProductDetailPage />} />
+            <Route path="/listing/*" element={<ProductPage />} />
+            <Route path="/listingDetail/*" element={<ProductDetailPage />} />
             <Route path="/favs" element={<Favourites />} />
             <Route path="/user">
               <Route path="login" element={<UserLogin />} />

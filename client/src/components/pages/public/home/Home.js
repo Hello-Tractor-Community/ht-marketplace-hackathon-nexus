@@ -6,7 +6,7 @@ import Search from '../../../common/search/Search';
 import Prompt from '../../shop/Prompt';
 import About from '../about/About';
 import StarRating from '../../shop/StarRating';
-import CartItem from '../../../components/CartItem';
+import CartItem from '../../shop/CartItem';
 import './Home.scss';
 
 const Home = ({ history }) => {
@@ -22,13 +22,10 @@ const Home = ({ history }) => {
            
             <div className="body-cta">
                 <div className="gradient">
-                    <p>Explore our unique collections, perfect for treating yourself or finding the ideal gifts for friends and family.</p>
+                    <p>Explore our unique collections, perfect for your farming needs.</p>
                 </div>
             </div>
-
-          
-
-            <Prompt />          
+      
             <About />
         </div>
     );

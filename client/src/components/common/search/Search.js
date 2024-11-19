@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SearchForm from './SearchForm';
-import Card from '../../../components/common/card/Card';
-import { searchInstitutes } from '../../../store/slices/InstituteSlice';
+import Card from '../card/Card';
+
 import './Search.scss';
 
 const Search = () => {
@@ -15,13 +15,13 @@ const Search = () => {
   });
 
   const handleSearch = (searchTerm) => {
-    dispatch(searchInstitutes({ searchTerm, ...filters }));
+    //dispatch here.
   };
 
   return (
     <div className="search-page">
       <div className="search-page__header">
-        <h1>Find Educational Institutes</h1>
+        <h1>Find Second Hand Tractors</h1>
         <SearchForm onSearch={handleSearch} />
       </div>
       

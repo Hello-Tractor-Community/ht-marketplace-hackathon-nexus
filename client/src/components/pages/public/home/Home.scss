@@ -1,6 +1,6 @@
-@import '../../../assets/styles/settings.scss';
-@import '../../../assets/styles/abstract/variables';
-@import '../../../assets/styles/abstract/mixins';
+@import '../../../../assets/styles/settings.scss';
+@import '../../../../assets/styles/abstract/variables';
+@import '../../../../assets/styles/abstract/mixins';
 
 .home {
   padding: map-get($spacing, 'xl');

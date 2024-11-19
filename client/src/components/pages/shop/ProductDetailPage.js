@@ -2,14 +2,14 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { IoArrowBack } from 'react-icons/io5';
-import BreadCrumb from '../../components/BreadCrumb';
 
-import NavBar from '../../common/navbar/NavBar';
-import CartItem from '../../components/CartItem';
-import StarRating from '../../components/StarRating';
-import QuantityErrorModal from '../../components/QuantityErrorModal';
-import { AppContext } from '../features/AppContext';
-import mockData from '../../assets/mockData';
+
+import NavBar from '../../common/navigation/NavBar';
+import CartItem from './CartItem';
+import StarRating from './StarRating';
+import QuantityErrorModal from './QuantityErrorModal';
+import { AppContext } from '../../../store/AppContext';
+import mockData from '../../../assets/mockData';
 
 import './ProductDetailPage.scss';
 
@@ -21,7 +21,7 @@ const ProductDetailPage = () => {
   const [customQuantities, setCustomQuantities] = useState({});
   const navigate = useNavigate();
   const { addToCart, upsellShown, cartItems } = useContext(AppContext);
-  const breadcrumbItems = ['Home', 'Products', item.name];
+
   console.log('item..',item)
   const [currentImage, setCurrentImage] = useState(item.images[0].source);
 //   const [currentImage, setCurrentImage] = useState('');
@@ -91,12 +91,7 @@ const ProductDetailPage = () => {
     <div className="main-container">
       <NavBar />
       <CartItem />
-      {/* <div className="header-container">
-        <button onClick={() => navigate(-1)} className="back-button">
-          <IoArrowBack size={24} color="#75A358" />
-        </button>
-        <BreadCrumb items={breadcrumbItems} />
-      </div> */}
+
       {item && (
         <div className="product-container">
           <div className="image-container">

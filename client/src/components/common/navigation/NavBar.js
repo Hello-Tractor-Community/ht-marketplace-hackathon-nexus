@@ -14,15 +14,16 @@ const Navbar = () => {
 
 
   const categoryTitles = {
-    fashion: 'Fashion',
-    homeDecor: 'Home Decor',
-    hobbyLeisure: 'Hobby & Leisure',
+    tractor: 'Tractor',
+    service: 'Service Centers',
+
+   
 
   };
 
 
   const handleNavigateCategory = (category, subCategory) => {
-    navigate('/product', {
+    navigate('/listing', {
       state: {
         category: category,
         subCategory: subCategory
@@ -64,9 +65,7 @@ const Navbar = () => {
             {categoryTitles[title]}
           </div>
         ))}
-        <div onClick={() => navigate('/create')} className="menu-item">
-          Create
-        </div>
+       
 
       </div>
 

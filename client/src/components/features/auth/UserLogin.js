@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../../store/slices/authSlice';
+
+import { loginUser } from '../../../store/slices/authSlice';
 import Button from '../../common/button/Button';
-import Input from '../../components/Input';
+import Input from '../../common/input/Input';
 
 import './Auth.scss';
 const UserLogin = () => {

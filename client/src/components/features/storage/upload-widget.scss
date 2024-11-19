@@ -1,4 +1,4 @@
-@import 'settings';
+@import '../../../assets/styles/settings.scss';
 
 
 .cloudinary-container {
@@ -21,20 +21,20 @@
         text-align: left;
         border: 1px solid green;
         width: 80%;
-        margin: $margin-medium auto;
-        padding: $margin-small;
-        font-size: $p-font-size-small;
+        margin: $large-spacing auto;
+        padding: $small-spacing;
+        font-size: calc($base-font-size/1.5);
 
         table{
             width: 90%;
             margin: auto;
 
             th{
-                font-size: $p-font-size-small;
+                font-size: calc($base-font-size/1.5);
             }
 
             button{
-                font-size: $p-font-size-tiny;
+                font-size: calc($base-font-size/2);
             }
         }
 

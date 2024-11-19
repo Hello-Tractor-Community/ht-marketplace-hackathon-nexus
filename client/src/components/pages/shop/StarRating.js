@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
-import styles from './StarRating.css';
+import styles from './StarRating.scss';
 
 const StarRating = ({ rating }) => {
   const fullStars = Math.floor(rating);

@@ -6,11 +6,11 @@ import { AppContext } from '../../../../store/AppContext';
 // import landingPagePromo from '../assets/images/landing-promo.jpg';
 
 import './LandingPage.scss';
-import logo from '../../../../assets/images/logo/HT_LOGO ICON_RGB_Orange.png';
-import bgimg from '../../../../assets/images/patterns/HT_PATTERNS_RGB-09.png';
-import landingPagePromo1 from '../../../../assets/images/characters/Aziza Gesture.png';
-import landingPagePromo2 from '../../../../assets/images/characters/Gitonga Gesture.png';
-import landingPagePromo3 from '../../../../assets/images/characters/Sasha Boots Neutral.png';
+import logo from '../../../../assets/images/logo/logo.png';
+import bgimg from '../../../../assets/images/patterns/ht_patterns_rgb_1.png';
+import landingPagePromo1 from '../../../../assets/images/characters/aziza_gesture.png';
+import landingPagePromo2 from '../../../../assets/images/characters/gitonga_gesture.png';
+import landingPagePromo3 from '../../../../assets/images/characters/sasha_boots_neutral.png';
 
 const production = process.env.NODE_ENV === 'production';
 const REACT_APP_API_URL = production ? process.env.REACT_APP_API_URL_PROD : process.env.REACT_APP_API_URL_DEV;
@@ -56,7 +56,7 @@ const LandingPage = () => {
           alt="Current promo"
         />
     
-        <h2 className="promo-text">Hello Tractor serving your tractor and.</h2>
+        <h2 className="promo-text">Hello Tractor serving your tractor needs since 2023.</h2>
       </div>
       <div className="login-section">
         <img src={logo} alt="Logo" className="logo" />

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
-import CartItem from '../../components/CartItem';
-import NavBar from '../../common/navbar/NavBar';
+import CartItem from '../shop/CartItem';
+import NavBar from '../../common/navigation/NavBar';
 
 const ErrorPage = () => {
  

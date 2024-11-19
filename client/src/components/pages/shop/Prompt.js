@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './Prompt.css';
+import styles from './Prompt.scss';
 
 const prompts = [
   { text: 'For her', top: '15%', left: '10%' },
