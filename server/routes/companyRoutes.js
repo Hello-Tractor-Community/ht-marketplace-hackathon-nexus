@@ -1,7 +1,7 @@
 // companyRoutes.js
 const express = require('express');
 const router = express.Router();
-const { protect, authorize, verifyBusiness } = require('../middleware/auth');
+const { protect, authorize, verifyCompany } = require('../middleware/auth');
 const { checkOnboardingStatus } = require('../middleware/validation');
 
 // router.use((req, res, next) => {
