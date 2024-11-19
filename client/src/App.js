@@ -62,7 +62,7 @@ const AppContent = () => {
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home />} />
             <Route path="/listing/*" element={<ProductPage />} />
-            <Route path="/listingDetail/*" element={<ProductDetailPage />} />
+            <Route path="/listingDetail/:id" element={<ProductDetailPage />} />
             <Route path="/favs" element={<Favourites />} />
             <Route path="/user">
               <Route path="login" element={<UserLogin />} />

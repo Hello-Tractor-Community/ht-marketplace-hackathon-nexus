@@ -18,6 +18,8 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.4",
     "gh-pages": "^6.1.1",
+    "json-server": "^1.0.0-beta.3",
+    "jsonserver": "^0.1.6",
     "rc-slider": "^11.0.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -26,8 +28,9 @@
     "react-router-dom": "^6.25.1",
     "react-scripts": "5.0.1",
     "react-spring": "^9.7.4",
-    "web-vitals": "^2.1.4",
-    "sass": "^1.80.5"
+    "sass": "^1.80.5",
+    "tailwindcss": "^1.9.6",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,0 +1,312 @@
+{
+   "listings": [{
+      "name": "John Deere Tractor",
+      "sku": "JD12345",
+      "category": "tractor",
+      "seller": "6423f5f1d4f09425e0a5d678",
+      "description": "High-quality tractor for heavy-duty work.",
+      "make": "John Deere",
+      "model": "X758",
+      "serviceHours": 1200,
+      "price": {
+        "amount": 15000,
+        "currency": "USD",
+        "compareAtPrice": 18000
+      },
+      "images": [
+        {
+          "url": "http://localhost:8000/tructors/trucktor1.jpeg",
+          "alt": "Tractor front view",
+          "isPrimary": true
+        }
+      ],
+      "location": {
+        "city": "Des Moines",
+        "state": "Iowa",
+        "country": "USA"
+      },
+      "status": "active",
+      "visibility": {
+        "isFeatured": true,
+        "isNewArrival": false
+      },
+      "inventory": {
+        "quantity": 5,
+        "lowStockThreshold": 2,
+        "sku": "INV-JD12345",
+        "allowBackorder": true
+      },
+      "metrics": {
+        "totalSales": 10,
+        "views": 150,
+        "averageRating": 4.8,
+        "reviewCount": 25
+      }
+    },
+    {
+      "name": "Spare Part - Engine Belt",
+      "sku": "SP56789",
+      "category": "spare parts",
+      "seller": "6423f5f1d4f09425e0a5d679",
+      "description": "Durable engine belt compatible with various tractors.",
+      "make": "Generic",
+      "model": "Universal",
+      "serviceHours": 0,
+      "price": {
+        "amount": 50,
+        "currency": "USD",
+        "compareAtPrice": 75
+      },
+      "images": [
+        {
+          "url": "http://localhost:8000/tructors/trucktor2.jpeg",
+          "alt": "Engine Belt",
+          "isPrimary": true
+        }
+      ],
+      "location": {
+        "city": "Houston",
+        "state": "Texas",
+        "country": "USA"
+      },
+      "status": "active",
+      "visibility": {
+        "isFeatured": false,
+        "isNewArrival": true
+      },
+      "inventory": {
+        "quantity": 50,
+        "lowStockThreshold": 10,
+        "sku": "INV-SP56789",
+        "allowBackorder": false
+      },
+      "metrics": {
+        "totalSales": 150,
+        "views": 500,
+        "averageRating": 4.5,
+        "reviewCount": 60
+      }
+    },
+    {
+      "name": "Spare Part - Engine Belt",
+      "sku": "SP56789",
+      "category": "spare parts",
+      "seller": "6423f5f1d4f09425e0a5d679",
+      "description": "Durable engine belt compatible with various tractors.",
+      "make": "Generic",
+      "model": "Universal",
+      "serviceHours": 0,
+      "price": {
+        "amount": 50,
+        "currency": "USD",
+        "compareAtPrice": 75
+      },
+      "images": [
+        {
+          "url": "http://localhost:8000/tructors/trucktor2.jpeg",
+          "alt": "Engine Belt",
+          "isPrimary": true
+        }
+      ],
+      "location": {
+        "city": "Houston",
+        "state": "Texas",
+        "country": "USA"
+      },
+      "status": "active",
+      "visibility": {
+        "isFeatured": false,
+        "isNewArrival": true
+      },
+      "inventory": {
+        "quantity": 50,
+        "lowStockThreshold": 10,
+        "sku": "INV-SP56789",
+        "allowBackorder": false
+      },
+      "metrics": {
+        "totalSales": 150,
+        "views": 500,
+        "averageRating": 4.5,
+        "reviewCount": 60
+      }
+    },
+    {
+      "name": "Spare Part - Engine Belt",
+      "sku": "SP56789",
+      "category": "spare parts",
+      "seller": "6423f5f1d4f09425e0a5d679",
+      "description": "Durable engine belt compatible with various tractors.",
+      "make": "Generic",
+      "model": "Universal",
+      "serviceHours": 0,
+      "price": {
+        "amount": 50,
+        "currency": "USD",
+        "compareAtPrice": 75
+      },
+      "images": [
+        {
+          "url": "http://localhost:8000/tructors/trucktor2.jpeg",
+          "alt": "Engine Belt",
+          "isPrimary": true
+        }
+      ],
+      "location": {
+        "city": "Houston",
+        "state": "Texas",
+        "country": "USA"
+      },
+      "status": "active",
+      "visibility": {
+        "isFeatured": false,
+        "isNewArrival": true
+      },
+      "inventory": {
+        "quantity": 50,
+        "lowStockThreshold": 10,
+        "sku": "INV-SP56789",
+        "allowBackorder": false
+      },
+      "metrics": {
+        "totalSales": 150,
+        "views": 500,
+        "averageRating": 4.5,
+        "reviewCount": 60
+      }
+    },
+    {
+      "name": "Spare Part - Engine Belt",
+      "sku": "SP56789",
+      "category": "spare parts",
+      "seller": "6423f5f1d4f09425e0a5d679",
+      "description": "Durable engine belt compatible with various tractors.",
+      "make": "Generic",
+      "model": "Universal",
+      "serviceHours": 0,
+      "price": {
+        "amount": 50,
+        "currency": "USD",
+        "compareAtPrice": 75
+      },
+      "images": [
+        {
+          "url": "http://localhost:8000/tructors/trucktor2.jpeg",
+          "alt": "Engine Belt",
+          "isPrimary": true
+        }
+      ],
+      "location": {
+        "city": "Houston",
+        "state": "Texas",
+        "country": "USA"
+      },
+      "status": "active",
+      "visibility": {
+        "isFeatured": false,
+        "isNewArrival": true
+      },
+      "inventory": {
+        "quantity": 50,
+        "lowStockThreshold": 10,
+        "sku": "INV-SP56789",
+        "allowBackorder": false
+      },
+      "metrics": {
+        "totalSales": 150,
+        "views": 500,
+        "averageRating": 4.5,
+        "reviewCount": 60
+      }
+    },
+    {
+      "name": "Spare Part - Engine Belt",
+      "sku": "SP56789",
+      "category": "spare parts",
+      "seller": "6423f5f1d4f09425e0a5d679",
+      "description": "Durable engine belt compatible with various tractors.",
+      "make": "Generic",
+      "model": "Universal",
+      "serviceHours": 0,
+      "price": {
+        "amount": 50,
+        "currency": "USD",
+        "compareAtPrice": 75
+      },
+      "images": [
+        {
+          "url": "http://localhost:8000/tructors/trucktor2.jpeg",
+          "alt": "Engine Belt",
+          "isPrimary": true
+        }
+      ],
+      "location": {
+        "city": "Houston",
+        "state": "Texas",
+        "country": "USA"
+      },
+      "status": "active",
+      "visibility": {
+        "isFeatured": false,
+        "isNewArrival": true
+      },
+      "inventory": {
+        "quantity": 50,
+        "lowStockThreshold": 10,
+        "sku": "INV-SP56789",
+        "allowBackorder": false
+      },
+      "metrics": {
+        "totalSales": 150,
+        "views": 500,
+        "averageRating": 4.5,
+        "reviewCount": 60
+      }
+    },
+    {
+      "name": "Spare Part - Engine Belt",
+      "sku": "SP56789",
+      "category": "spare parts",
+      "seller": "6423f5f1d4f09425e0a5d679",
+      "description": "Durable engine belt compatible with various tractors.",
+      "make": "Generic",
+      "model": "Universal",
+      "serviceHours": 0,
+      "price": {
+        "amount": 50,
+        "currency": "USD",
+        "compareAtPrice": 75
+      },
+      "images": [
+        {
+          "url": "http://localhost:8000/tructors/trucktor2.jpeg",
+          "alt": "Engine Belt",
+          "isPrimary": true
+        }
+      ],
+      "location": {
+        "city": "Houston",
+        "state": "Texas",
+        "country": "USA"
+      },
+      "status": "active",
+      "visibility": {
+        "isFeatured": false,
+        "isNewArrival": true
+      },
+      "inventory": {
+        "quantity": 50,
+        "lowStockThreshold": 10,
+        "sku": "INV-SP56789",
+        "allowBackorder": false
+      },
+      "metrics": {
+        "totalSales": 150,
+        "views": 500,
+        "averageRating": 4.5,
+        "reviewCount": 60
+      }
+    }
+  ]
+}
+  
