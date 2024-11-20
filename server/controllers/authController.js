@@ -457,6 +457,49 @@ const updateUserProfile = async (req, res) => {
     }
 };
 
+// Social Login Routes
+const googleAuth = passport.authenticate('google', {
+    scope: ['profile', 'email']
+});
+
+const googleCallback = (req, res, next) => {
+    passport.authenticate('google', async (err, user) => {
+        if (err) {
+            return res.redirect(`${CLIENT_URL}/login?error=auth_failed`);
+        }
+        
+        if (!user) {
+            return res.redirect(`${CLIENT_URL}/login?error=user_not_found`);
+        }
+
+        const token = generateToken(user._id);
+        
+        // Redirect to frontend with token
+        res.redirect(`${CLIENT_URL}/social-auth-success?token=${token}`);
+    })(req, res, next);
+};
+
+const facebookAuth = passport.authenticate('facebook', {
+    scope: ['email']
+});
+
+const facebookCallback = (req, res, next) => {
+    passport.authenticate('facebook', async (err, user) => {
+        if (err) {
+            return res.redirect(`${CLIENT_URL}/login?error=auth_failed`);
+        }
+        
+        if (!user) {
+            return res.redirect(`${CLIENT_URL}/login?error=user_not_found`);
+        }
+
+        const token = generateToken(user._id);
+        
+        // Redirect to frontend with token
+        res.redirect(`${CLIENT_URL}/social-auth-success?token=${token}`);
+    })(req, res, next);
+};
+
 // Add exports
 module.exports = {
     registerUser,
@@ -468,5 +511,9 @@ module.exports = {
     resendVerification,
     checkVerification,
     addCompanyAssociation,
-    addOperatorDetails
+    addOperatorDetails,
+    googleAuth,
+    googleCallback,
+    facebookAuth,
+    facebookCallback
 };
