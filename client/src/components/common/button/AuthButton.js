@@ -6,7 +6,6 @@ import Button from './Button';
 import { MdBusinessCenter } from 'react-icons/md';
 import { checkEmailVerification, setEmailVerified } from '../../../store/slices/authSlice';
 import { registerUser, loginUser, loginBusiness,logout } from '../../../store/slices/authSlice';
-import api from './config';
 import './AuthButton.scss';
 
 // AuthButton Component - Replaces your current Login button
