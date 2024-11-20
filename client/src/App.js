@@ -84,7 +84,7 @@ const AppContent = () => {
             />
 
             <Route 
-            path="/socialAuthSuccess"
+            path="/social-auth-success"
             element={
               <SocialAuthSuccess />   
             }

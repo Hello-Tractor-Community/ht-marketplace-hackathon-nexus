@@ -17,7 +17,8 @@ const AuthButton = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const user = useSelector(state => state.auth.user);
   
-
+  
+ 
   const handleAuthTypeSelect = (type) => {
     setAuthType(type);
     console.log("authType..", authType);
@@ -86,7 +87,12 @@ const AuthButton = () => {
 const EnhancedLoginModal = ({ authType, onClose, handleAuthTypeSelect }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+  const REACT_APP_API_URL =
+  process.env.REACT_APP_ENVIRONMENT === 'development'
+    ? process.env.REACT_APP_API_URL_DEV
+    : process.env.REACT_APP_API_URL_PROD;
+
+  console.log("API URL..", REACT_APP_API_URL);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -114,6 +120,8 @@ const EnhancedLoginModal = ({ authType, onClose, handleAuthTypeSelect }) => {
         // }));
         try {
           // 1. Register the user first
+
+          console.log("Inside AuthButton..");
           const response = await dispatch(registerUser({
             firstName: formData.firstName,
             lastName: formData.lastName,
@@ -122,6 +130,8 @@ const EnhancedLoginModal = ({ authType, onClose, handleAuthTypeSelect }) => {
             password: formData.password,
             platformRoles: formData.platformRoles
           }));
+
+          console.log("response..", response);
     
           const { success, data } = response.payload;
     
@@ -206,8 +216,13 @@ const EnhancedLoginModal = ({ authType, onClose, handleAuthTypeSelect }) => {
     }
   };
 
+  const handleGoogleRegister = () => {
+    window.location.href = `${REACT_APP_API_URL}/api/v1/auth/google`;
+  };
+  
   const handleGoogleLogin = () => {
-    window.location.href = '/api/v1/auth/google';
+    window.location.href = `${REACT_APP_API_URL}/api/v1/auth/google`;
+   
   };
 
   const handleFacebookLogin = () => {
@@ -331,7 +346,7 @@ const EnhancedLoginModal = ({ authType, onClose, handleAuthTypeSelect }) => {
       </div>
 
       <div className="login-modal__social">
-        <Button variant="quaternary" onClick={() => {}}>
+        <Button variant="quaternary" onClick={handleGoogleRegister}>
           <FaGoogle />
           <span>Register with Google</span>
         </Button>

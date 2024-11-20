@@ -463,6 +463,7 @@ const googleAuth = passport.authenticate('google', {
 });
 
 const googleCallback = (req, res, next) => {
+    console.log("Google callback reached..");
     passport.authenticate('google', async (err, user) => {
         if (err) {
             return res.redirect(`${CLIENT_URL}/login?error=auth_failed`);

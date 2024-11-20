@@ -129,7 +129,7 @@ const EmailVerification = () => {
     if (companyDetails && isCompanyAdmin) {
       console.log("should now navigate!");
 
-      navigate('/admin/dashboard', {
+      navigate('/seller/portal', {
         state: {
           companyDetails,
           verificationStatus: 'completed',

@@ -20,9 +20,12 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Please add a password'],
         minlength: 8,
-        select: false
+        select: false,
+        required: function () {
+            // Password is required only if no social accounts are linked
+            return this.socialMediaAccounts.length === 0;
+        },
     },
     phone: {
         number: String,

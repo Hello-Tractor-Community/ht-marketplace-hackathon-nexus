@@ -13,8 +13,9 @@ const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
-const session = require('express-session');
 const passport = require('./config/passport');
+const session = require('express-session');
+
 
 
 // Performance Imports
@@ -59,6 +60,7 @@ const securityMiddleware = () => {
         credentials: true
     }));
 
+
     
     // Rate Limiting
     app.use('/api/', rateLimit({
@@ -78,6 +80,10 @@ const securityMiddleware = () => {
             sameSite: production ? 'strict' : 'lax'
         }
     }));
+
+    // Passport Configuration
+    app.use(passport.initialize());
+    app.use(passport.session());
 
     // Passport Configuration
     app.use(passport.initialize());
@@ -132,16 +138,16 @@ const connectMongoDB = () =>{
 }
 
 // Telegram Bot Configuration
-const configureTelegramBot = () => {
-    const bot = new Telegraf(process.env.BOT_TOKEN);
+// const configureTelegramBot = () => {
+//     const bot = new Telegraf(process.env.BOT_TOKEN);
     
-    bot.start((ctx) => ctx.reply('Welcome to hello tractor commerce store!'));
-    bot.command('shop', (ctx) => {
-        ctx.reply('Hi! Please visit our shop: https://hello-tractor-commerce.onrender.com');
-    });
+//     bot.start((ctx) => ctx.reply('Welcome to hello tractor commerce store!'));
+//     bot.command('shop', (ctx) => {
+//         ctx.reply('Hi! Please visit our shop: https://hello-tractor-commerce.onrender.com');
+//     });
     
-    return bot;
-};
+//     return bot;
+// };
 
 // Server Startup Configuration
 const startServer = () => {
@@ -169,8 +175,8 @@ const startServer = () => {
         connectMongoDB();
         
         // Initialize Telegram bot
-        const bot = configureTelegramBot();
-        bot.launch();
+        // const bot = configureTelegramBot();
+        // bot.launch();
 
         // Start server
         app.listen(PORT, () => {

@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 
-const RoleRoute = ({ children, roles }) => {
+const RoleRoute = ({ children, platformRoles }) => {
   const { isAuthenticated, user, authLoading } = useSelector((state) => state.auth);
   const location = useLocation();
 
@@ -11,7 +11,7 @@ const RoleRoute = ({ children, roles }) => {
     isAuthenticated,
     authLoading,
     user: user,
-    requiredRoles: roles,
+    requiredRoles: platformRoles,
     pathname: location.pathname
   });
 
@@ -23,25 +23,18 @@ const RoleRoute = ({ children, roles }) => {
 
   if (!isAuthenticated) {
     console.log("RoleRoute: Not authenticated, redirecting to login");
-    return <Navigate to="/business/login" state={{ from: location }} replace />;
+    return <Navigate to="/company/login" state={{ from: location }} replace />;
   }
 
-  const hasRequiredRole = roles.some(role => {
-    if (role === 'business_admin') {
-      const hasRole = user?.businessAssociations?.some(
-        assoc => ['owner', 'founder', 'manager'].includes(assoc.role) &&
+  const hasRequiredRole = platformRoles.some(role => {
+    if (role === 'seller') {
+      const hasRole = user?.companyAssociations?.some(
+        assoc => ['owner', 'founder', 'manager','agent'].includes(assoc.role) &&
                  assoc.status === 'active'
       );
-      console.log("RoleRoute: Checking business_admin role:", { hasRole, associations: user?.businessAssociations });
+      console.log("RoleRoute: Checking company_admin role:", { hasRole, associations: user?.companyAssociations });
       return hasRole;
     }
-
-    if (role === 'platform_admin') {
-      const hasRole = user?.platformRoles?.includes('platform_admin');
-      console.log("RoleRoute: Checking platform_admin role:", { hasRole, platformRoles: user?.platformRoles });
-      return hasRole;
-    }
-
     return false;
   });
 
