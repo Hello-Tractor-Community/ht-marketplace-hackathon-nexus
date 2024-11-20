@@ -15,7 +15,8 @@ const companySchema = new mongoose.Schema({
     companyType: {
         type: String,
         enum: ['Freelance', 'Small Company', 'Registered Company'],
-        required: true
+        required: true, 
+        default: 'Freelance'
     },
     registrationStatus: {
         type: String,

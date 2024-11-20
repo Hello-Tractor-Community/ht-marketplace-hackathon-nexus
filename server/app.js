@@ -31,6 +31,7 @@ const authRoutes = require('./routes/authRoutes');
 const companyRoutes = require('./routes/companyRoutes');
 const listingRoutes = require('./routes/listingRoutes');
 const companyOnboardingRoutes = require('./routes/companyOnboardingRoutes');
+const userRoutes = require('./routes/userRoutes')
 
 // Middleware Imports
 const errorHandler = require('./middleware/errorHandler');
@@ -58,9 +59,6 @@ const securityMiddleware = () => {
         credentials: true
     }));
 
-    // Passport Configuration
-    app.use(passport.initialize());
-    app.use(passport.session());
     
     // Rate Limiting
     app.use('/api/', rateLimit({
@@ -68,7 +66,7 @@ const securityMiddleware = () => {
         max: 100, // limit each IP to 100 requests per windowMs
         message: 'Too many requests from this IP, please try again later.'
     }));
-
+    
     // Session Configuration
     app.use(session({
         secret: process.env.SESSION_SECRET || 'secret-key',
@@ -80,6 +78,10 @@ const securityMiddleware = () => {
             sameSite: production ? 'strict' : 'lax'
         }
     }));
+
+    // Passport Configuration
+    app.use(passport.initialize());
+    app.use(passport.session());
 };
 
 // Parser Middleware Configuration
@@ -103,7 +105,8 @@ const performanceMiddleware = () => {
 const configureRoutes = () => {
     // API Endpoints
     app.use('/api/v1/auth', authRoutes);
-    app.use('/api/v1/company', companyRoutes);
+    app.use('/api/v1/user', userRoutes)
+    app.use('/api/v1/companys', companyRoutes);
     app.use('/api/v1/listings', listingRoutes);
     app.use('/api/v1/onboarding', companyOnboardingRoutes);
 
