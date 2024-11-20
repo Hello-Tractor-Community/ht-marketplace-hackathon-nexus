@@ -3,7 +3,7 @@
 // controllers/authController.js
 
 const { generateToken, generateRefreshToken, generateTempToken } = require('../utils/generateToken');
-const passport = require('passport');
+const passport = require('../config/passport');
 
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');

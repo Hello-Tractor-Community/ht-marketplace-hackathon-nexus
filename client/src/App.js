@@ -25,6 +25,7 @@ import UserLogin from './components/features/auth/UserLogin';
 import UserRegister from './components/features/auth/BuyerRegister';
 import EmailVerification from './components/features/emailVerification/EmailVerification';
 import EmailConfirmation from './components/features/emailVerification/EmailConfirmation';
+import SocialAuthSuccess from './components/features/socialAuth/SocialAuthSuccess';
 // Protected Components
 import ProtectedRoute from './components/common/protectedRoute/ProtectedRoute';
 import ErrorPage from './components/pages/error/ErrorPage';
@@ -80,6 +81,13 @@ const AppContent = () => {
               element={
                 <EmailConfirmation />
               }
+            />
+
+            <Route 
+            path="/socialAuthSuccess"
+            element={
+              <SocialAuthSuccess />   
+            }
             />
   
             {/* Protected Business Admin Routes */}
