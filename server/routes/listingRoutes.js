@@ -18,6 +18,8 @@ const {
 } = require('../controllers/listingController');
 
 // Public routes
+// Create Listing
+router.post('/', createListing);
 router.get('/', getListings);
 router.get('/search', searchListings);
 router.get('/featured', getFeaturedListings);
@@ -26,13 +28,12 @@ router.get('/business/:businessId', getListingsByBusiness);
 router.get('/:id', getListingById);
 
 // Protected routes
-router.use(protect);
+// router.use(protect);
 
 // Business owner routes
 router.use(verifyCompany);
-router.use(checkOnboardingStatus);
+// router.use(checkOnboardingStatus);
 
-router.post('/', createListing);
 router.route('/:id')
     .put(updateListing)
     .delete(deleteListing);

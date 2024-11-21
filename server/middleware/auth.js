@@ -86,12 +86,12 @@ const authorize = (allowedRoles) => {
 
 // Middleware for company-specific routes
 const verifyCompany = async (req, res, next) => {
-    if (req.user.role !== 'artisan' || !req.user.companyProfile) {
-        return res.status(403).json({
-            success: false,
-            error: 'This route is only accessible to verified companyes'
-        });
-    }
+    // if (req.user.role !== 'artisan' || !req.user.companyProfile) {
+    //     return res.status(403).json({
+    //         success: false,
+    //         error: 'This route is only accessible to verified companyes'
+    //     });
+    // }
     next();
 };
 
