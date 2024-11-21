@@ -1,62 +1,53 @@
-// Backend socket handling (socket.js)
-const handleSocket = (io) => {
-  const presenceTimeouts = new Map();
-  io.on('connection', (socket) => {
-    socket.on('presence:ping', async ({ userId, status, timestamp }) => {
-      // Clear existing timeout
-      if (presenceTimeouts.has(userId)) {
-        clearTimeout(presenceTimeouts.get(userId));
-      }
+const socketIO = require('socket.io');
+const Message = require('../models/Message');
+const Conversation = require('../models/Conversation');
 
-      // Set new timeout
-      const timeout = setTimeout(async () => {
-        await UserPresence.findOneAndUpdate(
-          { user: userId },
-          { status: 'offline', lastActive: Date.now() }
-        );
-        io.emit('presenceUpdate', { 
-          userId, 
-          status: 'offline',
-          timestamp: Date.now()
+function initializeSocketIO(server) {
+    const io = socketIO(server);
+
+    io.on('connection', (socket) => {
+        // User joins their personal room
+        socket.on('join', (userId) => {
+            socket.join(userId);
         });
-      }, PresenceManager.OFFLINE_TIMEOUT);
 
-      presenceTimeouts.set(userId, timeout);
+        // Handle new message
+        socket.on('sendMessage', async (messageData) => {
+            try {
+                const { senderId, recipientId, content, conversationId } = messageData;
 
-      // Update presence
-      await UserPresence.findOneAndUpdate(
-        { user: userId },
-        { 
-          status,
-          lastActive: timestamp,
-          lastPing: Date.now()
-        },
-        { upsert: true }
-      );
+                let conversation;
+                if (!conversationId) {
+                    conversation = await Conversation.findOneOrCreate({
+                        participants: [senderId, recipientId]
+                    });
+                } else {
+                    conversation = await Conversation.findById(conversationId);
+                }
 
-      io.emit('presenceUpdate', { userId, status, timestamp });
+                const message = await Message.create({
+                    conversation: conversation._id,
+                    sender: senderId,
+                    recipient: recipientId,
+                    content
+                });
+
+                // Emit to recipient
+                io.to(recipientId).emit('newMessage', message);
+                
+                // Emit to sender for optimistic UI
+                socket.emit('messageSent', message);
+            } catch (error) {
+                socket.emit('messageError', error.message);
+            }
+        });
+
+        socket.on('disconnect', () => {
+            console.log('User disconnected');
+        });
     });
 
-    socket.on('typing', ({ conversationId }) => {
-      socket.to(`conversation_${conversationId}`).emit('userTyping', {
-        userId: socket.userId,
-        conversationId
-      });
-    });
+    return io;
+}
 
-    socket.on('stopTyping', ({ conversationId }) => {
-      socket.to(`conversation_${conversationId}`).emit('userStoppedTyping', {
-        userId: socket.userId,
-        conversationId
-      });
-    });
-
-    socket.on('disconnect', () => {
-      // Clean up any presence timeouts
-      if (socket.userId && presenceTimeouts.has(socket.userId)) {
-        clearTimeout(presenceTimeouts.get(socket.userId));
-        presenceTimeouts.delete(socket.userId);
-      }
-    });
-  });
-};
+module.exports = initializeSocketIO;

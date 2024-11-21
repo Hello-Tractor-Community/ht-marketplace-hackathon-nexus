@@ -86,19 +86,32 @@ const authorize = (allowedRoles) => {
 
 // Middleware for company-specific routes
 const verifyCompany = async (req, res, next) => {
-    // if (req.user.role !== 'artisan' || !req.user.companyProfile) {
-    //     return res.status(403).json({
-    //         success: false,
-    //         error: 'This route is only accessible to verified companyes'
-    //     });
-    // }
+    if (req.user.role !== 'artisan' || !req.user.companyProfile) {
+        return res.status(403).json({
+            success: false,
+            error: 'This route is only accessible to verified companyes'
+        });
+    }
     next();
 };
+
+// Temporary authentication bypass middleware
+const bypassAuth = (req, res, next) => {
+    // Simulate a user for testing
+
+    req.user = {
+      _id: '673f02a4b9ac057d09dd84f9', // Buyer ID
+      firstName: 'Buyer',
+      lastName: 'Natnael'
+    };
+    next();
+  };
 
 
 module.exports = { 
     protect, 
     authorize, 
     verifyCompany,
+    bypassAuth
 
 };

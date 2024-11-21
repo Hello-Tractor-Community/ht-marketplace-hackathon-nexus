@@ -33,6 +33,7 @@ const companyRoutes = require('./routes/companyRoutes');
 const listingRoutes = require('./routes/listingRoutes');
 const companyOnboardingRoutes = require('./routes/companyOnboardingRoutes');
 const userRoutes = require('./routes/userRoutes')
+const messageRoutes = require('./routes/messageRoute');
 
 // Middleware Imports
 const errorHandler = require('./middleware/errorHandler');
@@ -115,6 +116,8 @@ const configureRoutes = () => {
     app.use('/api/v1/companys', companyRoutes);
     app.use('/api/v1/listings', listingRoutes);
     app.use('/api/v1/onboarding', companyOnboardingRoutes);
+
+    app.use('/api/v1/messages', messageRoutes);
 
     // Base Routes
     app.get('/', (req, res) => {

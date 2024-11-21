@@ -1,44 +1,45 @@
-// models/Conversation.js
 const mongoose = require('mongoose');
 
 const conversationSchema = new mongoose.Schema({
-  participants: [{
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
+    participants: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }],
+    listing: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Listing',
+        required: true
     },
-    business: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Business'
+    buyer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
-    role: {
-      type: String,
-      enum: ['buyer', 'seller'],
-      required: true
+    seller: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    type: {
+        type: String,
+        enum: ['listing_inquiry', 'purchase_discussion'],
+        default: 'listing_inquiry'
+    },
+    status: {
+        type: String,
+        enum: ['active', 'resolved', 'closed'],
+        default: 'active'
+    },
+    lastMessage: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message'
     }
-  }],
-  product: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
-    required: true
-  },
-  status: {
-    type: String,
-    enum: ['active', 'archived', 'deleted'],
-    default: 'active'
-  },
-  lastMessage: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Message'
-  },
-  metadata: {
-    productName: String,
-    productImage: String,
-    initialInquiry: String
-  },
-  encryptionKey: {
-    type: String,
-    required: true
-  }
-}, { timestamps: true });
+}, {
+    timestamps: true
+});
+
+// Ensure unique conversation per listing and buyer-seller pair
+conversationSchema.index({ listing: 1, buyer: 1, seller: 1 }, { unique: true });
+
+module.exports = mongoose.model('Conversation', conversationSchema);

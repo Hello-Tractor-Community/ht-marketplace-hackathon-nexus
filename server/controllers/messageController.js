@@ -1,118 +1,171 @@
-// controllers/messageController.js
 const Message = require('../models/Message');
 const Conversation = require('../models/Conversation');
-const Business = require('../models/Business');
+const Listing = require('../models/Listing');
+const ErrorResponse = require('../utils/errorResponse');
+const asyncHandler = require('../middleware/async');
 
-const messageController = {
-  // Initialize conversation
-  async createConversation(req, res) {
-    try {
-      const { productId, buyerId, message } = req.body;
-      const encryptionKey = encryptionUtils.generateConversationKey();
-      const product = await Product.findById(productId);
-      
-      if (!product) {
-        return res.status(404).json({ error: 'Product not found' });
-      }
+const createListingConversation = asyncHandler(async (req, res, next) => {
+    const { listingId } = req.params;
+    const buyerId = req.user._id;
 
-      const business = await Business.findById(product.business);
-      
-      const conversation = await Conversation.create({
-        participants: [
-          { user: buyerId, role: 'buyer' },
-          { user: product.artisan, business: product.business, role: 'seller' }
-        ],
-        product: productId,
-        metadata: {
-          productName: product.name,
-          productImage: product.images[0]?.url,
-          initialInquiry: message
-        },
-        encryptionKey
-      });
-
-      const encryptedMessage = encryptionUtils.encryptMessage(message, encryptionKey);
-
-      // Create initial message
-      const initialMessage = await Message.create({
-        conversation: conversation._id,
-        sender: buyerId,
-        content: encryptedMessage,
-        encrypted: true
-      });
-
-      conversation.lastMessage = initialMessage._id;
-      await conversation.save();
-
-      // Emit socket event
-      req.io.to(`business_${product.business}`).emit('newConversation', conversation);
-
-      res.status(201).json(conversation);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    // Find the listing and verify it exists
+    const listing = await Listing.findById(listingId).populate('seller');
+    if (!listing) {
+        return next(new ErrorResponse('Listing not found', 404));
     }
-  },
 
-  // Get business conversations
-  async getBusinessConversations(req, res) {
-    try {
-      const { businessId } = req.params;
-      const conversations = await Conversation.find({
-        'participants.business': businessId,
-        status: 'active'
-      })
-      .populate('participants.user', 'firstName lastName')
-      .populate('product', 'name images')
-      .populate('lastMessage')
-      .sort('-updatedAt');
-
-      res.json(conversations);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    // Prevent buyer from messaging their own listing
+    if (listing.seller._id.toString() === buyerId.toString()) {
+        return next(new ErrorResponse('You cannot message your own listing', 400));
     }
-  },
 
-  // Send message
-  async sendMessage(req, res) {
-    try {
-      const { conversationId, content, attachments } = req.body;
-      const senderId = req.user._id;
+    // Check if conversation already exists
+    let conversation = await Conversation.findOne({
+        listing: listingId,
+        buyer: buyerId,
+        seller: listing.seller._id
+    });
 
-      const conversation = await Conversation.findById(conversationId);
-      const encryptedContent = encryptionUtils.encryptMessage(
-        content, 
-        conversation.encryptionKey
-      );
+    // Create new conversation if it doesn't exist
+    if (!conversation) {
+        conversation = await Conversation.create({
+            listing: listingId,
+            buyer: buyerId,
+            seller: listing.seller._id,
+            participants: [buyerId, listing.seller._id]
+        });
+    }
 
-      const message = await Message.create({
+    res.status(201).json({
+        success: true,
+        data: conversation
+    });
+});
+
+const sendListingMessage = asyncHandler(async (req, res, next) => {
+    const { conversationId } = req.params;
+    const { content, attachments } = req.body;
+    const senderId = req.user._id;
+
+    // Find the conversation
+    const conversation = await Conversation.findById(conversationId)
+        .populate('buyer')
+        .populate('seller')
+        .populate('listing');
+
+    if (!conversation) {
+        return next(new ErrorResponse('Conversation not found', 404));
+    }
+
+    // Verify sender is a participant
+    const isParticipant = conversation.participants.some(
+        participant => participant.toString() === senderId.toString()
+    );
+
+    if (!isParticipant) {
+        return next(new ErrorResponse('You are not a participant in this conversation', 403));
+    }
+
+    // Create the message
+    const message = await Message.create({
         conversation: conversationId,
         sender: senderId,
-        content: encryptedContent,
-        attachments,
-        encrypted: true
-      });
+        recipient: senderId.toString() === conversation.buyer._id.toString() 
+            ? conversation.seller._id 
+            : conversation.buyer._id,
+        content,
+        attachments
+    });
 
-      // Update conversation
-      await Conversation.findByIdAndUpdate(conversationId, {
-        lastMessage: message._id,
-        updatedAt: new Date()
-      });
+    // Update conversation's last message
+    conversation.lastMessage = message._id;
+    await conversation.save();
 
-      // Get recipient from conversation
-      const conversation = await Conversation.findById(conversationId);
-      const recipient = conversation.participants.find(
-        p => p.user.toString() !== senderId.toString()
-      );
+    res.status(201).json({
+        success: true,
+        data: message
+    });
+});
 
-      // Emit socket events
-      if (recipient.business) {
-        req.io.to(`business_${recipient.business}`).emit('newMessage', message);
-      }
-      req.io.to(`user_${recipient.user}`).emit('newMessage', message);
+const getBuyerListingConversations = asyncHandler(async (req, res, next) => {
+    console.log('Request params:', req.params);
 
-      res.status(201).json(message);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    const buyerId = req.user._id;
+    console.log("BuyerID: ", buyerId)
+
+    const conversations = await Conversation.find({ buyer: buyerId })
+        .populate('listing', 'name images price')
+        .populate('seller', 'firstName lastName profileImage')
+        .populate({
+            path: 'lastMessage',
+            select: 'content createdAt'
+        })
+        .sort({ updatedAt: -1 });
+    
+        console.log(conversations)
+
+    res.status(200).json({
+        success: true,
+        count: conversations.length,
+        data: conversations
+    });
+});
+
+const getSellerListingConversations = asyncHandler(async (req, res, next) => {
+    const sellerId = req.user._id;
+    console.log("Seller Id: ", sellerId)
+
+    const conversations = await Conversation.find({ seller: sellerId })
+        .populate('listing', 'name images price')
+        .populate('buyer', 'firstName lastName profileImage')
+        .populate({
+            path: 'lastMessage',
+            select: 'content createdAt'
+        })
+        .sort({ updatedAt: -1 });
+
+    console.log(conversations)
+
+    res.status(200).json({
+        success: true,
+        count: conversations.length,
+        data: conversations
+    });
+});
+
+const getConversationMessages = asyncHandler(async (req, res, next) => {
+    const { conversationId } = req.params;
+    const userId = req.user._id;
+
+    // Verify user is part of the conversation
+    const conversation = await Conversation.findById(conversationId);
+    if (!conversation) {
+        return next(new ErrorResponse('Conversation not found', 404));
     }
-  }
-};
+
+    const isParticipant = conversation.participants.some(
+        participant => participant.toString() === userId.toString()
+    );
+
+    if (!isParticipant) {
+        return next(new ErrorResponse('You are not authorized to view this conversation', 403));
+    }
+
+    const messages = await Message.find({ conversation: conversationId })
+        .populate('sender', 'firstName lastName profileImage')
+        .sort({ createdAt: 1 });
+
+    res.status(200).json({
+        success: true,
+        count: messages.length,
+        data: messages
+    });
+});
+
+module.exports = {
+    getConversationMessages,
+    createListingConversation,
+    sendListingMessage,
+    getSellerListingConversations,
+    getBuyerListingConversations
+}
