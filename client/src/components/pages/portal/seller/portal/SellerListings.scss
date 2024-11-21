@@ -1,0 +1,242 @@
+@import 'settings';
+
+
+// ToggleButton.scss
+
+$toggle-width: 60px;
+$toggle-height: 30px;
+$toggle-radius: $toggle-height / 2;
+$slider-width: 25px;
+$slider-height: 25px;
+$slider-radius: $slider-width / 2;
+$toggle-color: #ccc;
+$toggle-checked-color: #2196f3;
+
+.toggle-container {
+    width: $toggle-width;
+    height: $toggle-height;
+    border-radius: $toggle-radius;
+    background-color: $toggle-color;
+    position: relative;
+    cursor: pointer;
+}
+
+.toggle-button {
+    width: 100%;
+    height: 100%;
+    border-radius: $toggle-radius;
+    background-color: $toggle-color;
+    transition: background-color 0.3s;
+
+    &.checked {
+        background-color: $toggle-checked-color;
+    }
+}
+
+.toggle-slider {
+    width: $slider-width;
+    height: $slider-height;
+    border-radius: $slider-radius;
+    background-color: #fff;
+    position: absolute;
+    top: ($toggle-height - $slider-height) / 2;
+    transition: transform 0.3s, opacity 0.3s;
+
+    &.left {
+        transform: translateX(($toggle-width - $slider-width) / 2 - $toggle-radius);
+        opacity: 1;
+    }
+
+    &.right {
+        transform: translateX($toggle-width - $slider-width - ($toggle-width - $slider-width) / 2 - $toggle-radius);
+        opacity: 0.6;
+    }
+}
+
+.thumbnail-url-converter {
+    border: 1px solid $secondary-color-black;
+    border-radius: $margin-medium;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: $margin-small;
+    padding: $margin-small;
+    margin-bottom: $margin-medium;
+    position: relative;
+
+    p {
+        display: block;
+    }
+
+}
+
+.seller-listing-controller{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: $margin-big;
+    width: 100%;
+    
+
+    .seller-content-form, .seller-cloudinary-container
+    {
+        border: 1px solid $primary-color;
+        border-radius: $margin-medium;
+        width: 90%;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: $margin-medium;
+        padding: $margin-big $margin-small;
+    }
+
+    .seller-content-form {
+              
+        
+    
+        form {
+            // ToggleButton.scss
+            display: flex;
+    
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: $margin-medium;
+            padding: $margin-small;
+            margin-bottom: $margin-medium;
+            position: relative;
+    
+            width: 90%;
+            margin: auto;
+            $toggle-width: 60px;
+            $toggle-height: 34px;
+            $toggle-radius: $toggle-height / 2;
+            $slider-width: 26px;
+            $slider-height: 26px;
+            $slider-radius: $slider-width / 2;
+            $toggle-color: #ccc;
+            $toggle-checked-color: #2196f3;
+    
+            .featured{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                p{
+                    display: inline-block;
+                    margin-right: $margin-medium;
+                }
+            }
+    
+            .toggle-container {
+                width: $toggle-width;
+                height: $toggle-height;
+                border-radius: $toggle-radius;
+                background-color: $toggle-color;
+                position: relative;
+                cursor: pointer;
+                display: inline-block;
+                
+                // padding:$margin-extra-large;
+               
+            }
+    
+            .toggle-button {
+                width: 100%;
+                height: 100%;
+                border-radius: $toggle-radius;
+                background-color: $toggle-color;
+                transition: background-color 0.3s;
+                display: flex;
+                align-items: center;
+                padding: 4px;
+              
+    
+                span{
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                }
+    
+                &.checked {
+                    background-color: $toggle-checked-color;
+    
+                    .toggle-slider {
+                        transform: translateX($toggle-width - $slider-width - 4px);
+                    }
+                }
+            }
+    
+            .toggle-slider {
+                width: $slider-width;
+                height: $slider-height;
+                border-radius: $slider-radius;
+                background-color: #fff;
+                transition: transform 0.3s;
+                transform: translateX(4px);
+            }
+
+            input, textarea{
+                display: block;
+                width: 40%;
+                margin: auto;
+            }
+            button{
+                margin-left: $margin-big;
+
+            }
+        }
+       
+    
+      
+    
+    }
+}
+
+
+
+.listings-table{
+    width: 90%;
+    display: flex;
+    margin: $margin-small auto;
+    flex-direction: column;
+    border: 1px solid $primary-color;
+    border-radius: $margin-medium;
+    padding: $margin-big $margin-small;
+    table {
+        width: 80%;
+        margin: $margin-big auto;
+
+    }
+
+    thead {
+        font-size: $p-font-size-small;
+        font-weight: bold;
+
+        th{
+            font-size: $p-font-size-tiny;
+        }
+    }
+
+    tbody {
+        font-size: $p-font-size-small;
+
+        button{
+            font-size: $p-font-size-tiny;
+            background-color: $secondary-color-fade-dark;
+            color: $secondary-color-fade-light;
+            padding: $margin-bento;
+
+            &:hover{
+                background-color: red;
+            }
+        }
+    }
+}

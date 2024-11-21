@@ -32,8 +32,10 @@ const authRoutes = require('./routes/authRoutes');
 const companyRoutes = require('./routes/companyRoutes');
 const listingRoutes = require('./routes/listingRoutes');
 const companyOnboardingRoutes = require('./routes/companyOnboardingRoutes');
-const userRoutes = require('./routes/userRoutes')
-const messageRoutes = require('./routes/messageRoute');
+const userRoutes = require('./routes/userRoutes');
+const imageProxyRoutes = require('./routes/imageProxyRoutes');
+const cloudinaryRoutes = require('./routes/cloudinaryRoutes');
+
 
 // Middleware Imports
 const errorHandler = require('./middleware/errorHandler');
@@ -116,8 +118,8 @@ const configureRoutes = () => {
     app.use('/api/v1/companys', companyRoutes);
     app.use('/api/v1/listings', listingRoutes);
     app.use('/api/v1/onboarding', companyOnboardingRoutes);
-
-    app.use('/api/v1/messages', messageRoutes);
+    app.use('/api/v1/images', imageProxyRoutes);
+    app.use('/api/v1/cloudinary', cloudinaryRoutes);
 
     // Base Routes
     app.get('/', (req, res) => {

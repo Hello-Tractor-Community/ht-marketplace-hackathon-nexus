@@ -1,0 +1,173 @@
+.admin-login-page,
+.admin-dashboard {
+  background-color: #5733FF;
+  color: #FFFFFF;
+  font-family: "Montserrat", sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+.admin-login-page button,
+.admin-dashboard button {
+  background-color: #FFD9E8;
+  color: #020202;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+.admin-login-page button:hover,
+.admin-dashboard button:hover {
+  background-color: #020202;
+  color: #FFD9E8;
+  border: 1px solid #020202;
+}
+
+.admin-login-page button {
+  background-color: #FFD9E8;
+  color: #020202;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.5rem;
+  width: 50%;
+  margin: auto;
+}
+.admin-login-page button:hover {
+  background-color: #020202;
+  color: #FFD9E8;
+  border: 1px solid #020202;
+}
+.admin-login-page input {
+  font-size: 0.8rem;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  font-family: "Montserrat", sans-serif;
+  margin-right: 0.5rem;
+}
+
+.logo-container {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 0.25rem;
+  left: 2rem;
+  background-color: #FFFFFF;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+.logo-container img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.admin-dashboard h2 {
+  font-size: 2rem;
+}
+.admin-dashboard h3 {
+  font-size: 1.4rem;
+}
+.admin-dashboard h3, .admin-dashboard h4 {
+  color: #FFFFFF;
+  background-color: #5733FF;
+  margin-top: 2rem;
+}
+.admin-dashboard .admin-button-logout {
+  position: absolute;
+  top: 1rem;
+  right: 3rem;
+  background-color: transparent;
+  color: #FFFFFF;
+  border: 1px solid #020202;
+  font-weight: normal;
+}
+.admin-dashboard .admin-button-logout:hover {
+  background-color: #FFFFFF;
+  color: #5733FF;
+  border: 1px solid #020202;
+  font-weight: bold;
+}
+
+.admin-welcome {
+  color: #020202;
+  font-size: 2rem;
+}
+
+.admin-items {
+  background-color: #FFFFFF;
+  color: #020202;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: left;
+  margin: auto 1rem;
+  position: relative;
+  min-height: 50vh;
+  min-width: 50vw;
+}
+.admin-items table {
+  margin-top: 1rem;
+  border: 2px solid #020202;
+}
+.admin-items thead {
+  background-color: #020202;
+  color: #FFFFFF;
+  font-weight: bold;
+  font-size: 1rem;
+}
+.admin-items tbody p {
+  font-size: 0.8rem;
+}
+.admin-items tbody img {
+  width: 40px;
+  height: 40px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.admin-items input, .admin-items textarea {
+  font-size: 0.8rem;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  font-family: "Montserrat", sans-serif;
+  margin-right: 0.5rem;
+}
+.admin-items textarea {
+  border: 1px solid #020202;
+  height: 100px; /* Set a specific height for the textarea */
+  resize: vertical; /* Allow vertical resizing of the textarea */
+}
+.admin-items .admin-buttons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.admin-items .admin-buttons-container button {
+  background-color: rgba(83, 83, 246, 0.3882352941);
+  color: #FFFFFF;
+  border: 1px solid #020202;
+  padding: 1rem 3rem;
+  font-weight: normal;
+}
+.admin-items .admin-buttons-container button:hover {
+  background-color: #020202;
+  color: #5733FF;
+}
+.admin-items .admin-buttons-container button.active {
+  background-color: #020202;
+  color: #FFD9E8;
+}/*# sourceMappingURL=SellerPortal.css.map */

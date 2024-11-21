@@ -1,3 +1,58 @@
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Rooney", serif;
+  font-weight: 700;
+  font-size: 2.25rem;
+  line-height: 1.2;
+  color: hsl(218, 69%, 2%);
+}
+
+h2, h3, h4 {
+  font-family: "Avenir", sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  color: hsl(218, 69%, 2%);
+}
+
+body {
+  font-family: "Avenir", sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: hsl(188, 11%, 36%);
+  background-color: hsl(218, 65%, 100%);
+}
+
+.cta {
+  font-family: "Avenir", sans-serif;
+  font-weight: 600;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: hsl(218, 47%, 99%);
+  background-color: hsl(13.8, 100%, 60.78%);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s, color 0.3s;
+  border: 1px solid hsl(218, 10%, 95%);
+}
+.cta:hover {
+  background-color: hsl(218, 47%, 39%);
+  color: hsl(218, 69%, 2%);
+}
+
+.cta:hover {
+  background-color: hsl(193.47, 73.13%, 39.41%);
+  color: hsl(248, 47%, 99%);
+}
+
+.card {
+  background-color: hsl(0, 0%, 99%);
+  color: hsl(218, 69%, 1%);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
 .container {
   display: flex;
   flex-direction: column;

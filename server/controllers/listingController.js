@@ -4,6 +4,83 @@ const User = require('../models/User'); // Assuming User model exists
 const mongoose = require('mongoose');
 const asyncHandler = require('express-async-handler');
 
+// const createListing = asyncHandler(async (req, res) => {
+//     const {
+        
+//         sku,
+//         seller,
+        
+//     } = req.body;
+
+//   // Log the seller after destructuring
+//   console.log("Seller after destructuring:", seller);
+
+//   // Validate ObjectId
+//   if (!mongoose.Types.ObjectId.isValid(seller)) {
+//       res.status(400);
+//       throw new Error('Invalid seller ID format');
+//   }
+
+//     // Convert string to ObjectId
+//     const sellerId = new mongoose.Types.ObjectId(seller);
+//     console.log("Converted sellerId:", sellerId);
+
+//    // Validate ObjectIds
+//     if (!mongoose.Types.ObjectId.isValid(sellerId)) {
+//         res.status(400);
+//         throw new Error('Invalid seller ID');
+//     }
+
+
+//     // Check seller exists
+//     const foundSeller = await User.findById(sellerId);
+//     if (!foundSeller) {
+//         res.status(404);
+//         throw new Error('Seller not found');
+//     }
+
+//     // Check SKU uniqueness
+//     const existingSku = await Listing.findOne({ sku });
+//     if (existingSku) {
+//         res.status(400);
+//         throw new Error('SKU already exists');
+//     }
+
+//     // const listing = await Listing.create({
+//     //     ...req.body,
+//     //     seller: sellerId,
+//     // });
+//         // Create a specific listing object
+//         const listingToCreate = {
+//             name: req.body.name,
+//             sku: req.body.sku,
+//             category: req.body.category,
+//             seller: sellerId,  // Use the converted ID directly
+//             description: req.body.description,
+//             make: req.body.make,
+//             model: req.body.model,
+//             serviceHours: req.body.serviceHours,
+//             price: req.body.price,
+//             images: req.body.images,
+//             location: req.body.location,
+//             status: req.body.status,
+//             visibility: req.body.visibility,
+//             inventory: req.body.inventory,
+//             metrics: req.body.metrics
+//         };
+
+//         console.log("About to create listing with data:", listingToCreate);
+
+//     // Create the listing with explicit object
+//     const listing = await Listing.create(listingToCreate);
+
+//     res.status(201).json({
+//         success: true,
+//         data: listing
+//     });
+// });
+
+
 const createListing = asyncHandler(async (req, res) => {
     const {
         name,
@@ -38,35 +115,22 @@ const createListing = asyncHandler(async (req, res) => {
         throw new Error('Seller not found');
     }
 
-    // Check SKU uniqueness
-    const existingSku = await Listing.findOne({ sku });
-    if (existingSku) {
-        res.status(400);
-        throw new Error('SKU already exists');
+    console.log("Final seller value:", listingToCreate.seller);
+    console.log("About to create listing with data:", listingToCreate);
+
+    try {
+        // Create the listing with explicit object
+        const listing = await Listing.create(listingToCreate);
+        console.log("Created listing:", listing);
+
+        res.status(201).json({
+            success: true,
+            data: listing
+        });
+    } catch (error) {
+        console.error("Error details:", error);
+        throw error;
     }
-
-    const listing = await Listing.create({
-        name,
-        sku,
-        category,
-        seller,
-        description,
-        make,
-        model,
-        serviceHours,
-        price,
-        images,
-        location,
-        status,
-        visibility,
-        inventory,
-        metrics
-    });
-
-    res.status(201).json({
-        success: true,
-        data: listing
-    });
 });
 
 const getListings = asyncHandler(async (req, res) => {

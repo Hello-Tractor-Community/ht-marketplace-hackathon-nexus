@@ -1,4 +1,8 @@
 // src/services/api/listing.js
+
+import api from './config';
+
+
 export const listingService = {
     getListings: async (params) => {
       try {
@@ -22,6 +26,15 @@ export const listingService = {
       try {
         const response = await api.get(`/listings/${id}`);
         return response.data;
+      } catch (error) {
+        throw error.response?.data || error.message;
+      }
+    },
+
+    getListingsByUser: async (userId) => {
+      try {
+        const response = await api.get(`/listings?seller=${userId}`);
+        return response.data.data; // Note: response has a nested 'data' structure
       } catch (error) {
         throw error.response?.data || error.message;
       }

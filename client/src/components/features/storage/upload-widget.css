@@ -1,0 +1,31 @@
+.cloudinary-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  text-align: left;
+}
+.cloudinary-container .cloudinary-uploader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+  border: 1px solid green;
+  width: 80%;
+  margin: 2rem auto;
+  padding: 0.5rem;
+  font-size: 10.6666666667px;
+}
+.cloudinary-container .cloudinary-uploader table {
+  width: 90%;
+  margin: auto;
+}
+.cloudinary-container .cloudinary-uploader table th {
+  font-size: 10.6666666667px;
+}
+.cloudinary-container .cloudinary-uploader table button {
+  font-size: 8px;
+}/*# sourceMappingURL=upload-widget.css.map */

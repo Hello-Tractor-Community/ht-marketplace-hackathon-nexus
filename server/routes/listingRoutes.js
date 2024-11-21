@@ -26,6 +26,8 @@ router.get('/featured', getFeaturedListings);
 router.get('/new-arrivals', getNewArrivals);
 router.get('/business/:businessId', getListingsByBusiness);
 router.get('/:id', getListingById);
+// crud operation on listing should be protected
+router.post('/', createListing);
 
 // Protected routes
 // router.use(protect);
@@ -33,6 +35,7 @@ router.get('/:id', getListingById);
 // Business owner routes
 router.use(verifyCompany);
 // router.use(checkOnboardingStatus);
+
 
 router.route('/:id')
     .put(updateListing)

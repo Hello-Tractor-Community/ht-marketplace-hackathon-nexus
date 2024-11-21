@@ -1,31 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import { logout } from '../../../../../store/slices/authSlice';
+import logo from '../../../../../assets/images/logo/logo.png';
 
-import UploadWidgetClaudinary from '../../../../features/storage/UploadWidgetClaudinary';
-import axios from 'axios';
-import { FaEye, FaEyeSlash, FaCopy, FaTrash } from 'react-icons/fa';
+import SellerListings from './SellerListings';
 
+import './SellerPortal.scss'; // Import CSS file for styling
 
-
-// import bcrypt from 'bcryptjs'; // Import bcryptjs for hashing
-
-import './seller_portal.scss'; // Import CSS file for styling
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-// const API_URL = 'https://api-netconn.brosfe.com';
 
 const SellerPortal = () => {
-  const navigate = useNavigate();  
+  const dispatch = useDispatch();
+  const navigate = useNavigate(); 
+  const { user } = useSelector((state) => state.auth);
+
+  const [error, setError] = useState(null);
   
+  const [isListingsVisible, setIsListingsVisible] = useState(true);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    // Redirect the user to the home page
+    navigate('/home');
+  };
+
+  function handleToggleVisibility(contentType) {
+    // Set the visibility of the content based on the button clicked
+    setIsListingsVisible(contentType === 'listings');
+  }
+
   return (
     <div className='admin-dashboard'>
+      <div className='logo-container'>
+        <img src={logo} alt='hello-tractor logo'></img>
 
-<h2>Seller Portal</h2>
-     
+      </div>
+
+      <h2>Seller Portal</h2>
+      <h3 className='admin-welcome'>Welcome! You're logged in as {user?.firstName} {user?.lastName}</h3>
+      <button onClick={handleLogout}
+        className='admin-button-logout'>Logout</button>
+      <div className='admin-items'>
+        <div className='admin-buttons-container'>
+          <button onClick={() => handleToggleVisibility('listings')}
+          style={{ color: isListingsVisible ? '#FFD9E8' : '#FFFFFF' }}
+          className={isListingsVisible ? 'active' : ''}>
+            Listings
+          </button>
+        </div>
+
+
+        {isListingsVisible && (
+          <>
+         <SellerListings />
+        
+         </>
+        )
+        }
+       
+      </div>
+
 
     </div>
-
-
   );
 };
 
