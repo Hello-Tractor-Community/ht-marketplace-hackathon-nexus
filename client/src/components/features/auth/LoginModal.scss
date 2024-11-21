@@ -1,0 +1,47 @@
+@import '../../../assets/styles/abstract/_variables.scss';
+.login-modal{
+    background-color: $secondary;
+   
+    width: 100%;
+    position: relative;
+
+  &__content{
+        .errorMessage{
+            background-color: hsl($accent);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%); 
+            color:hsl($accent-foreground);
+            width: 75%;
+            margin: auto;
+        }
+      }      
+}
+
+.role-selection {
+    display: flex;           // Makes the container a flexbox
+    flex-direction: row;     // Aligns items in a horizontal row
+    justify-content: space-between; // Adjusts spacing between items
+    align-items: center;     // Vertically centers the items
+    gap: 1rem;               // Adds consistent spacing between buttons
+   
+    padding: 1rem;           // Optional: Adds spacing inside the container
+  }
+  
+//   .role-buttons {
+    
+//     padding: 0.5rem 1rem;    // Adds spacing inside buttons
+//     border-radius: 8px;      // Optional: Rounds button edges
+  
+//     &.active {
+//       background-color: #2563eb; // Blue background for active
+//       color: white;             // White text
+//     }
+  
+//     &:hover {
+//       cursor: pointer;          // Pointer on hover
+//       background-color: #d1d5db; // Lighter gray on hover
+//     }
+//   }
+

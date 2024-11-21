@@ -20,9 +20,10 @@ const initializeAuthState = () => {
     }
 
     const currentUser = authService.getCurrentUser();
+    console.log("currenuser..",currentUser);
     return {
       user: currentUser,
-      isAuthenticated: !!hasToken && !!currentUser, // More strict check
+      isAuthenticated: currentUser?.isVerified ?? false,
       isVerified: currentUser?.isVerified ?? false,
       verifiedAt: currentUser?.verifiedAt ?? null,
       companyDetails: currentUser?.companyDetails ?? null,
@@ -111,6 +112,9 @@ export const checkEmailVerification = createAsyncThunk(
         companyDetails: response.data.companyDetails || null,
         user: {
           _id: response.data.user._id,
+          firstName: response.data.user.firstName,
+          lastName: response.data.user.lastName,
+          email: response.data.user.email,
           companyAssociations: response.data.user.companyAssociations,
           security: response.data.user.security,
           platformRoles: response.data.user.platformRoles
@@ -142,6 +146,7 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.verifiedAt = action.payload.verifiedAt || new Date().toISOString();
       state.authLoading = false;
+      clearError(state); 
       
       // Update the entire user object
       if (action.payload.user) {
@@ -204,7 +209,6 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.isAuthenticated = true;
         state.authLoading = false;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -221,8 +225,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.authLoading = false;
         state.isVerified = action.payload.isVerified;
-        state.verifiedAt = action.payload.verifiedAt;
-       
+        state.verifiedAt = action.payload.verifiedAt;      
       
         // Update user data
         if (action.payload.user) {

@@ -1,4 +1,3 @@
-// RoleRoute.js
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
@@ -7,43 +6,62 @@ const RoleRoute = ({ children, platformRoles }) => {
   const { isAuthenticated, user, authLoading } = useSelector((state) => state.auth);
   const location = useLocation();
 
-  console.log("RoleRoute initial check:", {
+  
+
+  // Debugging logs
+  console.log("RoleRoute Initial Debugging:");
+  console.log({
     isAuthenticated,
     authLoading,
-    user: user,
+    user,
     requiredRoles: platformRoles,
-    pathname: location.pathname
+    currentPath: location.pathname,
   });
 
-  // Wait for auth to be checked
+  // Wait for auth to load
   if (authLoading) {
-    console.log('RoleRoute: Auth loading...');
-    return null; // or a loading spinner
+    console.log("RoleRoute: Auth still loading...");
+    return null;
   }
 
+  // Redirect if not authenticated
   if (!isAuthenticated) {
-    console.log("RoleRoute: Not authenticated, redirecting to login");
+    console.warn("RoleRoute: User not authenticated. Redirecting to login...");
     return <Navigate to="/company/login" state={{ from: location }} replace />;
   }
 
-  const hasRequiredRole = platformRoles.some(role => {
-    if (role === 'seller') {
-      const hasRole = user?.companyAssociations?.some(
-        assoc => ['owner', 'founder', 'manager','agent'].includes(assoc.role) &&
-                 assoc.status === 'active'
-      );
-      console.log("RoleRoute: Checking company_admin role:", { hasRole, associations: user?.companyAssociations });
-      return hasRole;
+  // Check if user has one of the required roles
+  const hasRequiredRole = platformRoles.some((role) => {
+    if (role === "seller") {
+      const isSeller = user?.platformRoles?.includes("seller");
+      return isSeller;
     }
+    if (role === "admin") {
+      const isAdmin = user?.platformRoles?.includes("admin");
+      console.log("RoleRoute: Admin role check:", { isAdmin });
+      return isAdmin;
+    }
+    if (role === "buyer") {
+      const isBuyer = user?.platformRoles?.includes("buyer");
+      console.log("RoleRoute: Buyer role check:", { isBuyer });
+      return isBuyer;
+    }
+    console.warn(`RoleRoute: Role '${role}' is not explicitly handled.`);
     return false;
   });
 
   if (!hasRequiredRole) {
-    console.log("RoleRoute: Missing required role, redirecting to unauthorized");
+    console.warn("RoleRoute: Missing required role. Redirecting to unauthorized.");
+    console.log("RoleRoute Debugging Context:", {
+      userRoles: user?.platformRoles,
+      companyAssociations: user?.companyAssociations,
+      platformRoles,
+      location,
+    });
     return <Navigate to="/unauthorized" replace />;
   }
 
-  console.log("RoleRoute: All checks passed, rendering children");
+  console.log("RoleRoute: User passed all checks. Rendering children.");
   return children;
 };
 

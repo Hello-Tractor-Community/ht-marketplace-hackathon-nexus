@@ -47,14 +47,14 @@ const reviewSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    product: {
+    listing: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: 'Listing',
         required: true
     },
-    business: {
+    company: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Business',
+        ref: 'Company',
         required: true
     },
     user: {
@@ -69,10 +69,9 @@ const reviewSchema = new mongoose.Schema({
     tags: [{
         type: String,
         enum: [
-            'Quality Materials', 'Excellent Craftsmanship', 
+            'Quality Tractor', 'Excellent Service', 
             'Great Communication', 'Fast Shipping',
-            'Custom Request', 'Packaging', 'Authentic',
-            'Sustainable', 'Handmade'
+            'Authentic','Sustainable', 
         ]
     }],
     helpfulVotes: {
@@ -88,7 +87,7 @@ const reviewSchema = new mongoose.Schema({
         enum: ['pending', 'published', 'flagged', 'removed'],
         default: 'pending'
     },
-    businessResponse: {
+    companyResponse: {
         text: String,
         respondedAt: Date,
         lastUpdated: Date
@@ -99,18 +98,18 @@ const reviewSchema = new mongoose.Schema({
     toObject: { virtuals: true }
 });
 
-// Prevent user from submitting more than one review per product
-reviewSchema.index({ product: 1, user: 1 }, { unique: true });
+// Prevent user from submitting more than one review per listing
+reviewSchema.index({ listing: 1, user: 1 }, { unique: true });
 
 // Static method to calculate average ratings
-reviewSchema.statics.getAverageRatings = async function(businessId) {
+reviewSchema.statics.getAverageRatings = async function(companyId) {
     const obj = await this.aggregate([
         {
-            $match: { business: businessId }
+            $match: { company: companyId }
         },
         {
             $group: {
-                _id: '$business',
+                _id: '$company',
                 averageOverall: { $avg: '$rating.overall' },
                 averageCraftsmanship: { $avg: '$rating.craftsmanship' },
                 averageValueForMoney: { $avg: '$rating.valueForMoney' },
@@ -122,7 +121,7 @@ reviewSchema.statics.getAverageRatings = async function(businessId) {
 
     try {
         if (obj[0]) {
-            await this.model('Business').findByIdAndUpdate(businessId, {
+            await this.model('Company').findByIdAndUpdate(companyId, {
                 ratings: {
                     overall: obj[0].averageOverall.toFixed(1),
                     craftsmanship: obj[0].averageCraftsmanship.toFixed(1),
@@ -139,11 +138,11 @@ reviewSchema.statics.getAverageRatings = async function(businessId) {
 
 // Update ratings after save/remove
 reviewSchema.post('save', function() {
-    this.constructor.getAverageRatings(this.business);
+    this.constructor.getAverageRatings(this.company);
 });
 
 reviewSchema.pre('remove', function() {
-    this.constructor.getAverageRatings(this.business);
+    this.constructor.getAverageRatings(this.company);
 });
 
 

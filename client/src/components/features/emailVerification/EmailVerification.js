@@ -10,13 +10,16 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 
 const EmailVerification = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+
   const dispatch = useDispatch();
   const [verificationStatus, setVerificationStatus] = useState('pending');
-  const [companyDetails, setCompanyDetails] = useState(null);
+
   // const [user, setUser] = useState(null);
   const { isAuthenticated, user, authLoading } = useSelector((state) => state.auth);
+
   const [checkingVerification, setCheckingVerification] = useState(false);
+
+
   const [resendStatus, setResendStatus] = useState('');
   const [resendCount, setResendCount] = useState(0);
   const [tokenCheckAttempts, setTokenCheckAttempts] = useState(0);
@@ -28,130 +31,76 @@ const EmailVerification = () => {
     return token !== null;
   };
 
-  // Effect for token checking
-  useEffect(() => {
-    let tokenCheckInterval;
+ // First effect
+useEffect(() => {
+  let tokenCheckInterval;
 
-    if (verificationStatus === 'pending') {
-      tokenCheckInterval = setInterval(() => {
-        setTokenCheckAttempts(prev => {
-          // If we've exceeded max attempts, clear interval and set error
-          if (prev >= MAX_TOKEN_CHECK_ATTEMPTS) {
-            clearInterval(tokenCheckInterval);
-            setVerificationStatus('error');
-            return prev;
-          }
-
-          // Check if we have a token
-          if (checkForToken()) {
-            clearInterval(tokenCheckInterval);
-            // Trigger verification check once we have a token
-            setCheckingVerification(false); // Reset this to allow verification check
-            return prev;
-          }
-
-          return prev + 1;
-        });
-      }, 2000); // Check every 2 seconds
-    }
-
-    return () => {
-      if (tokenCheckInterval) {
-        clearInterval(tokenCheckInterval);
-      }
-    };
-  }, [verificationStatus]);
-
-  // Effect for verification status checking
-  useEffect(() => {
-    const checkVerificationStatus = async () => {
-      if (checkingVerification || verificationStatus === 'error') return;
-
-      // Only proceed if we have a token
-      if (!checkForToken()) return;
-
-      setCheckingVerification(true);
-
-      try {
-        const result = await dispatch(checkEmailVerification()).unwrap();
-        console.log("EmailVerification result verified..", result.isVerified);
-        console.log("EmailVerification result..", result);
-        if (result.isVerified) {
-          setVerificationStatus('success');
-          setCompanyDetails(result.companyDetails);
-          // setUser(result.user);
-          // Update the auth state to mark the user as authenticated and verified
-          console.log("email to be verified..");
-          dispatch(setEmailVerified({
-            verifiedAt: result.verifiedAt,
-            user: result.user,
-            companyDetails: result.companyDetails
-          }));
-          console.log("Email verified, updated state:", {
-            verifiedAt: result.verifiedAt,
-            user: result.user,
-            companyDetails: result.companyDetails
-          });
-        }
-      } catch (error) {
-        console.error('Error checking verification status:', error);
-        if (tokenCheckAttempts >= MAX_TOKEN_CHECK_ATTEMPTS) {
+  if (verificationStatus === 'pending') {
+    tokenCheckInterval = setInterval(() => {
+      setTokenCheckAttempts(prev => {
+        if (prev >= MAX_TOKEN_CHECK_ATTEMPTS) {
+          clearInterval(tokenCheckInterval);
           setVerificationStatus('error');
+          return prev;
         }
-      } finally {
-        setCheckingVerification(false);
-      }
-    };
 
-    // Only poll if we're pending and have a token
-    if (verificationStatus === 'pending') {
-      const interval = setInterval(checkVerificationStatus, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [dispatch, checkingVerification, verificationStatus, tokenCheckAttempts]);
+        if (checkForToken()) {
+          clearInterval(tokenCheckInterval);
+          setCheckingVerification(false);
+          return prev;
+        }
 
-
-  
-  const handleContinue = async () => {
-    const isCompanyAdmin = user?.companyAssociations?.some(
-      assoc => ['owner', 'founder', 'manager'].includes(assoc.role) &&
-        assoc.status === 'active'
-    );
-
-    console.log("Email verification..");
-    console.log('isCompanyAdmin..', isCompanyAdmin);
-    console.log('user..', user);
-    console.log('companyDetails..', companyDetails);
-
-    // Wait for any pending state updates
-    await Promise.resolve();
-
-    if (companyDetails && isCompanyAdmin) {
-      console.log("should now navigate!");
-
-      navigate('/seller/portal', {
-        state: {
-          companyDetails,
-          verificationStatus: 'completed',
-          user
-        },
-        replace: true
+        return prev + 1;
       });
-    } else if (companyDetails) {
-      // If they have company details but aren't admin level
-      navigate('/home', {
-        state: {
-          companyDetails,
-          verificationStatus: 'completed',
-          user
-        },
-        replace: true
-      });
-    } else {
-      // Fallback route if no company details are available
-      navigate('/home', { replace: true });
+    }, 2000);
+  }
+
+  return () => {
+    if (tokenCheckInterval) {
+      clearInterval(tokenCheckInterval);
     }
   };
+}, [verificationStatus]); // Only run when verificationStatus changes
+
+// Second effect
+useEffect(() => {
+  const checkVerificationStatus = async () => {
+    // Add check to stop if already successful
+    if (verificationStatus === 'success' || 
+        checkingVerification || 
+        verificationStatus === 'error') return;
+
+    if (!checkForToken()) return;
+    setCheckingVerification(true);
+
+    try {
+      const result = await dispatch(checkEmailVerification()).unwrap();
+      
+      if (result.isVerified) {
+        setVerificationStatus('success');
+        dispatch(setEmailVerified({
+          verifiedAt: result.verifiedAt,
+          user: result.user,
+          companyDetails: result.companyDetails
+        }));
+      }
+    } catch (error) {
+      console.error('Error checking verification status:', error);
+      if (tokenCheckAttempts >= MAX_TOKEN_CHECK_ATTEMPTS) {
+        setVerificationStatus('error');
+      }
+    } finally {
+      setCheckingVerification(false);
+    }
+  };
+
+  // Only poll if we're pending and have a token
+  if (verificationStatus === 'pending') {
+    const interval = setInterval(checkVerificationStatus, 5000);
+    return () => clearInterval(interval);
+  }
+}, [dispatch, checkingVerification, verificationStatus, tokenCheckAttempts]);
+
 
   const handleResendVerification = async () => {
     if (resendCount >= 3) {
@@ -171,49 +120,43 @@ const EmailVerification = () => {
     }
   };
 
-  const renderContent = () => {
-    // Add a new state for waiting for token
-    if (verificationStatus === 'pending' && !checkForToken()) {
-      return (
-        <div className="verification-waiting">
-          <h2>Waiting for Email Verification</h2>
-          <p>Please complete the verification in the email we sent you.</p>
-          <p>This page will automatically update once verification is complete.</p>
-          {tokenCheckAttempts > 0 && (
-            <p className="attempt-counter">
-              Waiting for verification... ({Math.floor((MAX_TOKEN_CHECK_ATTEMPTS - tokenCheckAttempts) * 2)} seconds remaining)
-            </p>
-          )}
-          <Button onClick={handleResendVerification} disabled={resendCount >= 3}>
-            Resend Verification Email
-          </Button>
-          {resendStatus && <p className="status-message">{resendStatus}</p>}
-          <h2>isAuthenticated is.. </h2>
-          {isAuthenticated && <p>true</p>}
-          <h2>authLoading is.. </h2>
-          {authLoading && <p>true</p>}
-        </div>
-      );
-    }
+  const handleContinue = async () => {
+    navigate('/home', { replace: true });
+  }
 
+
+
+  const renderContent = () => {
     switch (verificationStatus) {
+      case 'pending':
+        return (
+          <div className="verification-waiting">
+            <h2>Waiting for Email Verification</h2>
+            <p>Please complete the verification in the email we sent you.</p>
+            <p>This page will automatically update once verification is complete.</p>
+            {tokenCheckAttempts > 0 && (
+              <p className="attempt-counter">
+                Waiting for verification... (
+                {Math.floor((MAX_TOKEN_CHECK_ATTEMPTS - tokenCheckAttempts) * 2)} seconds remaining)
+              </p>
+            )}
+            <Button onClick={handleResendVerification} disabled={resendCount >= 3}>
+              Resend Verification Email
+            </Button>
+            {resendStatus && <p className="status-message">{resendStatus}</p>}
+          </div>
+        );
+
       case 'success':
         return (
-          <div className="verification-success">
-            <h2>Email Verified Successfully!</h2>
-            <p>Your email has been verified and your account is now active.</p>
-            {companyDetails && (
-              <div className="company-details">
-                <p>Company Name: {companyDetails.companyName}</p>
-                <p>Your Role: {companyDetails.role}</p>
-              </div>
-            )}
-            <Button onClick={handleContinue}>Continue to Onboarding</Button>
-            <h2>isAuthenticated is.. </h2>
-            {isAuthenticated && <p>true</p>}
-            <h2>authLoading is.. </h2>
-            {authLoading && <p>true</p>}
-          </div>
+                 <div className="verification-success">
+              <h2>Email Verified Successfully!</h2>
+              <p>
+                Hello {user?.firstName}, your email has been verified and your account is now active.
+              </p>
+              <Button onClick={handleContinue}>Continue to store</Button>
+            </div>
+       
         );
 
       case 'error':
@@ -225,41 +168,17 @@ const EmailVerification = () => {
               Resend Verification Email
             </Button>
             {resendStatus && <p className="status-message">{resendStatus}</p>}
-            <h2>isAuthenticated is.. </h2>
-            {isAuthenticated && <p>true</p>}
-            <h2>authLoading is.. </h2>
-            {authLoading && <p>true</p>}
           </div>
         );
 
       default:
-        return (
-          <div className="verification-waiting">
-            <h2>Waiting for Email Verification</h2>
-            <p>Please complete the verification in the email we sent you.</p>
-            <p>This page will automatically update once verification is complete.</p>
-            {tokenCheckAttempts > 0 && (
-              <p className="attempt-counter">
-                Waiting for verification... ({Math.floor((MAX_TOKEN_CHECK_ATTEMPTS - tokenCheckAttempts) * 2)} seconds remaining)
-              </p>
-            )}
-            <Button onClick={handleResendVerification} disabled={resendCount >= 3}>
-              Resend Verification Email
-            </Button>
-            {resendStatus && <p className="status-message">{resendStatus}</p>}
-
-            <h2>isAuthenticated is.. </h2>
-            {isAuthenticated && <p>true</p>}
-            <h2>authLoading is.. </h2>
-            {authLoading && <p>true</p>}
-
-          </div>
-        );
+        return null; // Handles undefined or unexpected statuses
     }
   };
 
+
   return (
-    <div className="email-verification-page">
+    <div className="email-verification">
       <NavBar />
       {renderContent()}
     </div>

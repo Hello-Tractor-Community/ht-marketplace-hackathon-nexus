@@ -22,7 +22,7 @@ import RoleRoute from './components/common/protectedRoute/RoleRoute';
 // Auth Components
 import UserLogin from './components/features/auth/UserLogin';
 // import UserRegister from './components/features/auth/UserRegister';
-import UserRegister from './components/features/auth/BuyerRegister';
+
 import EmailVerification from './components/features/emailVerification/EmailVerification';
 import EmailConfirmation from './components/features/emailVerification/EmailConfirmation';
 import SocialAuthSuccess from './components/features/socialAuth/SocialAuthSuccess';
@@ -67,7 +67,7 @@ const AppContent = () => {
             <Route path="/favs" element={<Favourites />} />
             <Route path="/user">
               <Route path="login" element={<UserLogin />} />
-              <Route path="register" element={<UserRegister />} />
+              {/* <Route path="register" element={<UserRegister />} /> */}
             </Route>
             {/* Semi-protected onboarding route */}
             <Route
@@ -95,22 +95,22 @@ const AppContent = () => {
               path="/seller/*"
               element={
                 <ProtectedRoute>
-                  <RoleRoute roles={['seller']}>
+                  <RoleRoute platformRoles={['seller']}>
                     <Routes>
                       <Route path="portal" element={<SellerPortal />} />
-                      {/* <Route path="seller" element={<SellerPortal />} /> */}
-                  </Routes>
+                    </Routes>
                   </RoleRoute>
                 </ProtectedRoute>
               }
             />
 
           <Route 
-              path="/buyer-portal/*" 
+              path="/buyer/*" 
               element={
                 <ProtectedRoute>
-                  <RoleRoute roles={['buyer']}>
-                  <BuyerPortal />
+                  <RoleRoute platformRoles={['buyer']}>
+                  <Route path="portal" element={<BuyerPortal />} />
+                  
                   </RoleRoute>
                 </ProtectedRoute>
               } 

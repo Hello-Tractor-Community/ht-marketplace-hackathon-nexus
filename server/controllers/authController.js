@@ -116,8 +116,12 @@ const checkVerification = asyncHandler(async (req, res, next) => {
         } : null,
         user: {
             _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
             companyAssociations,
-            platformRoles: user.platformRoles,            
+            platformRoles: user.platformRoles, 
+            security: user.security           
         }
     };
 
@@ -180,7 +184,7 @@ const resendVerification = asyncHandler(async (req, res, next) => {
 });
 
 const registerUser = asyncHandler(async (req, res, next) => {
-    const { firstName, lastName, email, phone, password, roles } = req.body;
+    const { firstName, lastName, email, phone, password, platformRoles } = req.body;
 
     const userExists = await User.findOne({ email });
 
@@ -194,7 +198,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
         email,
         phone,
         password,
-        platformRoles: roles,
+        platformRoles,
         companyAssociations: [],
         operatorDetails: {},
         security: {}
@@ -463,22 +467,40 @@ const googleAuth = passport.authenticate('google', {
 });
 
 const googleCallback = (req, res, next) => {
-    console.log("Google callback reached..");
-    passport.authenticate('google', async (err, user) => {
+    console.log("Google callback reached...");
+    
+    passport.authenticate('google', async (err, user, info) => {
+      try {
+        // Handle authentication errors
         if (err) {
-            return res.redirect(`${CLIENT_URL}/login?error=auth_failed`);
+          console.error("Error during Google authentication:", err);
+          return res.redirect(`${CLIENT_URL}/login?error=auth_failed`);
         }
-        
+  
+        // Handle case where no user is returned
         if (!user) {
-            return res.redirect(`${CLIENT_URL}/login?error=user_not_found`);
+          console.warn("Google authentication failed, user not found.");
+          return res.redirect(`${CLIENT_URL}/login?error=user_not_found`);
         }
-
+  
+        // Generate a token for the authenticated user
         const token = generateToken(user._id);
-        
-        // Redirect to frontend with token
+        if (!token) {
+          console.error("Failed to generate token for user.");
+          return res.redirect(`${CLIENT_URL}/login?error=token_generation_failed`);
+        }
+  
+        // Redirect to frontend with the token
+        console.log("Google authentication successful, redirecting with token.");
         res.redirect(`${CLIENT_URL}/social-auth-success?token=${token}`);
+      } catch (error) {
+        // Catch unexpected errors
+        console.error("Unexpected error in Google callback:", error);
+        return res.redirect(`${CLIENT_URL}/login?error=internal_server_error`);
+      }
     })(req, res, next);
-};
+  };
+  
 
 const facebookAuth = passport.authenticate('facebook', {
     scope: ['email']

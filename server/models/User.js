@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema({
     platformRoles: [{
         type: String,
         enum: ['buyer', 'seller', 'admin'],
-        default: 'buyer'
+        default: ['buyer']
     }],
     
     // Company associations 

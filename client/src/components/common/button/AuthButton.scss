@@ -1,4 +1,24 @@
-@import '../../../assets/styles/abstract/_variables.scss';
-.loginmodel{
-    background-color: $primary;
-}
+@import '../../../assets/styles/abstract/variables';
+  
+ 
+  .authbutton-container {
+    position: absolute; 
+    top: 0%;          
+    left: 80%;          
+    transform: translateX(-50%); 
+    z-index: 1000;      
+ 
+    padding: 1rem;      
+    border-radius: 8px; 
+    max-width: 50%; 
+   
+    width: 300px;  
+    background-color: hsl($popover);
+    border: 1px solid hsl($border);
+    align-items: center;
+   
+  }
+  
+  
+  
+  

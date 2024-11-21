@@ -26,6 +26,7 @@ router.post('/operator-details',addOperatorDetails);
 router.post('/login', loginUser);
 router.post('/logout', logoutUser);
 router.get('/verify/:token', verifyEmail);
+router.post('/resend-verification', resendVerification);
 
 // Social authentication routes
 router.get('/google', googleAuth);
@@ -42,7 +43,7 @@ router.get('/check-verification', (req, res, next) => {
 });
 router.get('/profile', getUserProfile);
 router.put('/profile', updateUserProfile);
-router.post('/verify/resend', resendVerification);
+
 
 
 

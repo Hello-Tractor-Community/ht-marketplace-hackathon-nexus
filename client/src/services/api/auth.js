@@ -35,7 +35,7 @@ export const authService = {
     localStorage.removeItem(TOKEN_KEY);  // Removes the token from localStorage
     delete api.defaults.headers.common['Authorization'];  // Optionally, remove the Authorization header from API defaults
   },
-  
+
 
   /**
    * Login user with credentials
@@ -54,7 +54,7 @@ export const authService = {
       }
 
       authService.setAuthData(token, user);
-      return {token, user, companyDetails, success};
+      return { token, user, companyDetails, success };
     } catch (error) {
       authService.clearAuthData(); // Clear any partial data on error
       throw error.response?.data || error.message;
@@ -68,14 +68,14 @@ export const authService = {
     try {
       const response = await api.post('/auth/register', userData);
       console.log('Full response from server:', response);
-  
+
       const { success, data } = response.data;
-      console.log("success..",success);
-      console.log("data..",data);
+      console.log("success..", success);
+      console.log("data..", data);
       if (!success || !data.user || !data.token) {
         throw new Error('Invalid response format from server');
       }
-  
+
       const { user, token } = data;
       authService.setAuthData(token, user);
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -129,7 +129,7 @@ export const authService = {
       const user = JSON.parse(userStr);
 
       // Validate user object has required properties
-      if (!user.id || !Array.isArray(user.roles)) {
+      if (!user.id || !Array.isArray(user.platformRoles)) {
         authService.clearAuthData();
         return null;
       }
@@ -142,22 +142,6 @@ export const authService = {
     }
   },
 
-  // checkEmailVerification: async () => {
-  //   // const token = localStorage.getItem('token');
-  //   const token = authService.getToken();
-  //   console.log('token in checkEmailVerification..', token);
-  //   try {
-  //     const response = await api.get('/auth/check-verification', {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     throw error.response?.data || error.message;
-  //   }
-  // },
-
   checkEmailVerification: async () => {
     try {
       const token = localStorage.getItem(TOKEN_KEY);
@@ -168,7 +152,7 @@ export const authService = {
 
       // Set token in default headers
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
+
       const response = await api.get('/auth/check-verification');
       console.log('response in checkEmailVerification..', response.data.data);
       return {
@@ -185,8 +169,10 @@ export const authService = {
   /**
    * Check if user is authenticated
    */
-  isAuthenticated: () => {
-    return !!localStorage.getItem(TOKEN_KEY);
+  isAuthenticated: (state) => {
+    console.log('isVerified value in isAuthenticated:', state.isVerified); // Debugging step
+    const token = localStorage.getItem(TOKEN_KEY);
+    return !!token && state.isVerified;
   },
 
   /**
@@ -265,15 +251,10 @@ export const authService = {
       throw error.response?.data || error.message;
     }
   },
-  
+
 
   resendVerificationEmail: async () => {
-    // try {
-    //   const response = await api.post('/auth/verify/resend');
-    //   return response.data;
-    // } catch (error) {
-    //   throw error.response?.data || error.message;
-    // }
+
     const token = authService.getToken();
     if (!token) {
       throw new Error('No authentication token found');

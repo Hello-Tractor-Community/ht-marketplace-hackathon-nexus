@@ -35,11 +35,14 @@
             background-color: darken(hsl($background), 5%);
             transform: translateY(-1px);
             @include shadow(2);
+            // border: 1px;
         }
 
-        &:active {
+        &.active {
             transform: translateY(0);
             @include shadow(1);
+            background-color: hsl($accent);
+            color: hsl($accent-foreground);
         }
     }
 

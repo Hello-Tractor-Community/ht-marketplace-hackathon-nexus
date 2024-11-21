@@ -1,0 +1,16 @@
+@import '../../../assets/styles/abstract/_variables.scss';
+
+
+.profilebtn-container{
+
+    &__options{
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+        a{
+            display: block;
+        }
+    }
+
+}

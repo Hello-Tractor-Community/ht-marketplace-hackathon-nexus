@@ -1,49 +1,112 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { FaUserCircle } from 'react-icons/fa';
+import Button from './Button';
+import { logout } from '../../../store/slices/authSlice';
 
-const ProfileButton = ({ user }) => {
-    const [showDropdown, setShowDropdown] = useState(false);
-    const dispatch = useDispatch();
-    
-    const handleLogout = () => {
-      dispatch(logout());
-    };
+const ProfileButton = () => {
+  const businessDetails = useSelector((state) => state.auth.businessDetails);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   
-    const getProfileLink = () => {
-      return user.businessDetails 
-        ? '/business-portal'
-        : '/customer-portal';
-    };
-  
-    return (
-      <div className="relative">
-        <Button
-          variant="secondary"
-          onClick={() => setShowDropdown(!showDropdown)}
-          className="flex items-center gap-2"
-        >
-          <FaUserCircle className="text-lg" />
-          {user.businessDetails ? 'Business Portal' : 'My Account'}
-        </Button>
-  
-        {showDropdown && (
-          <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-            <div className="py-1">
-              <a
-                href={getProfileLink()}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Profile
-              </a>
-              <button
-                onClick={handleLogout}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-    );
+  const { isAuthenticated, user, authLoading } = useSelector((state) => state.auth);
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/home');
   };
 
-  export default ProfileButton;
+  useEffect(()=>{
+
+    console.log("isAuthenticated..",isAuthenticated);
+
+  },[])
+
+  const getProfileLink = () => {
+    const platformRole = user.platformRoles;
+    console.log("profile navigation role..",platformRole);
+    if(platformRole[0] === "seller"){
+      // navigate('/seller/portal', {
+      //   state: {
+      //     companyDetails,
+      //     verificationStatus: 'completed',
+      //     user
+      //   },
+      //   replace: true
+      // });
+      navigate('/seller/portal')
+
+    }
+
+    else{
+      // navigate('/buyer/portal',{
+      //   state: {
+      //     companyDetails,
+      //     verificationStatus: 'completed',
+      //     user
+      //   },
+      //   replace: true
+
+      // })
+      navigate('/buyer/portal');
+
+    }
+  };
+
+   // Close dropdown when clicking outside
+   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div className="profilebtn-container"
+    ref={dropdownRef} >
+
+
+      <Button
+        variant="primary"
+        onClick={() => setShowDropdown((prev) => !prev)}
+        
+      >
+        <FaUserCircle />
+        {businessDetails ? 'Portal' : 'My Account'}
+      </Button>
+      {showDropdown && (
+       
+          <div className='__options'>
+            <div>
+            <a
+              href="#"
+              onClick={getProfileLink}
+              
+            >
+              Profile
+            </a>
+            </div>
+            <div>
+            <Button
+        variant="secondary"
+        onClick={handleLogout}       
+      >
+        Logout
+        </Button>
+            </div>
+          </div>
+        
+      )}
+    </div>
+  );
+};
+
+export default ProfileButton;

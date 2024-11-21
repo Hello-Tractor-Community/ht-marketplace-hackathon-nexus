@@ -21,10 +21,10 @@ const ProtectedRoute = ({ children }) => {
 
   if (!isAuthenticated) {
     console.log("ProtectedRoute: Not authenticated, redirecting to login");
-    return <Navigate to="/business/login" state={{ from: location }} replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (!user?.security?.emailVerified) { // Changed from security.emailVerified to match your authSlice
+  if (!user?.security?.emailVerified) { 
     console.log("ProtectedRoute: Email not verified, redirecting to verification");
     return <Navigate to="/email-verification" state={{ from: location }} replace />;
   }
