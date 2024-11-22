@@ -1,4 +1,8 @@
 const express = require('express');
+const router = express.Router();
+
+const { protect, bypassAuth, bypassAdminAuth } = require('../middleware/auth');
+
 const { 
     createListingConversation,
     sendListingMessage,
@@ -12,9 +16,13 @@ const {
     getAdminConversations,
     createWelcomeConversation
 } = require('../controllers/adminMessageController')
-const { protect, bypassAuth, bypassAdminAuth } = require('../middleware/auth');
 
-const router = express.Router();
+
+// Get all conversations for a seller
+router.get('/seller/conversations', protect,getSellerListingConversations);
+
+// Get messages for a specific conversation
+router.get('/conversation/:conversationId/messages', protect, getConversationMessages);
 
 // Create a new conversation for a specific listing
 router.post('/listing/:listingId/conversation',  bypassAuth,createListingConversation);
@@ -25,11 +33,7 @@ router.post('/conversation/:conversationId/send', bypassAuth,sendListingMessage)
 // Get all conversations for a buyer
 router.get('/buyer/conversations', bypassAuth ,getBuyerListingConversations);
 
-// Get all conversations for a seller
-router.get('/seller/conversations', bypassAuth,getSellerListingConversations);
 
-// Get messages for a specific conversation
-router.get('/conversation/:conversationId/messages', bypassAuth, getConversationMessages);
 
 router.get('/admin/conversations', bypassAdminAuth, getAdminConversations )
 

@@ -95,8 +95,7 @@ $toggle-checked-color: #2196f3;
         padding: $margin-big $margin-small;
     }
 
-    .seller-content-form {
-              
+    .seller-content-form {        
         
     
         form {
@@ -239,4 +238,9 @@ $toggle-checked-color: #2196f3;
             }
         }
     }
+}
+
+.mailbox-container{
+    border: 1px solid red;
+
 }

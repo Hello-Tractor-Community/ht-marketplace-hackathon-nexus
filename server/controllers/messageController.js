@@ -4,6 +4,7 @@ const Listing = require('../models/Listing');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 
+
 const createListingConversation = asyncHandler(async (req, res, next) => {
     const { listingId } = req.params;
     const buyerId = req.user._id;
@@ -136,9 +137,10 @@ const getSellerListingConversations = asyncHandler(async (req, res, next) => {
 const getConversationMessages = asyncHandler(async (req, res, next) => {
     const { conversationId } = req.params;
     const userId = req.user._id;
-
+    console.log("fetching messages by converstaion..");
     // Verify user is part of the conversation
     const conversation = await Conversation.findById(conversationId);
+    
     if (!conversation) {
         return next(new ErrorResponse('Conversation not found', 404));
     }

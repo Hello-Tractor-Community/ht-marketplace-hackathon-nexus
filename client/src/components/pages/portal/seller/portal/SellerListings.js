@@ -19,6 +19,7 @@ const SellerListings = () => {
   const [listingCreated, setListingCreated] = useState(false);
   const [listingError, setListingError] = useState(false);
   const cloudinaryFolder = process.env.CLOUDINARY_UPLOAD_PRODUCT_FOLDER || 'products';
+  const [fetchingComplete, setFetchingComplete] = useState(false);
   // const cloudinaryFolder = 'products';
 
   const [newListing, setNewListing] = useState({
@@ -55,10 +56,12 @@ const SellerListings = () => {
     console.log("token:", token);
 
     if (token) {
+      if (!fetchingComplete) {
+        fetchListings(userId);
+      }
 
-      fetchListings(userId);
     }
-  }, []);
+  }, [fetchingComplete, user]);
 
   const [originalUrl, setOriginalUrl] = useState('');
   const [convertedUrl, setConvertedUrl] = useState('');
@@ -106,6 +109,8 @@ const SellerListings = () => {
 
   const fetchListings = async (userId) => {
 
+
+
     console.log("fetchlisting.. userId", userId);
 
     try {
@@ -114,6 +119,7 @@ const SellerListings = () => {
       if (response.success) {
         setListings(response.data);
         setIsLoading(false);
+        setFetchingComplete(true);
       }
 
 
@@ -241,16 +247,25 @@ const SellerListings = () => {
           allowBackorder: false
         }
       });
-      fetchListings(user._id);
+          // Trigger fetchListings with a delay
+          setTimeout(() => {
+            fetchListings(user._id);
+          }, 2000); // 2-second delay
     } catch (error) {
       console.error('Error creating listing:', error);
     }
   };
 
   const handleListingDelete = async (id) => {
+    console.log("Attempting to delete listing with ID:", id);
     try {
-      await listingService.deleteListing(id);
-      fetchListings();
+      const response = await listingService.deleteListing(id);
+      console.log("Response data:", response.data);
+
+      // Trigger fetchListings with a delay
+      setTimeout(() => {
+        fetchListings(user._id);
+      }, 2000); // 2-second delay
     } catch (error) {
       console.error('Error deleting listing:', error);
     }
@@ -407,12 +422,12 @@ const SellerListings = () => {
                 )}
               </div>
               <div>
-              <button type="submit">Create Listing</button>
+                <button type="submit">Create Listing</button>
 
               </div>
 
 
-              
+
             </form>
           </div>
           <div className='seller-cloudinary-container'>

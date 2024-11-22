@@ -308,12 +308,15 @@ const updateListing = asyncHandler(async (req, res) => {
 });
 
 const deleteListing = asyncHandler(async (req, res) => {
+    console.log("Attempting to delete listing..");
+    console.log("req params..",req.params);
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
         res.status(400);
         throw new Error('Invalid listing ID');
     }
 
     const listing = await Listing.findById(req.params.id);
+    console.log("listing..",listing);
 
     if (!listing) {
         res.status(404);
@@ -454,10 +457,21 @@ const getNewArrivals = asyncHandler(async (req, res) => {
     });
 });
 
-const getListingsByBusiness = asyncHandler(async (req, res) => {
-    pass
-});
+const getListingsByCompany = asyncHandler(async (req, res) => {
+    const companyId = req.params.companyId;
+    const listings = await Listing.find({ user: companyId })
+        .populate({
+            path: 'user',
+            select: 'firstName lastName'
+        })
+        .sort({ createdAt: -1 });
 
+    res.status(200).json({
+        success: true,
+        count: listings.length,
+        data: listings
+    });
+});
 module.exports = {
     createListing,
     getListings,
@@ -468,6 +482,6 @@ module.exports = {
     updateListingStatus,
     updateListingInventory,
     getFeaturedListings,
-    getListingsByBusiness,
+    getListingsByCompany,
     getNewArrivals
 };

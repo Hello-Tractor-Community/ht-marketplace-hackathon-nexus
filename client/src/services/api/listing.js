@@ -70,6 +70,7 @@ export const listingService = {
     deleteListing: async (id) => {
       try {
         const response = await api.delete(`/listings/${id}`);
+        console.log("Delete Response data:", response.data);
         return response.data;
       } catch (error) {
         throw error.response?.data || error.message;

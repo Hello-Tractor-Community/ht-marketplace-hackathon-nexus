@@ -35,11 +35,11 @@ const companyOnboardingRoutes = require('./routes/companyOnboardingRoutes');
 const userRoutes = require('./routes/userRoutes');
 const imageProxyRoutes = require('./routes/imageProxyRoutes');
 const cloudinaryRoutes = require('./routes/cloudinaryRoutes');
-
+const messageRoutes = require('./routes/messageRoutes');
 
 // Middleware Imports
 const errorHandler = require('./middleware/errorHandler');
-const { protect } = require('./middleware/auth');
+// const { protect } = require('./middleware/auth');
 
 // Environment Configuration
 const production = process.env.NODE_ENV === 'production';
@@ -51,18 +51,20 @@ const app = express();
 
 // Security Middleware Configuration
 const securityMiddleware = () => {
+
+        // CORS Configuration
+        app.use(cors({
+            origin: CLIENT_URL,
+            credentials: true
+        }));
+
+        
     app.use(helmet()); // Security headers
     app.use(mongoSanitize()); // Prevent NoSQL injections
     app.use(xss()); // Prevent XSS attacks
     app.use(hpp()); // Prevent HTTP Parameter Pollution
 
        
-    // CORS Configuration
-    app.use(cors({
-        origin: CLIENT_URL,
-        credentials: true
-    }));
-
 
     
     // Rate Limiting
@@ -84,9 +86,7 @@ const securityMiddleware = () => {
         }
     }));
 
-    // Passport Configuration
-    app.use(passport.initialize());
-    app.use(passport.session());
+   
 
     // Passport Configuration
     app.use(passport.initialize());
