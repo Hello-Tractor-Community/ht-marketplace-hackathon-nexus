@@ -107,11 +107,23 @@ const bypassAuth = (req, res, next) => {
     next();
   };
 
+const bypassAdminAuth = (req, res, next) => {
+    // Simulate a user for testing
+
+    req.user = {
+      _id: '674033c9817b64e78c93e818', // Admin ID
+      firstName: 'Admin',
+      lastName: 'Hello_tractor',
+      platformRoles: ['admin']
+    };
+    next();
+  };
 
 module.exports = { 
     protect, 
     authorize, 
     verifyCompany,
-    bypassAuth
+    bypassAuth,
+    bypassAdminAuth
 
 };

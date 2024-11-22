@@ -1,6 +1,8 @@
+// socket/socket.js
 const socketIO = require('socket.io');
 const Message = require('../models/Message');
 const Conversation = require('../models/Conversation');
+const User = require('../models/User');
 
 function initializeSocketIO(server) {
     const io = socketIO(server);
@@ -18,9 +20,20 @@ function initializeSocketIO(server) {
 
                 let conversation;
                 if (!conversationId) {
-                    conversation = await Conversation.findOneOrCreate({
-                        participants: [senderId, recipientId]
-                    });
+                    // Check if sender is admin
+                    const sender = await User.findById(senderId);
+                    if (sender.platformRoles.includes('admin')) {
+                        conversation = await Conversation.create({
+                            participants: [senderId, recipientId],
+                            admin: senderId,
+                            type: 'admin_support',
+                            status: 'active'
+                        });
+                    } else {
+                        conversation = await Conversation.findOneOrCreate({
+                            participants: [senderId, recipientId]
+                        });
+                    }
                 } else {
                     conversation = await Conversation.findById(conversationId);
                 }
@@ -31,6 +44,10 @@ function initializeSocketIO(server) {
                     recipient: recipientId,
                     content
                 });
+
+                // Update conversation's last message
+                conversation.lastMessage = message._id;
+                await conversation.save();
 
                 // Emit to recipient
                 io.to(recipientId).emit('newMessage', message);

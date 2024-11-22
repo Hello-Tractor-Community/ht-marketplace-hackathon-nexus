@@ -9,21 +9,36 @@ const conversationSchema = new mongoose.Schema({
     listing: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Listing',
-        required: true
+        // Only required for listing-related conversations
+        required: function() {
+            return this.type === 'listing_inquiry' || this.type === 'purchase_discussion';
+        }
     },
     buyer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        // Only required for listing-related conversations
+        required: function() {
+            return this.type === 'listing_inquiry' || this.type === 'purchase_discussion';
+        }
+    },
+    admin: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
     seller: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        // Only required for listing-related conversations and seller welcome messages
+        required: function() {
+            return this.type === 'listing_inquiry' || 
+                   this.type === 'purchase_discussion' || 
+                   this.type === 'admin_welcome';
+        }
     },
     type: {
         type: String,
-        enum: ['listing_inquiry', 'purchase_discussion'],
+        enum: ['listing_inquiry', 'purchase_discussion', 'admin_welcome', 'admin_support'],
         default: 'listing_inquiry'
     },
     status: {
@@ -39,7 +54,19 @@ const conversationSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Ensure unique conversation per listing and buyer-seller pair
-conversationSchema.index({ listing: 1, buyer: 1, seller: 1 }, { unique: true });
+// Modified index to only apply to listing-related conversations
+conversationSchema.index(
+    { 
+        listing: 1, 
+        buyer: 1, 
+        seller: 1 
+    }, 
+    { 
+        unique: true,
+        partialFilterExpression: { 
+            type: { $in: ['listing_inquiry', 'purchase_discussion'] } 
+        }
+    }
+);
 
 module.exports = mongoose.model('Conversation', conversationSchema);
