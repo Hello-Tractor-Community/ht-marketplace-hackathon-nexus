@@ -21,11 +21,13 @@ const listingSchema = new mongoose.Schema({
         index: true
     },
     // Seller/Business Info
-    seller: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
-        index: true
+        index: true,
+        get: v => v ? v.toString() : v,
+        set: v => v ? new mongoose.Types.ObjectId(v) : v
     },
     // Listing Details
     description: String,

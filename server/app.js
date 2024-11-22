@@ -119,7 +119,7 @@ const configureRoutes = () => {
     app.use('/api/v1/listings', listingRoutes);
     app.use('/api/v1/onboarding', companyOnboardingRoutes);
     app.use('/api/v1/images', imageProxyRoutes);
-    app.use('/api/v1/cloudinary', cloudinaryRoutes);
+    app.use('/api/cloudinary', cloudinaryRoutes);
 
     // Base Routes
     app.get('/', (req, res) => {

@@ -3,9 +3,12 @@ import { useSelector } from 'react-redux';
 import './SellerListings.scss'; // Import CSS file for styling
 import { FaEye, FaEyeSlash, FaCopy, FaTrash } from 'react-icons/fa';
 
+import { authService } from '../../../../../services/api/auth';
 import { listingService } from '../../../../../services/api/listing';
 
 import UploadWidgetClaudinary from './UploadWidgetClaudinary';
+import SuccessOverlay from './SuccessOverlay';
+import ErrorOverlay from './ErrorOverlay';
 
 const SellerListings = () => {
 
@@ -13,6 +16,11 @@ const SellerListings = () => {
   const { user } = useSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState(true);
   const [listings, setListings] = useState([]);
+  const [listingCreated, setListingCreated] = useState(false);
+  const [listingError, setListingError] = useState(false);
+  const cloudinaryFolder = process.env.CLOUDINARY_UPLOAD_PRODUCT_FOLDER || 'products';
+  // const cloudinaryFolder = 'products';
+
   const [newListing, setNewListing] = useState({
     name: '',
     sku: '',
@@ -24,7 +32,7 @@ const SellerListings = () => {
     price: {
       amount: '', // Default amount
       currency: 'USD', // Default currency or leave blank
-    },  
+    },
     images: [],
     location: '',
     status: 'draft',
@@ -40,12 +48,14 @@ const SellerListings = () => {
   });
   const [isClipboardCopied, setIsClipboardCopied] = useState(false);
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = authService.getToken();
     console.log("User:", user);
-    console.log("User ID:", user._id);
+    const userId = user?._id;
+    console.log("User ID:", userId);
+    console.log("token:", token);
 
     if (token) {
-      const userId = user?.id;
+
       fetchListings(userId);
     }
   }, []);
@@ -96,10 +106,17 @@ const SellerListings = () => {
 
   const fetchListings = async (userId) => {
 
+    console.log("fetchlisting.. userId", userId);
+
     try {
       const response = await listingService.getListingsByUser(userId);
-      setListings(response);
-      setIsLoading(false);
+      console.log("response..", response);
+      if (response.success) {
+        setListings(response.data);
+        setIsLoading(false);
+      }
+
+
     } catch (error) {
       console.error('Error fetching listings:', error);
       setIsLoading(false);
@@ -107,7 +124,7 @@ const SellerListings = () => {
   };
   const handleListingChange = (e) => {
     const { name, value } = e.target;
-  
+
     if (name === 'price.amount') {
       // Update the amount in the price object
       setNewListing((prevListing) => ({
@@ -134,14 +151,53 @@ const SellerListings = () => {
       }));
     }
   };
-  
+
+  const onClose = () => {
+    setListingCreated(false);
+    setListingError(false);
+
+  };
+
+  const handleImageChange = (e, index, field) => {
+    const updatedImages = [...newListing.images];
+    updatedImages[index] = {
+      ...updatedImages[index],
+      [field]: e.target.value,
+    };
+    setNewListing((prev) => ({
+      ...prev,
+      images: updatedImages,
+    }));
+  };
+
+  const addImage = () => {
+    if (newListing.images.length < 3) {
+      setNewListing((prev) => ({
+        ...prev,
+        images: [...prev.images, { url: '', alt: '', isPrimary: false }],
+      }));
+    }
+  };
+
+  const removeImage = (index) => {
+    const updatedImages = newListing.images.filter((_, i) => i !== index);
+    setNewListing((prev) => ({
+      ...prev,
+      images: updatedImages,
+    }));
+  };
+
+
 
   const handleListingSubmit = async (e) => {
+
     e.preventDefault();
+    setListingCreated(false);
+
     try {
       const listingData = {
         ...newListing,
-        seller: user._id,
+        user: user._id,
         sku: generateUniqueSKU(), // You'll need to implement this
         category: 'tractor', // Or dynamically set
         status: 'draft', // Default status
@@ -150,34 +206,42 @@ const SellerListings = () => {
       console.log("Payload being sent to backend:", listingData);
 
       const response = await listingService.createListing(listingData);
-      console.log("response listing..",response);
+      console.log("response listing..", response);
+      console.log("response listing success..", response.success);
+      if (response.success) {
+        setListingCreated(true);
+        setListingError(false);
+      } else {
+        setListingError(true);
+        setListingCreated(false);
 
+      }
       setNewListing({
         name: '',
-    sku: '',
-    category: 'tractor', // Default category
-    description: '',
-    make: '',
-    model: '',
-    serviceHours: '',
-    price: {
-      amount: '', // Default amount
-      currency: 'USD', // Default currency or leave blank
-    },  
-    images: [],
-    location: '',
-    status: 'draft',
-    visibility: {
-      isFeatured: false,
-      isNewArrival: false
-    },
-    inventory: {
-      quantity: 0,
-      lowStockThreshold: 5,
-      allowBackorder: false
-    }
+        sku: '',
+        category: 'tractor', // Default category
+        description: '',
+        make: '',
+        model: '',
+        serviceHours: '',
+        price: {
+          amount: '', // Default amount
+          currency: 'USD', // Default currency or leave blank
+        },
+        images: [],
+        location: '',
+        status: 'draft',
+        visibility: {
+          isFeatured: false,
+          isNewArrival: false
+        },
+        inventory: {
+          quantity: 0,
+          lowStockThreshold: 5,
+          allowBackorder: false
+        }
       });
-      fetchListings();
+      fetchListings(user._id);
     } catch (error) {
       console.error('Error creating listing:', error);
     }
@@ -210,7 +274,8 @@ const SellerListings = () => {
   return (
     < >
 
-      <div className='sub-container'>
+      <div className='sub-container'
+      >
         <div className='seller-listing-controller'>
           <div className='seller-content-form'>
             <h3>Add new listing</h3>
@@ -295,25 +360,6 @@ const SellerListings = () => {
                 value={newListing.location}
                 onChange={handleListingChange}
               />
-
-              {/* <div className='featured'>
-                  <p>Featured</p>
-                  <div
-                    className="toggle-container"
-                    onClick={() => setNewListing(prev => ({
-                      ...prev,
-                      visibility: {
-                        ...prev.visibility,
-                        isFeatured: !prev.visibility.isFeatured
-                      }
-                    }))}
-                  >
-                    <div className={`toggle-button ${newListing.visibility.isFeatured ? 'checked' : ''}`}>
-                      <div className="toggle-slider" />
-                    </div>
-                  </div>
-                </div> */}
-
               <input
                 type="number"
                 name="inventory.quantity"
@@ -327,14 +373,63 @@ const SellerListings = () => {
                   }
                 }))}
               />
-
+              <div>
+                <label>Images:</label>
+                {newListing.images.map((image, index) => (
+                  <div key={index}>
+                    <input
+                      type="url"
+                      name={`imageUrl${index}`}
+                      placeholder="Image URL"
+                      value={image.url}
+                      onChange={(e) => handleImageChange(e, index, 'url')}
+                    />
+                    <input
+                      type="text"
+                      name={`altText${index}`}
+                      placeholder="Alt text"
+                      value={image.alt || ''}
+                      onChange={(e) => handleImageChange(e, index, 'alt')}
+                    />
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={image.isPrimary || false}
+                        onChange={(e) => handleImageChange(e, index, 'isPrimary')}
+                      />
+                      Primary Image
+                    </label>
+                    <button type="button" onClick={() => removeImage(index)}>Remove</button>
+                  </div>
+                ))}
+                {newListing.images.length < 3 && (
+                  <button type="button" onClick={addImage}>Add Image</button>
+                )}
+              </div>
+              <div>
               <button type="submit">Create Listing</button>
+
+              </div>
+
+
+              
             </form>
           </div>
           <div className='seller-cloudinary-container'>
-            <UploadWidgetClaudinary folderName='listings' />
+            <UploadWidgetClaudinary folderName={cloudinaryFolder} />
           </div>
+
         </div>
+
+        {listingCreated && !listingError &&
+          (
+            <SuccessOverlay onClose={onClose} />
+          )}
+
+        {!listingCreated && listingError && (
+          <ErrorOverlay onClose={onClose} onRetry={handleListingSubmit} />
+        )}
+
 
         <div className='listings-table'>
           {isLoading && <p>Loading...</p>}
@@ -353,6 +448,7 @@ const SellerListings = () => {
                 <th>Price</th>
                 <th>Location</th>
                 <th>Quantity</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -368,8 +464,9 @@ const SellerListings = () => {
                   <td>{listing.model}</td>
                   <td>{listing.serviceHours}</td>
                   <td>{listing.price.amount}</td>
-                  <td>{listing.location}</td>
+                  <td>{listing.location?.city}, {listing.location?.state}, {listing.location?.country}</td>
                   <td>{listing.quantity}</td>
+                  <td>{listing.status}</td>
                   <td>
                     <button onClick={() => handleListingDelete(listing._id)}><FaTrash /> </button>
                   </td>

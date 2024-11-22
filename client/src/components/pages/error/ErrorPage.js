@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { replace, useNavigate } from 'react-router-dom';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 import CartItem from '../shop/CartItem';
 import NavBar from '../../common/navigation/NavBar';
@@ -11,7 +11,7 @@ const ErrorPage = () => {
 
    const handleContinueShopping = () => {
         
-        navigate('/product', { state: { category: 'fashion', subcategory: 'all' } });
+        navigate('/home', { replace: true });
     };
 
 

@@ -105,7 +105,7 @@ const createListing = asyncHandler(async (req, res) => {
     // Validate ObjectIds
     if (!mongoose.Types.ObjectId.isValid(seller)) {
         res.status(400);
-        throw new Error('Invalid seller ID');
+        throw new Error('User ID is required');
     }
 
     // Check seller exists
@@ -138,13 +138,15 @@ const getListings = asyncHandler(async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
+    console.log("getListings request..");
+
     // Build filter object
     const filter = {};
     if (req.query.category) filter.category = req.query.category;
     if (req.query.make) filter.make = req.query.make;
     if (req.query.model) filter.model = req.query.model;
     if (req.query.status) filter.status = req.query.status;
-    if (req.query.seller) filter.seller = req.query.seller;
+    if (req.query.user) filter.user = req.query.user;
 
     // Price range filter
     if (req.query.minPrice || req.query.maxPrice) {
@@ -175,7 +177,7 @@ const getListings = asyncHandler(async (req, res) => {
     const [listings, total] = await Promise.all([
         Listing.find(filter)
             .populate({
-                path: 'seller',
+                path: 'user',
                 select: 'firstName lastName'
             })
             .sort(sort)
@@ -223,7 +225,7 @@ const searchListings = asyncHandler(async (req, res) => {
 
     const listings = await Listing.find(query)
         .populate({
-            path: 'seller',
+            path: 'user',
             select: 'firstName lastName'
         })
         .sort(q ? { score: { $meta: 'textScore' } } : { 'metrics.totalSales': -1 })
@@ -244,7 +246,7 @@ const getListingById = asyncHandler(async (req, res) => {
 
     const listing = await Listing.findById(req.params.id)
         .populate({
-            path: 'seller',
+            path: 'user',
             select: 'firstName lastName'
         });
 
@@ -279,7 +281,7 @@ const updateListing = asyncHandler(async (req, res) => {
 
     // Check authorization is not working in postman
     // // Check authorization
-    // if (listing.seller.toString() !== req.user._id.toString()) {
+    // if (listing.user.toString() !== req.user._id.toString()) {
     //     res.status(403);
     //     throw new Error('Not authorized to update this listing');
     // }
@@ -319,7 +321,7 @@ const deleteListing = asyncHandler(async (req, res) => {
     }
 
     // Check authorization
-    if (listing.seller.toString() !== req.user._id.toString()) {
+    if (listing.user.toString() !== req.user._id.toString()) {
         res.status(403);
         throw new Error('Not authorized to delete this listing');
     }
@@ -354,7 +356,7 @@ const updateListingStatus = asyncHandler(async (req, res) => {
     }
 
     // Check authorization
-    if (listing.seller.toString() !== req.user._id.toString()) {
+    if (listing.user.toString() !== req.user._id.toString()) {
         res.status(403);
         throw new Error('Not authorized to update this listing');
     }
@@ -392,7 +394,7 @@ const updateListingInventory = asyncHandler(async (req, res) => {
     }
 
     // Check authorization
-    if (listing.seller.toString() !== req.user._id.toString()) {
+    if (listing.user.toString() !== req.user._id.toString()) {
         res.status(403);
         throw new Error('Not authorized to update this listing');
     }
@@ -420,7 +422,7 @@ const getFeaturedListings = asyncHandler(async (req, res) => {
         'visibility.isFeatured': true
     })
         .populate({
-            path: 'seller',
+            path: 'user',
             select: 'firstName lastName'
         })
         .sort({ 'metrics.totalSales': -1 })
@@ -439,7 +441,7 @@ const getNewArrivals = asyncHandler(async (req, res) => {
         'visibility.isNewArrival': true
     })
         .populate({
-            path: 'seller',
+            path: 'user',
             select: 'firstName lastName'
         })
         .sort({ createdAt: -1 })

@@ -29,13 +29,13 @@ const UploadWidgetClaudinary = ({folderName}) => {
 
     const initializeCloudinaryWidget = async () => {
         console.log('Initializing Cloudinary widget...');
-
+        console.log('Folder name:', folderName);
 
         try {
             // Get the upload signature from your server using Axios
-            const signatureResponse = await axios.get(`${API_URL}/api/v1/cloudinary/signature`);
+            const signatureResponse = await axios.get(`${API_URL}/api/cloudinary/signature`);
             const { signature, timestamp, cloudName, apiKey, uploadPreset } = signatureResponse.data;
-           
+        //    console.log("signatureResponse..", signatureResponse.data);
 
             cloudinaryRef.current = window.cloudinary;
 

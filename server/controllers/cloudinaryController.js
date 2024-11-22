@@ -37,17 +37,10 @@ exports.getUploadSignature = (req, res) => {
    console.log("timestamp", timestamp);
    res.json({ signature, timestamp, cloudName, apiKey});
   
-  // const signature = generateSignature(
-  //   generateTimestamp(),
-  //   process.env.CLOUDINARY_UPLOAD_PRESET,
-  //   process.env.CLOUDINARY_API_SECRET
-  // );
-
-  // res.json({ signature, timestamp });
 };
 
 exports.uploadImage = async (req, res) => {
-  console.log('Inside CLOUDINARY CONTROLLER.');
+  console.log('Cloudinary.. uploading image');
   try {
       const fileData = req.file.buffer; // Ensure req.file.buffer contains the file data
       const originalFilename = req.file.originalname;

@@ -27,14 +27,19 @@ export const listingService = {
         const response = await api.get(`/listings/${id}`);
         return response.data;
       } catch (error) {
-        throw error.response?.data || error.message;
+        const errorMessage = error.response?.data || error.message;
+        return { success: false, error: errorMessage };
       }
     },
 
     getListingsByUser: async (userId) => {
+      console.log("Attempting to fetch listings for user:", userId);
       try {
-        const response = await api.get(`/listings?seller=${userId}`);
-        return response.data.data; // Note: response has a nested 'data' structure
+        const response = await api.get(`/listings?user=${userId}`);
+        console.log("Response data:", response.data.data);
+        return { success: true, data: response.data.data }; // Always return success: true if successful
+        
+        
       } catch (error) {
         throw error.response?.data || error.message;
       }
@@ -43,11 +48,15 @@ export const listingService = {
     createListing: async (listingData) => {
       try {
         const response = await api.post('/listings', listingData);
-        return response.data;
+        // Assuming the backend returns { success: true, data: listing }
+        return { success: true, data: response.data }; // Always return success: true if successful
       } catch (error) {
-        throw error.response?.data || error.message;
+        // Check if the backend error contains a success field or if it's missing
+        const errorMessage = error.response?.data?.error || error.message;
+        return { success: false, error: errorMessage }; // Always return success: false in case of an error
       }
     },
+    
   
     updateListing: async (id, listingData) => {
       try {
