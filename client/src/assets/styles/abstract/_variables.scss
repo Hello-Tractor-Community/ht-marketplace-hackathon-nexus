@@ -95,7 +95,7 @@ $spacing: (
   font-family: $font-cta;
   font-weight: 600;
   font-size: map-get($font-sizes, 'lg'); // Slightly larger for CTAs
-  text-transform: uppercase;
+  text-transform: capitalize;
   letter-spacing: 0.05em;
   color: hsl($primary-foreground); // Primary foreground color
   background-color: hsl($primary); // Primary background color
@@ -107,6 +107,18 @@ $spacing: (
     background-color: hsl($ring); // Highlight ring color on hover
     color: hsl($foreground); // Ensure text contrast
   }
+}
+@mixin cta-secondary-font {
+  font-family: $font-cta;
+  font-weight: 600;
+  font-size: map-get($font-sizes, 'base'); // Slightly larger for CTAs
+  text-transform: capitalize;
+  letter-spacing: 0.05em;
+
+  padding: 0.75rem 1.5rem;
+  border-radius: calc($radius/2); // Tokenized border radius
+  transition: background-color 0.3s, color 0.3s;
+
 }
 
 

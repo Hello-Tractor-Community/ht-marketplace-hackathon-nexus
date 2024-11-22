@@ -10,7 +10,7 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const loginModalRef = useRef(null);
-  
+
   const [passwordMismatch, setPasswordMismatch] = useState(false);
 
   const REACT_APP_API_URL =
@@ -18,7 +18,7 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
       ? process.env.REACT_APP_API_URL_DEV
       : process.env.REACT_APP_API_URL_PROD;
 
-  
+
 
   const [formData, setFormData] = useState({
     email: '',
@@ -46,18 +46,18 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
     };
   }, []);
 
- 
+
 
   const handleInputChange = (field, value) => {
-   
-      setFormData((prev) => ({ ...prev, [field]: value }));   
-      setPasswordMismatch(false);
+
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setPasswordMismatch(false);
   };
 
   const handleEmailSubmit = async (e) => {
-    
+
     e.preventDefault();
-    console.log("platform roles..",formData.platformRoles);
+    console.log("platform roles..", formData.platformRoles);
     try {
       if (isRegisterMode) {
         if (formData.password !== formData.confirmPassword) {
@@ -113,11 +113,13 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
         <div className="login-modal__content">
           <div className="login-modal__header">
             <h2>{isRegisterMode ? 'Register' : 'Login'}</h2>
-            <button className="login-modal__close-btn" onClick={onClose}>
+            <Button type="button" variant="mini" className="login-modal__close-btn"
+              onClick={onClose}>&times;</Button>
+            {/* <button className="login-modal__close-btn" onClick={onClose}>
               &times;
-            </button>
+            </button> */}
           </div>
-  
+
           <form onSubmit={handleEmailSubmit} className="login-modal__body">
             {isRegisterMode && (
               <>
@@ -162,6 +164,7 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
                       handleAuthTypeSelect(role);
                     }}
                     className={`${formData.platformRoles === role ? 'active' : ''}`}
+                    variant='tertiary'
                   >
                     I'm a {role}
                   </Button>
@@ -174,18 +177,24 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
             <div className="login-modal__divider mt-4">
               <span>or</span>
             </div>
-            <Button variant="quaternary" onClick={handleGoogleAuth} className="w-full">
+
+            <Button variant="quaternary" onClick={handleGoogleAuth} className="w-full"
+            style={{marginBottom:'24px'}}>
               <FaGoogle />
-              <span>{isRegisterMode ? 'Register with Google' : 'Continue with Google'}</span>
+              <span>{isRegisterMode ? '    Register with Google' : '    Continue with Google'}</span>
             </Button>
-            <div className="login-modal__toggle mt-4 text-center">
-              <p>{isRegisterMode ? 'Already have an account?' : "Don't have an account?"}</p>
-              <Button variant="link" onClick={() => setIsRegisterMode((prev) => !prev)}>
-                {isRegisterMode ? 'Login' : 'Register'}
-              </Button>
+            <div className="login-modal__divider mt-4">
+              <span></span>
             </div>
+
           </form>
-  
+          <div className="login-modal__toggle ">
+            <p>{isRegisterMode ? 'Already have an account?' : "Don't have an account?"}</p>
+            <Button variant="secondary" onClick={() => setIsRegisterMode((prev) => !prev)}>
+              {isRegisterMode ? 'Login' : 'Register'}
+            </Button>
+          </div>
+
           {passwordMismatch && (
             <div className="errorMessage">
               <p>Password mismatch! Please make sure your passwords are the same.</p>
@@ -195,7 +204,7 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
       </div>
     )
   );
-  
+
 };
 
 export default LoginModal;

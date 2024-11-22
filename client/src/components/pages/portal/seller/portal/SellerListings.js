@@ -108,9 +108,7 @@ const SellerListings = () => {
   }, [isClipboardCopied]);
 
   const fetchListings = async (userId) => {
-
-
-
+    
     console.log("fetchlisting.. userId", userId);
 
     try {

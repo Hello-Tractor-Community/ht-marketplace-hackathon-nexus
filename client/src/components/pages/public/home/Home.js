@@ -7,6 +7,7 @@ import Prompt from '../../shop/Prompt';
 import About from '../about/About';
 import StarRating from '../../shop/StarRating';
 import CartItem from '../../shop/CartItem';
+import Footer from '../footer/Footer'
 import './Home.scss';
 
 const Home = ({ history }) => {
@@ -20,6 +21,7 @@ const Home = ({ history }) => {
             <CartItem />
             <Search />        
             <About />
+            <Footer />
         </div>
     );
 };

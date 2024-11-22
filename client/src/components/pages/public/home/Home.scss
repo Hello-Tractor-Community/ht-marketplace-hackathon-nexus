@@ -3,10 +3,11 @@
 @import '../../../../assets/styles/abstract/mixins';
 
 .home {
-  padding: map-get($spacing, 'xl');
+ 
   flex-direction: column;
   background-color: $background;
   color: $foreground;
+  min-height: 150vh;
 
 }
 

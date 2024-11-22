@@ -1,7 +1,6 @@
 /* Base styles for navbar */
-@import '../../../assets/styles/abstract/mixins';
-@import '../../../assets/styles/abstract/variables';
-@import '../../../assets/styles/settings.scss';
+@import '../../../assets/styles/abstract/_variables';
+@import '../../../assets/styles/abstract/_mixins';
 
 
 .navbar {
@@ -10,16 +9,18 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  background-color: transparent;
-  padding: 0.25rem 1rem;
+  max-width: 98%;
+  margin: auto;
+  padding: map-get($spacing, 'xs' ) map-get($spacing, 's' );
   // gap: 2rem;
-  width: 100%;
-  border: 1px solid red;
+
+  background-color: hsl($foreground);
+  padding: map-get($spacing, 'base');
 
   .menu-toggle {
     display: none;
-    background-color: $secondary;
-    color: white;
+    background-color: hsl($secondary);
+    color: hsl($muted-foreground);
     border: none;
     padding: 0.5rem;
     cursor: pointer;
@@ -28,7 +29,7 @@
   .navbar-content {
      .logo-link {
       .logo {
-        height: 60px;
+        height: calc(map-get($font-sizes,'4xl')*2)
       }
     }
 
@@ -41,12 +42,12 @@
     max-width: 600px;
 
     .menu-item {
-      color: $primary-foreground;
+      color: hsl($muted-foreground);
 
       text-decoration: none;
 
       &:hover {
-        color: $primary-color;
+        color: hsl($primary-foreground);
         cursor: pointer;
       }
 
@@ -69,8 +70,6 @@
       top: 0;
       right: 0;
       z-index: 10;
-      background-color: $secondary-color;
-      color: white;
       border: none;
       padding: 0.5rem;
       cursor: pointer
@@ -84,8 +83,8 @@
       top: 0;
       right: 8%;
       text-align: right;
-      background-color: $secondary-color;
-      padding: $spacing-unit;
+      
+      padding: map-get($spacing, 'sm' );
       opacity: 0.7;
     
     
@@ -95,7 +94,7 @@
         display: flex;
       }
       .menu-item{
-        color: white;
+        color: hsl($muted-foreground);
       }
     }
 

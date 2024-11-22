@@ -32,7 +32,7 @@ const AuthButton = () => {
             onClick={handleLogin}
            
           >
-            <FaUserCircle />
+            
             Login
           </Button>
           {showLoginModal && (

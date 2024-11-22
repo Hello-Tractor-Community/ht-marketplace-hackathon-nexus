@@ -1,14 +1,11 @@
-@import '../../../assets/styles/abstract/variables';
-@import '../../../assets/styles/abstract/mixins';
+@import '../../../assets/styles/abstract/_variables';
+@import '../../../assets/styles/abstract/_mixins';
 
 .btn {
     @include flex(row, center, center);
     padding: map-get($spacing, 'sm') map-get($spacing, 'lg');
     border-radius:$radius;
-    font-family: $font-cta;
-    font-size: map-get($font-sizes, 'base');
-    font-weight: 500;
-    border: none;
+   
     cursor: pointer;
     transition: all 0.3s ease;
     
@@ -27,9 +24,9 @@
 
     // Primary variant
     &--primary {
-        background-color: $background;
-        color: $accent;
+      
         @include shadow(1);
+        @include cta-font;
 
         &:hover {
             background-color: darken(hsl($background), 5%);
@@ -38,22 +35,19 @@
             // border: 1px;
         }
 
-        &.active {
-            transform: translateY(0);
-            @include shadow(1);
-            background-color: hsl($accent);
-            color: hsl($accent-foreground);
-        }
+
     }
 
     // Secondary variant (in case you need it)
     &--secondary {
-        background-color: $secondary;
-        color: white;
+        background-color: hsl($primary-foreground);
+        color: hsl($primary);
         @include shadow(1);
+        @include cta-secondary-font;
 
         &:hover {
-            background-color: darken(hsl($secondary), 5%);
+            background-color: darken(hsl($primary-foreground), 5%);
+            color: hsl($secondary);
             transform: translateY(-1px);
             @include shadow(2);
         }
@@ -65,32 +59,57 @@
     }
     &--tertiary {
         background-color: none;
-        color: #1877F2;
-        @include shadow(1);
+        color: hsl($accent);   
+
 
         &:hover {
             // background-color: darken(#4285F4, 5%);
             transform: translateY(-1px);
-            @include shadow(2);
+            @include shadow(1);
         }
 
         &:active {
             transform: translateY(0);
+            // @include shadow(1);
+        }
+        &.active {
+            transform: translateY(0);
+            @include shadow(1);
+            background-color: hsl($accent);
+            color: hsl($accent-foreground);
+        }
+    }
+    &--mini {
+        background-color: none;
+        color: hsl($popover-foreground); 
+        padding: 0 map-get($spacing, 'sm' );     
+        font-size: map-get($font-sizes, base); 
+
+        &:hover {
+            // background-color: darken(#4285F4, 5%);
+            transform: translateY(-1px);
             @include shadow(1);
         }
+
+        &:active {
+            transform: translateY(0);
+            // @include shadow(1);
+        }
+    
     }
 
     &--quaternary {
         background-color: #4285F4; // Fallback color for older browsers
-        background-image: linear-gradient(
-            to right,
-            #4285F4,  // Blue
-            #EA4335,  // Red
-            #FBBC05,  // Yellow
-            #34A853   // Green
-        );
+        // background-image: linear-gradient(
+        //     to right,
+        //     #4285F4,  // Blue
+        //     #EA4335,  // Red
+        //     #FBBC05,  // Yellow
+        //     #34A853   // Green
+        // );
         color: white;
         @include shadow(1);
+        font-size: map-get($font-sizes,'base' );
 
         &:hover {
             background-color: darken(#4285F4, 5%);
