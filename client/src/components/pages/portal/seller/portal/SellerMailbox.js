@@ -85,7 +85,7 @@ const SellerMailbox = () => {
                 setIsLoading(false);
                 setMessageFetched(true);
                 setMsgCount(response.data.count);
-                setMessages(response.data.data);
+                setMessages(response.data);
 
 
             }

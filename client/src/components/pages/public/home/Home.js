@@ -18,7 +18,7 @@ const Home = ({ history }) => {
     return (
         <div className="home">
             <NavBar history={history} />
-            <CartItem />
+            {/* <CartItem /> */}
             <Search />        
             <About />
             <Footer />

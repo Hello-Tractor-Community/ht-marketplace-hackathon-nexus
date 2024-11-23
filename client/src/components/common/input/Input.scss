@@ -1,0 +1,71 @@
+@import '../../../assets/styles/abstract/_variables';
+@import '../../../assets/styles/abstract/_mixins';
+
+.input {
+  width: 100%;
+  padding: map-get($spacing, 'sm') map-get($spacing, 'md');
+  border: 1px solid hsl($foreground);
+  border-radius: $radius;  
+  color: hsl($foreground);
+  background-color: hsl($background);
+  outline: none;
+  transition: all 0.3s ease;
+
+  &::placeholder {
+    color: rgba(hsl($foreground), 0.3);
+  }
+
+  &:focus {
+    border-color: hsl($muted-foreground);
+    box-shadow: 0 0 0 2px rgba(hsl($muted-foreground), 0.2);
+    background-color: hsl($muted-foreground);
+    color: hsl($background);
+  }
+
+  &:disabled {
+    background-color: transparent;
+    color: rgba(hsl($input), 0.5);
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    border-color: hsl($muted-foreground);
+    background-color: hsl($primary-foreground);
+    font-size: map-get($font-sizes, 'base');
+
+    &:focus {
+      border-color: darken(hsl($primary), 5%);
+    }
+  }
+
+  &--secondary {
+    border-color: hsl($secondary);
+    background-color: hsl($secondary-foreground);
+    font-size: map-get($font-sizes, 'xs');
+    
+    
+
+    &:focus {
+      border-color: darken(hsl($secondary), 5%);
+    }
+  }
+
+  &--outline {
+    border: 2px solid hsl($foreground);
+    background-color: transparent;
+    color: hsl($input);
+
+    &:focus {
+      border-color: hsl($primary);
+    }
+  }
+
+  &--error {
+    border-color: hsl($destructive-foreground);
+    background-color: rgba(hsl($destructive-foreground), 0.1);
+
+    &:focus {
+      border-color: darken(hsl($destructive-foreground), 5%);
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './UploadWidgetClaudinary.scss'; // Import CSS file for styling
+import Button from '../../../../common/button/Button';
 
 import { FaCopy } from 'react-icons/fa';
 
@@ -140,9 +141,10 @@ const UploadWidgetClaudinary = ({folderName}) => {
                     {cloudinaryUploadSuccess && <p>Image uploaded successfully</p>}
 
                     <h3>Upload Images to Cloudinary</h3>
-                    <button onClick={handleUploadClick}>
-                        Upload image(s)
-                    </button>
+                 
+                    <Button onClick={handleUploadClick} variant="secondary">
+                        Upload images
+                    </Button>
 
                     {copyURL && (
                         <div className='cloudinary-uploader'>

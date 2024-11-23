@@ -1,75 +1,52 @@
-@import 'settings';
+@import '../../../../../assets/styles/abstract/_variables';
+@import '../../../../../assets/styles/abstract/_mixins';
 
 .admin-login-page,
-.admin-dashboard{
-    background-color: $primary-color;
-    color: $secondary-color;
-    font-family: $montserrat-font-family;
+.admin-portal{
+    background-color: hsl($muted);
+    color: hsl($muted-foreground);
+    // font-family: $montserrat-font-family;
     min-height: 100vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: $margin-small;
+    gap: map-get($spacing, 'sm' );
     align-items: center;
-    gap: $margin-small;
+    gap: map-get($spacing, 'xs' );
     position: relative;
-    button{
-        background-color: $accent-color;
-        color: $secondary-color-black;
-        border-radius: $margin-bento;
-        font-size: $p-font-size;
-        font-weight: bold;
-        cursor: pointer;
-        padding: $margin-small;
-        
-    }
-    button:hover{
-        background-color: $secondary-color-black;
-        color: $accent-color;
-        border: 1px solid $secondary-color-black;
+
+    .admin-button-logout{
+        position: absolute;
+        top: map-get($map: $spacing, $key: 'base' );
+        right: map-get($map: $spacing, $key: 'lg' );
+  
+    
     }
    
-    
-}
+    }
 
 .admin-login-page{
-    button{
-        background-color: $accent-color;
-        color: $secondary-color-black;
-        border-radius: $margin-bento;
-        font-size: $p-font-size;
-        font-weight: bold;
-        cursor: pointer;
-        padding: $margin-small;
-        width: 50%;
-        margin: auto;
-        
-    }
-    button:hover{
-        background-color: $secondary-color-black;
-        color: $accent-color;
-        border: 1px solid $secondary-color-black;
-    }
+
     input{
-        font-size: $p-font-size-small;
-        padding: $margin-medium;
-        border-radius: $margin-bento;
+        font-size:map-get($map: $font-sizes, $key:'sm' );
+        padding: map-get($map: $spacing, $key: 'lg');
+        border-radius: map-get($map: $spacing, $key: 'xs' );
         
-        font-family: $montserrat-font-family;
-        margin-right: $margin-small;
+ 
+        margin-right: map-get($map: $spacing, $key: 'sm')
     }
    
 }
 
 .logo-container{
-    width: 100px;
-    height: 100px;
+    width: calc(map-get($map: $font-sizes, $key: '4xl') * 2);
     position: absolute;
-    top: $margin-bento;
-    left: $margin-big;
-    background-color: $secondary-color;
-    border-radius: $margin-medium;
+    top: map-get($map: $spacing, $key: 'sm' );
+    left: map-get($map: $spacing, $key: 'base' );
+    background-color: hsl($muted-foreground);
+    color: hsl($muted);
+    border-radius: $radius;
     overflow: hidden;
     img{
         width: 100%;
@@ -77,155 +54,95 @@
         object-fit: contain;
 }
 }
-.admin-dashboard{
-    h2{
-        font-size: $h3-font-size;
-        
-    }
-    h3{
-        font-size: $h4-font-size;
-       
 
-    }
-
-    h3, h4{
-        color: $secondary-color;
-        background-color: $primary-color;
-        margin-top: $margin-big;
-    }
-    .admin-button-logout{
-        position: absolute;
-        top: $margin-medium;
-        right: $margin-large;
-        background-color: transparent;
-        color: $secondary-color;
-        border: 1px solid $secondary-color-black;
-        font-weight: normal;  
-    
-    }
-    .admin-button-logout:hover{
-        background-color: $secondary-color;
-        color: $primary-color;
-        border: 1px solid $secondary-color-black;
-        font-weight: bold;  
-    }
-
-}
 
 .admin-welcome{
-    color: $secondary-color-black;
-    font-size: $h3-font-size;
+    color: hsl($primary);
+    font-size: map-get($map: $font-sizes, $key: 'lg');
+    span{
+        color: hsl($muted-foreground);
+    }
 }
 
 
 .admin-items{
-    background-color: $secondary-color;
-    color: $secondary-color-black;
-    border-radius: $margin-bento;
-    padding: $margin-small;
-    display: flex;
-    flex-direction: column;
-    gap: $margin-small;
-    align-items: left;
-    margin: auto $margin-medium;
-    position: relative;
-    min-height: 50vh;
-    min-width: 50vw;
-    table{
-        margin-top: $margin-medium;
-        border: 2px solid $secondary-color-black;
-    }
-    thead{
-        background-color: $secondary-color-black;
-        color: $secondary-color;
-        font-weight: bold;
-        font-size: $p-font-size;
-    }
-    tbody p{
-        font-size: $p-font-size-small;
-    }
-    tbody img{
-        width: 40px;
-        height: 40px;
-        object-fit: contain;
-    }
-    input, textarea{
-        font-size: $p-font-size-small;
-        padding: $margin-medium;
-        border-radius: $margin-bento;
-        
-        font-family: $montserrat-font-family;
-        margin-right: $margin-small;
-    }
-    textarea {
-        border: 1px solid $secondary-color-black;
-        height: 100px; /* Set a specific height for the textarea */
-        resize: vertical; /* Allow vertical resizing of the textarea */
-    }
-  
-    // form{
-    //     display: flex;
-    //     // flex-direction: row;
-    //     flex-wrap: wrap;
-    //     justify-content: baseline;
-    //     gap: $margin-small;
-    //     align-items: left;
-    //     margin: auto $margin-medium;
-    //     label{
-    //         display: block;
-    //     }
-        
-    //     input, button{
-    //         height: 30%;
-    //         margin: auto $margin-small;
-    //     }
-    //     // input, textarea{
-    //     //     width: 40%;
-    //     // }
-    //     td{
-    //         button{
-    //             width: 100%;
-    //             text-align: center;
-    //         }
-    //     }
-        
-    
-    // }
  
+    border-radius: $radius;
+    padding: map-get($map: $spacing, $key: 'sm' );
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    // gap: map-get($map: $spacing, $key: 'sm' );
+    align-items: flex-start;
+    margin: auto map-get($map: $spacing, $key: 'sm' );
+    position: relative;
+    min-height: 100vh;
+     width: 95%;
+     border: 1px solid red;
+     margin: auto;
+
 
     .admin-buttons-container{
-        
         display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
+        min-width: 20%;
+        background-color: hsl($muted-foreground);
+        height: calc(100vh - 10rem);
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: flex-start;
+
+        padding: 0;
+        
         flex-wrap: wrap;
-        gap: $margin-small;
-       
+        gap: map-get($map: $spacing, $key: 'sm' );
+      
+
+
         button{
-            // display: block;
-            background-color: $primary-color-fade-dark;
-            color: $secondary-color;
-            border: 1px solid $secondary-color-black;
-            padding: $margin-medium $margin-large;
-            font-weight: normal;
-            
-            &:hover{
-                background-color: $secondary-color-black;
-                color: $primary-color;
-            
-            
+            width: 100%;
+            padding: map-get($map: $spacing, $key: 'lg') map-get($map: $spacing, $key: 'sm');
+            border-radius: 0;
         }
-       
-        }
-        button.active{            
-            background-color: $secondary-color-black;
-            color:$accent-color            
-        }
-
-
       
     }
+
+    .admin-content{
+
+        min-width: 80%;
+        border: 2px solid $primary;
+
+        table{
+            margin-top:map-get($map: $spacing, $key: 'sm' );
+           
+        }
+        thead{
+            background-color: hsl($muted);
+            color: hsl($muted-foreground);
+            font-weight: bold;
+            font-size: map-get($map: $font-sizes, $key: 'base' );
+        }
+        tbody p{
+            font-size: map-get($map: $font-sizes, $key: 'sm')
+        }
+        tbody img{
+            width: map-get($map: $font-sizes, $key: '4xl' );
+            height: map-get($map: $font-sizes, $key: '4xl' );
+            object-fit: contain;
+        }
+        input, textarea{
+            font-size: map-get($map: $font-sizes, $key: '2xl' );
+            padding: map-get($map: $spacing, $key: 'sm' );
+            border-radius: $radius;       
+            margin-right: map-get($map: $spacing, $key: 'sm' );
+        }
+        textarea {
+            border: 1px solid hsl($muted-foreground);
+            height: calc(map-get($map: $font-sizes, $key: '4xl') * 2);
+            resize: vertical; 
+        }
+        
+    }
+
    
  
 }

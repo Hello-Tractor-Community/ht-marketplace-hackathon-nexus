@@ -9,6 +9,8 @@ import { listingService } from '../../../../../services/api/listing';
 import UploadWidgetClaudinary from './UploadWidgetClaudinary';
 import SuccessOverlay from './SuccessOverlay';
 import ErrorOverlay from './ErrorOverlay';
+import Button from '../../../../common/button/Button';
+import Input from '../../../../common/input/Input';
 
 const SellerListings = () => {
 
@@ -21,6 +23,8 @@ const SellerListings = () => {
   const cloudinaryFolder = process.env.CLOUDINARY_UPLOAD_PRODUCT_FOLDER || 'products';
   const [fetchingComplete, setFetchingComplete] = useState(false);
   // const cloudinaryFolder = 'products';
+  const [isNewListingsVisible, setIsNewListingsVisible] = useState(true);
+  const [isListingsStatusVisible, setIsListingsStatusVisible] = useState(false);
 
   const [newListing, setNewListing] = useState({
     name: '',
@@ -108,7 +112,7 @@ const SellerListings = () => {
   }, [isClipboardCopied]);
 
   const fetchListings = async (userId) => {
-    
+
     console.log("fetchlisting.. userId", userId);
 
     try {
@@ -127,10 +131,14 @@ const SellerListings = () => {
     }
   };
   const handleListingChange = (e) => {
+    if (!e || !e.target) {
+      console.error('Invalid event object:', e);
+      return;
+    }
+
     const { name, value } = e.target;
 
     if (name === 'price.amount') {
-      // Update the amount in the price object
       setNewListing((prevListing) => ({
         ...prevListing,
         price: {
@@ -139,7 +147,6 @@ const SellerListings = () => {
         },
       }));
     } else if (name === 'price.currency') {
-      // Update the currency in the price object
       setNewListing((prevListing) => ({
         ...prevListing,
         price: {
@@ -148,13 +155,13 @@ const SellerListings = () => {
         },
       }));
     } else {
-      // Update other top-level fields
       setNewListing((prevListing) => ({
         ...prevListing,
         [name]: value,
       }));
     }
   };
+
 
   const onClose = () => {
     setListingCreated(false);
@@ -196,30 +203,12 @@ const SellerListings = () => {
   const handleListingSubmit = async (e) => {
 
     e.preventDefault();
-    setListingCreated(false);
+    
+  
+    const action = e.nativeEvent.submitter.value;
+    // console.log("action..", action);
 
-    try {
-      const listingData = {
-        ...newListing,
-        user: user._id,
-        sku: generateUniqueSKU(), // You'll need to implement this
-        category: 'tractor', // Or dynamically set
-        status: 'draft', // Default status
-      };
-
-      console.log("Payload being sent to backend:", listingData);
-
-      const response = await listingService.createListing(listingData);
-      console.log("response listing..", response);
-      console.log("response listing success..", response.success);
-      if (response.success) {
-        setListingCreated(true);
-        setListingError(false);
-      } else {
-        setListingError(true);
-        setListingCreated(false);
-
-      }
+     if (action === 'cancel') {
       setNewListing({
         name: '',
         sku: '',
@@ -245,13 +234,67 @@ const SellerListings = () => {
           allowBackorder: false
         }
       });
-          // Trigger fetchListings with a delay
-          setTimeout(() => {
-            fetchListings(user._id);
-          }, 2000); // 2-second delay
-    } catch (error) {
-      console.error('Error creating listing:', error);
     }
+    else{
+      setListingCreated(false);
+      try {
+        const listingData = {
+          ...newListing,
+          user: user._id,
+          sku: generateUniqueSKU(), // You'll need to implement this
+          category: 'tractor', // Or dynamically set
+          status: 'draft', // Default status
+        };
+  
+        console.log("Payload being sent to backend:", listingData);
+  
+        const response = await listingService.createListing(listingData);
+        console.log("response listing..", response);
+        console.log("response listing success..", response.success);
+        if (response.success) {
+          setListingCreated(true);
+          setListingError(false);
+        } else {
+          setListingError(true);
+          setListingCreated(false);
+  
+        }
+        setNewListing({
+          name: '',
+          sku: '',
+          category: 'tractor', // Default category
+          description: '',
+          make: '',
+          model: '',
+          serviceHours: '',
+          price: {
+            amount: '', // Default amount
+            currency: 'USD', // Default currency or leave blank
+          },
+          images: [],
+          location: '',
+          status: 'draft',
+          visibility: {
+            isFeatured: false,
+            isNewArrival: false
+          },
+          inventory: {
+            quantity: 0,
+            lowStockThreshold: 5,
+            allowBackorder: false
+          }
+        });
+        // Trigger fetchListings with a delay
+        setTimeout(() => {
+          fetchListings(user._id);
+        }, 2000); // 2-second delay
+      } catch (error) {
+        console.error('Error creating listing:', error);
+      }
+
+    }
+
+ 
   };
 
   const handleListingDelete = async (id) => {
@@ -284,155 +327,257 @@ const SellerListings = () => {
     }));
   };
 
+  function handleToggleVisibility(contentType) {
+    // Set the visibility of the content based on the button clicked
+    setIsNewListingsVisible(contentType === 'newListings');
+    setIsListingsStatusVisible(contentType === 'listingsStatus');
+
+  }
+
   return (
-    < >
 
-      <div className='sub-container'
-      >
-        <div className='seller-listing-controller'>
-          <div className='seller-content-form'>
-            <h3>Add new listing</h3>
-            <form onSubmit={handleListingSubmit}>
-              <input
-                type="text"
-                name="name"
-                placeholder="Listing Name"
-                value={newListing.name}
-                onChange={handleListingChange}
-              />
 
-              <div className="sku-input-group" style={{ display: 'flex', gap: '8px' }}>
-                <input
+    <div className='listings-container'>
+
+      <div className='buttons-container'>
+        <Button onClick={() => handleToggleVisibility('newListings')}
+          variant='mini'
+
+          className={isNewListingsVisible ? 'active' : ''}>
+          Create Listing
+        </Button>
+        <Button onClick={() => handleToggleVisibility('listingsStatus')}
+          variant='mini'
+
+          className={isListingsStatusVisible ? 'active' : ''}>
+          See Listings
+        </Button>
+      </div>
+
+      <div className='listings-content' >
+
+        {isNewListingsVisible && (
+          <div className='new-listing-container'>
+            <div className='seller-content-form'>
+              <h3>Add new listing</h3>
+              <form onSubmit={handleListingSubmit}>
+
+                <Input
                   type="text"
-                  name="sku"
-                  placeholder="SKU"
-                  value={newListing.sku}
+                  name="name"
+                  placeholder="Listing Name"
+                  value={newListing.name}
+                  variant='secondary'
                   onChange={handleListingChange}
                 />
-                <button
-                  type="button" // Important: type="button" prevents form submission
-                  onClick={generateAndSetSKU}
-                  style={{ padding: '8px 16px' }}
-                >
-                  Generate SKU
-                </button>
-              </div>
 
-              <select
-                name="category"
-                value={newListing.category}
-                onChange={handleListingChange}
-              >
-                <option value="tractor">Tractor</option>
-                <option value="spare parts">Spare Parts</option>
-              </select>
+                <div className="sku-input-group" style={{ display: 'flex', gap: '8px' }}>
+                  <Input
+                    type="text"
+                    name="sku"
+                    placeholder="SKU"
+                    value={newListing.sku}
+                    variant='secondary'
+                    onChange={handleListingChange}
+                  />
+                  <Button
+                    type="button"
+                    onClick={generateAndSetSKU}
+                    variant='mini'
+                  >
+                    Generate SKU
+                  </Button>
+                </div>
 
-              <textarea
-                name="description"
-                placeholder="Listing Description"
-                value={newListing.description}
-                onChange={handleListingChange}
-              ></textarea>
 
-              <input
-                type="text"
-                name="make"
-                placeholder="Make"
-                value={newListing.make}
-                onChange={handleListingChange}
-              />
-
-              <input
-                type="text"
-                name="model"
-                placeholder="Model"
-                value={newListing.model}
-                onChange={handleListingChange}
-              />
-
-              <input
-                type="number"
-                name="serviceHours"
-                placeholder="Service Hours"
-                value={newListing.serviceHours}
-                onChange={handleListingChange}
-              />
-
-              <input
-                type="number"
-                name="price.amount"
-                placeholder="Price"
-                value={newListing.price.amount}
-                onChange={handleListingChange}
-              />
-
-              <input
-                type="text"
-                name="location"
-                placeholder="Location"
-                value={newListing.location}
-                onChange={handleListingChange}
-              />
-              <input
-                type="number"
-                name="inventory.quantity"
-                placeholder="Inventory Quantity"
-                value={newListing.inventory.quantity}
-                onChange={(e) => setNewListing(prev => ({
-                  ...prev,
-                  inventory: {
-                    ...prev.inventory,
-                    quantity: parseInt(e.target.value)
-                  }
-                }))}
-              />
-              <div>
-                <label>Images:</label>
-                {newListing.images.map((image, index) => (
-                  <div key={index}>
-                    <input
-                      type="url"
-                      name={`imageUrl${index}`}
-                      placeholder="Image URL"
-                      value={image.url}
-                      onChange={(e) => handleImageChange(e, index, 'url')}
-                    />
-                    <input
-                      type="text"
-                      name={`altText${index}`}
-                      placeholder="Alt text"
-                      value={image.alt || ''}
-                      onChange={(e) => handleImageChange(e, index, 'alt')}
-                    />
-                    <label>
+                <div>
+                  <label>Images:</label>
+                  {newListing.images.map((image, index) => (
+                    <div key={index}>
                       <input
-                        type="checkbox"
-                        checked={image.isPrimary || false}
-                        onChange={(e) => handleImageChange(e, index, 'isPrimary')}
+                        type="url"
+                        name={`imageUrl${index}`}
+                        placeholder="Image URL"
+                        value={image.url}
+                        onChange={(e) => handleImageChange(e, index, 'url')}
                       />
-                      Primary Image
-                    </label>
-                    <button type="button" onClick={() => removeImage(index)}>Remove</button>
-                  </div>
+                      <input
+                        type="text"
+                        name={`altText${index}`}
+                        placeholder="Alt text"
+                        value={image.alt || ''}
+                        onChange={(e) => handleImageChange(e, index, 'alt')}
+                      />
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={image.isPrimary || false}
+                          onChange={(e) => handleImageChange(e, index, 'isPrimary')}
+                        />
+                        Primary Image
+                      </label>
+                      <button type="button" onClick={() => removeImage(index)}>Remove</button>
+                    </div>
+                  ))}
+                  {newListing.images.length < 3 && (
+                    <button type="button" onClick={addImage}>Add Image URLs</button>
+                  )}
+                </div>
+
+                <textarea
+                  name="description"
+                  placeholder="Listing Description"
+                  value={newListing.description}
+                  onChange={handleListingChange}
+                ></textarea>
+
+                <select
+                  name="category"
+                  value={newListing.category}
+                  onChange={handleListingChange}
+                >
+                  <option value="tractor">Tractor</option>
+                  <option value="spare parts">Spare Parts</option>
+                </select>
+
+                <Input
+                  type="text"
+                  name="make"
+                  placeholder="Make"
+                  value={newListing.make}
+                  variant='secondary'
+                  onChange={handleListingChange}
+                />
+                <Input
+                  type="text"
+                  name="model"
+                  placeholder="Model"
+                  value={newListing.model}
+                  variant='secondary'
+                  onChange={handleListingChange}
+                />
+
+                <Input
+                  type="number"
+                  name="serviceHours"
+                  placeholder="Service Hours"
+                  value={newListing.serviceHours}
+                  variant='secondary'
+                  onChange={handleListingChange}
+                />
+
+                <Input
+                  type="number"
+                  name="price.amount"
+                  placeholder="Price"
+                  value={newListing.price.amount}
+                  variant='secondary'
+                  onChange={handleListingChange}
+                />
+                <Input
+                  type="text"
+                  name="location"
+                  placeholder="Location"
+                  value={newListing.location}
+                  variant='secondary'
+                  onChange={handleListingChange}
+                />
+                {/* <input
+                  type="number"
+                  name="inventory.quantity"
+                  placeholder="Inventory Quantity"
+                  value={newListing.inventory.quantity}
+                  onChange={(e) => setNewListing(prev => ({
+                    ...prev,
+                    inventory: {
+                      ...prev.inventory,
+                      quantity: parseInt(e.target.value)
+                    }
+                  }))}
+                /> */}
+
+                <Input
+                  type="number"
+                  name="inventory.quantity"
+                  placeholder="Inventory Quantity"
+                  value={newListing.inventory.quantity}
+                  variant='secondary'
+                  onChange={(e) => setNewListing(prev => ({
+                    ...prev,
+                    inventory: {
+                      ...prev.inventory,
+                      quantity: parseInt(e.target.value)
+                    }
+                  }))}
+                />
+
+                <div className="button-group">
+                  
+                  <Button type="submit" variant='primary' name="action" value="create" >Create Listing</Button>
+                  <Button type="submit" variant='secondary' name="action" value="cancel" >Cancel</Button>
+                 
+
+                </div>
+
+
+
+              </form>
+            </div>
+            <div className='seller-cloudinary-container'>
+              <UploadWidgetClaudinary folderName={cloudinaryFolder} />
+            </div>
+
+          </div>
+
+        )}
+
+        {isListingsStatusVisible && (
+          <div className='listings-status-container'>
+            {isLoading && <p>Loading...</p>}
+            <h4>Listings on database</h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>SKU</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Make</th>
+                  <th>Model</th>
+                  <th>Service Hours</th>
+                  <th>Price</th>
+                  <th>Location</th>
+                  <th>Quantity</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {listings.map((listing) => (
+                  <tr key={listing._id}>
+                    <td><img src={listing.image} alt={listing.name} /></td>
+                    <td>{listing.name}</td>
+                    <td>{listing.sku}</td>
+                    <td>{listing.category}</td>
+                    <td>{listing.description}</td>
+                    <td>{listing.make}</td>
+                    <td>{listing.model}</td>
+                    <td>{listing.serviceHours}</td>
+                    <td>{listing.price.amount}</td>
+                    <td>{listing.location?.city}, {listing.location?.state}, {listing.location?.country}</td>
+                    <td>{listing.quantity}</td>
+                    <td>{listing.status}</td>
+                    <td>
+                      <button onClick={() => handleListingDelete(listing._id)}><FaTrash /> </button>
+                    </td>
+
+                  </tr>
                 ))}
-                {newListing.images.length < 3 && (
-                  <button type="button" onClick={addImage}>Add Image</button>
-                )}
-              </div>
-              <div>
-                <button type="submit">Create Listing</button>
-
-              </div>
-
-
-
-            </form>
+              </tbody>
+            </table>
           </div>
-          <div className='seller-cloudinary-container'>
-            <UploadWidgetClaudinary folderName={cloudinaryFolder} />
-          </div>
-
-        </div>
+        )}
 
         {listingCreated && !listingError &&
           (
@@ -443,56 +588,14 @@ const SellerListings = () => {
           <ErrorOverlay onClose={onClose} onRetry={handleListingSubmit} />
         )}
 
-
-        <div className='listings-table'>
-          {isLoading && <p>Loading...</p>}
-          <h4>Listings on database</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>SKU</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Make</th>
-                <th>Model</th>
-                <th>Service Hours</th>
-                <th>Price</th>
-                <th>Location</th>
-                <th>Quantity</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {listings.map((listing) => (
-                <tr key={listing._id}>
-                  <td><img src={listing.image} alt={listing.name} /></td>
-                  <td>{listing.name}</td>
-                  <td>{listing.sku}</td>
-                  <td>{listing.category}</td>
-                  <td>{listing.description}</td>
-                  <td>{listing.make}</td>
-                  <td>{listing.model}</td>
-                  <td>{listing.serviceHours}</td>
-                  <td>{listing.price.amount}</td>
-                  <td>{listing.location?.city}, {listing.location?.state}, {listing.location?.country}</td>
-                  <td>{listing.quantity}</td>
-                  <td>{listing.status}</td>
-                  <td>
-                    <button onClick={() => handleListingDelete(listing._id)}><FaTrash /> </button>
-                  </td>
-
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
 
 
-    </>
+
+    </div>
+
+
+
   );
 };
 

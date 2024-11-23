@@ -95,6 +95,13 @@
             transform: translateY(0);
             // @include shadow(1);
         }
+        &.active {
+            transform: translateY(0);
+            @include shadow(1);
+            background-color: hsl($primary-foreground);
+            color: hsl($primary);
+           
+        }
     
     }
 

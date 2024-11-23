@@ -10,7 +10,7 @@ import SellerDashboard from './SellerDashboard';
 import SellerProfile from './SellerProfile';
 
 import './SellerPortal.scss'; // Import CSS file for styling
-
+import Button from '../../../../common/button/Button';
 
 const SellerPortal = () => {
   const dispatch = useDispatch();
@@ -39,40 +39,48 @@ const SellerPortal = () => {
   }
 
   return (
-    <div className='admin-dashboard'>
+    <div className='admin-portal'>
       <div className='logo-container'>
         <img src={logo} alt='hello-tractor logo'></img>
 
       </div>
 
       <h2>Seller Portal</h2>
-      <h3 className='admin-welcome'>Welcome! You're logged in as {user?.firstName} {user?.lastName}</h3>
-      <button onClick={handleLogout}
-        className='admin-button-logout'>Logout</button>
+      <h3 className='admin-welcome'>Welcome! You're logged in as <span>{user?.firstName} {user?.lastName}</span></h3>
+      {/* <button onClick={handleLogout}
+        className='admin-button-logout'>Logout</button> */}
+      <Button onClick={handleLogout} variant='secondary'
+      className='admin-button-logout'
+      >Logout</Button>
       <div className='admin-items'>
         <div className='admin-buttons-container'>
-          <button onClick={() => handleToggleVisibility('listings')}
-            style={{ color: isListingsVisible ? '#FFD9E8' : '#FFFFFF' }}
+         
+          <Button onClick={() => handleToggleVisibility('listings')}
+            variant='mini'
+           
             className={isListingsVisible ? 'active' : ''}>
             Listings
-          </button>
-          <button onClick={() => handleToggleVisibility('mailbox')}
-            style={{ color: isMailboxVisible ? '#FFD9E8' : '#FFFFFF' }}
+          </Button>
+          <Button onClick={() => handleToggleVisibility('mailbox')}
+            variant='mini'
+           
             className={isMailboxVisible ? 'active' : ''}>
-            Mailbox
-          </button>
-          <button onClick={() => handleToggleVisibility('dashboard')}
-            style={{ color: isDashboardVisible ? '#FFD9E8' : '#FFFFFF' }}
+            Message
+          </Button>
+          <Button onClick={() => handleToggleVisibility('dashboard')}
+            variant='mini'
+           
             className={isDashboardVisible ? 'active' : ''}>
             Dashboard
-          </button>
-          <button onClick={() => handleToggleVisibility('profile')}
-            style={{ color: isProfileVisible ? '#FFD9E8' : '#FFFFFF' }}
+          </Button>
+          <Button onClick={() => handleToggleVisibility('profile')}
+            variant='mini'
+           
             className={isProfileVisible ? 'active' : ''}>
             Profile
-          </button>
+          </Button>
         </div>
-
+        <div className='admin-content'>
 
         {isListingsVisible && (
           <>
@@ -103,6 +111,7 @@ const SellerPortal = () => {
           </>
         )
         }
+        </div>
 
       </div>
 

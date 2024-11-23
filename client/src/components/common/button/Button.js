@@ -8,7 +8,8 @@ const Button = ({
   type = 'button', 
   onClick, 
   disabled, 
-  className = '' // Accept custom className
+  className = '',
+  ...props
 }) => {
   const handleClick = (e) => {
     onClick?.(e);
@@ -20,6 +21,7 @@ const Button = ({
       type={type}
       onClick={handleClick}
       disabled={disabled}
+      {...props}
     >
       {children}
     </button>

@@ -34,19 +34,6 @@ const Navbar = () => {
     setMenuOpen(!menuOpen);
   };
 
-  const handleButtonClick = () => {
-    setShowLoginModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowLoginModal(false);
-  };
-
-  const handleRegister = () => {
-    // Implement register logic here
-    console.log('Navigating to register page');
-  };
-
   return (
     <div className="navbar">
       <div className="navbar-content">
