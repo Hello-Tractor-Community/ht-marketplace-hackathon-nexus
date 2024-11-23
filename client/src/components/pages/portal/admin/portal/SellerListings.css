@@ -1,0 +1,178 @@
+.toggle-container {
+  width: 60px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: #ccc;
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle-button {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  background-color: #ccc;
+  transition: background-color 0.3s;
+}
+.toggle-button.checked {
+  background-color: #2196f3;
+}
+
+.toggle-slider {
+  width: 25px;
+  height: 25px;
+  border-radius: 12.5px;
+  background-color: #fff;
+  position: absolute;
+  top: 2.5px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+.toggle-slider.left {
+  transform: translateX(2.5px);
+  opacity: 1;
+}
+.toggle-slider.right {
+  transform: translateX(2.5px);
+  opacity: 0.6;
+}
+
+.thumbnail-url-converter {
+  border: 1px solid #020202;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.thumbnail-url-converter p {
+  display: block;
+}
+
+.seller-listing-controller {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+.seller-listing-controller .seller-content-form, .seller-listing-controller .seller-cloudinary-container {
+  border: 1px solid #5733FF;
+  border-radius: 1rem;
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0.5rem;
+}
+.seller-listing-controller .seller-content-form form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  width: 90%;
+  margin: auto;
+}
+.seller-listing-controller .seller-content-form form .featured {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.seller-listing-controller .seller-content-form form .featured p {
+  display: inline-block;
+  margin-right: 1rem;
+}
+.seller-listing-controller .seller-content-form form .toggle-container {
+  width: 60px;
+  height: 34px;
+  border-radius: 17px;
+  background-color: #ccc;
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+}
+.seller-listing-controller .seller-content-form form .toggle-button {
+  width: 100%;
+  height: 100%;
+  border-radius: 17px;
+  background-color: #ccc;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+.seller-listing-controller .seller-content-form form .toggle-button span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.seller-listing-controller .seller-content-form form .toggle-button.checked {
+  background-color: #2196f3;
+}
+.seller-listing-controller .seller-content-form form .toggle-button.checked .toggle-slider {
+  transform: translateX(30px);
+}
+.seller-listing-controller .seller-content-form form .toggle-slider {
+  width: 26px;
+  height: 26px;
+  border-radius: 13px;
+  background-color: #fff;
+  transition: transform 0.3s;
+  transform: translateX(4px);
+}
+.seller-listing-controller .seller-content-form form input, .seller-listing-controller .seller-content-form form textarea {
+  display: block;
+  width: 40%;
+  margin: auto;
+}
+.seller-listing-controller .seller-content-form form button {
+  margin-left: 2rem;
+}
+
+.listings-table {
+  width: 90%;
+  display: flex;
+  margin: 0.5rem auto;
+  flex-direction: column;
+  border: 1px solid #5733FF;
+  border-radius: 1rem;
+  padding: 2rem 0.5rem;
+}
+.listings-table table {
+  width: 80%;
+  margin: 2rem auto;
+}
+.listings-table thead {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.listings-table thead th {
+  font-size: 0.6rem;
+}
+.listings-table tbody {
+  font-size: 0.8rem;
+}
+.listings-table tbody button {
+  font-size: 0.6rem;
+  background-color: #333;
+  color: #eee;
+  padding: 0.25rem;
+}
+.listings-table tbody button:hover {
+  background-color: red;
+}/*# sourceMappingURL=SellerListings.css.map */

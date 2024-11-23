@@ -26,30 +26,15 @@ const ProfileButton = () => {
 
   const getProfileLink = () => {
     const platformRole = user.platformRoles;
-    console.log("profile navigation role..",platformRole);
+    console.log("profile navigation role..",platformRole[0]);
     if(platformRole[0] === "seller"){
-      // navigate('/seller/portal', {
-      //   state: {
-      //     companyDetails,
-      //     verificationStatus: 'completed',
-      //     user
-      //   },
-      //   replace: true
-      // });
-      navigate('/seller/portal')
-
+       navigate('/seller/portal')
     }
-
+    else if(platformRole[0] === "admin") {
+      console.log("Yes, admin is here.")
+      navigate('/admin/portal')
+    }
     else{
-      // navigate('/buyer/portal',{
-      //   state: {
-      //     companyDetails,
-      //     verificationStatus: 'completed',
-      //     user
-      //   },
-      //   replace: true
-
-      // })
       navigate('/buyer/portal');
 
     }

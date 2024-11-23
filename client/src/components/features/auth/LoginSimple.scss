@@ -1,0 +1,68 @@
+@import '../../../assets/styles/abstract/_variables.scss';
+
+.login-simple{
+    background-color: hsl($popover);
+   
+    width: 40%;
+    margin: map-get($map: $spacing, $key: 'lg' ) auto;
+    // position: relative;
+    // position: fixed; 
+    // top: 10%;          
+    // left: 40%;
+    color: hsl($popover-foreground);
+    border-radius: $radius;
+    border: 1px solid hsl($popover-foreground);
+    padding: map-get($spacing, 'base' );
+    opacity: 0.98;
+
+  &__content{
+    // text-align: right;
+        .errorMessage{
+            background-color: hsl($accent);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%); 
+            color:hsl($accent-foreground);
+            width: 75%;
+            margin: auto;
+        }
+
+        input{
+          padding: map-get($spacing, 'sm');
+          margin: map-get($spacing, 'sm' ) map-get($spacing, 'sm' ) map-get($spacing, 'sm' ) 0;
+        }
+      }  
+
+  &__toggle{
+      
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      text-align: right;
+     
+    
+
+  }
+
+  .login-simple__divider {
+    display: flex; /* Use flexbox to align items */
+    align-items: center; /* Align the text vertically */
+    justify-content: center; /* Center the span horizontally */
+    width: 80%; /* Set width to 80% of parent */
+    margin: 0 auto; /* Center the divider within the parent */
+    position: relative; /* Ensure pseudo-elements align properly */
+  }
+  
+  .login-simple__divider::before,
+  .login-simple__divider::after {
+    content: ''; /* Add the lines */
+    flex: 1; /* Take up remaining space */
+    height: 1px; /* Line thickness */
+    background-color: #ccc; /* Adjust the color of the line */
+    margin: 0 10px; /* Space between the text and lines */
+  }
+  
+      
+
+}

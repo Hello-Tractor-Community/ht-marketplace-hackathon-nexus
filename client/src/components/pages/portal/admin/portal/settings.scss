@@ -1,0 +1,102 @@
+// Define primary color variable
+$primary-color: #5733FF;
+$primary-color-fade-light: #7272fc63;
+$primary-color-fade-dark: #5353f663;
+
+
+
+
+
+// Define secondary color variable
+$secondary-color: #FFFFFF;
+$secondary-color-fade-light: #eee;
+
+
+$secondary-color-black: #020202;
+$secondary-color-fade-dark: #333;
+
+// Define accent color variable
+$accent-color: #FFD9E8;
+
+//error message color
+$error-color: #FFA500;
+
+// Define margins
+$margin-tiny: 0.125rem;
+$margin-bento: 0.25rem;
+
+$margin-small: 0.5rem;
+$margin-medium: 1rem;
+$margin-big: 2rem;
+$margin-large: 3rem;
+$margin-extra-large: 4rem;
+$margin-crazy-large: 8rem;
+
+//font-size
+$h1-font-size: 4rem;
+$h2-font-size: 3rem;
+$h3-font-size: 2rem;
+$h4-font-size: 1.4rem;
+$p-font-size-big:1.2rem;
+$p-font-size:1rem;
+$p-font-size-small: 0.8rem;
+$p-font-size-tiny: 0.6rem;
+
+// Define Montserrat font stack variable
+$montserrat-font-family: 'Montserrat', sans-serif;
+
+$box-shadow-white: 15px 15px 15px rgba(255, 255, 255,1);
+$box-shadow-logo: 5px 5px 15px rgba(255, 217, 232, 0.5);
+
+// Define a mixin for Montserrat font styles
+@mixin montserratFontBold{
+   
+      font-family: "Montserrat", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: bold;
+//       font-style: normal;
+      letter-spacing: 0.15em;
+      line-height: 1.2;
+    
+  }
+
+  @mixin montserratFontRegular {
+   
+      font-family: "Montserrat", sans-serif;
+      font-optical-sizing: auto;
+      font-style: normal;
+      font-weight: 400;
+    
+  }
+
+  @mixin merriweatherFontRegular {
+    font-family: "Merriweather Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  }
+
+
+@mixin montserratSubrayadaRegular{
+   
+        font-family: "Montserrat Subrayada", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      
+
+}
+ 
+@mixin montserratSubrayadaBold{
+
+        font-family: "Montserrat Subrayada", sans-serif;
+        font-weight: 700;
+        font-style: normal;
+      
+
+}
+  
+
+  
+  
+  
+  

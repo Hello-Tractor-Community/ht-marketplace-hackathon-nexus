@@ -20,7 +20,7 @@ import Favourites from './components/pages/shop/Favourites';
 import RoleRoute from './components/common/protectedRoute/RoleRoute';
 
 // Auth Components
-import UserLogin from './components/features/auth/UserLogin';
+import LoginPage from './components/features/auth/LoginPage';
 // import UserRegister from './components/features/auth/UserRegister';
 
 import EmailVerification from './components/features/emailVerification/EmailVerification';
@@ -33,7 +33,7 @@ import ErrorPage from './components/pages/error/ErrorPage';
 //Portals
 import BuyerPortal from './components/pages/portal/buyer/BuyerPortal';
 import SellerPortal from './components/pages/portal/seller/portal/SellerPortal';
-import AdminPortal from './components/pages/portal/admin/AdminPortal';
+import AdminPortal from './components/pages/portal/admin/portal/AdminPortal';
 import './App.css';
 
 function RedirectHandler() {
@@ -65,10 +65,10 @@ const AppContent = () => {
             <Route path="/listing/*" element={<ProductPage />} />
             <Route path="/listingDetail/:id" element={<ProductDetailPage />} />
             <Route path="/favs" element={<Favourites />} />
-            <Route path="/user">
-              <Route path="login" element={<UserLogin />} />
+            
+            <Route path="login" element={<LoginPage />} />
               {/* <Route path="register" element={<UserRegister />} /> */}
-            </Route>
+            
             {/* Semi-protected onboarding route */}
             <Route
               path="/email-verification"
@@ -121,7 +121,7 @@ const AppContent = () => {
               path="/admin/*"
               element={
                 <ProtectedRoute>
-                  <RoleRoute roles={['admin']}>
+                  <RoleRoute platformRoles={['admin']}>
                     <Routes>
                       <Route path="portal" element={<AdminPortal />} />                     
                     </Routes>

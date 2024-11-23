@@ -91,34 +91,34 @@ const verifyCompany = async (req, res, next) => {
 };
 
 // Temporary authentication bypass middleware
-const bypassAuth = (req, res, next) => {
-    // Simulate a user for testing
+// const bypassAuth = (req, res, next) => {
+//     // Simulate a user for testing
 
-    req.user = {
-      _id: '673f02a4b9ac057d09dd84f9', // Buyer ID
-      firstName: 'Buyer',
-      lastName: 'Natnael'
-    };
-    next();
-  };
+//     req.user = {
+//       _id: '673f02a4b9ac057d09dd84f9', // Buyer ID
+//       firstName: 'Buyer',
+//       lastName: 'Natnael'
+//     };
+//     next();
+//   };
 
-const bypassAdminAuth = (req, res, next) => {
-    // Simulate a user for testing
+// const bypassAdminAuth = (req, res, next) => {
+//     // Simulate a user for testing
 
-    req.user = {
-      _id: '674033c9817b64e78c93e818', // Admin ID
-      firstName: 'Admin',
-      lastName: 'Hello_tractor',
-      platformRoles: ['admin']
-    };
-    next();
-  };
+//     req.user = {
+//       _id: '674033c9817b64e78c93e818', // Admin ID
+//       firstName: 'Admin',
+//       lastName: 'Hello_tractor',
+//       platformRoles: ['admin']
+//     };
+//     next();
+//   };
 
 module.exports = { 
     protect, 
     authorize, 
     verifyCompany,
-    bypassAuth,
-    bypassAdminAuth
+    // bypassAuth,
+    // bypassAdminAuth
 
 };

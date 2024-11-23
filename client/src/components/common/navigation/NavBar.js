@@ -5,8 +5,9 @@ import logo from '../../../assets/images/logo/logo.png';
 import AuthButton from '../button/AuthButton';
 import './NavBar.scss';
 import { FaBars, FaTimes } from 'react-icons/fa'; // Import icons
+import { TreeDeciduous } from 'lucide-react';
 
-const Navbar = () => {
+const Navbar = ({ show = true }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -16,7 +17,7 @@ const Navbar = () => {
     tractor: 'Tractor',
     service: 'Service Centers',
 
-   
+
 
   };
 
@@ -41,21 +42,26 @@ const Navbar = () => {
           <img src={logo} alt="Logo" className="logo" />
         </Link>
       </div>
+      {show && (
 
-      <div className={`menu ${menuOpen ? 'open' : ''}`}>
+        <div className={`menu ${menuOpen ? 'open' : ''}`}>
 
-        {categoryTitles && Object.keys(categoryTitles).map((title) => (
-          <div key={title} onClick={() => handleNavigateCategory(title, 'all')} className="menu-item">
-            {categoryTitles[title]}
-          </div>
-        ))}
-       
+          {categoryTitles && Object.keys(categoryTitles).map((title) => (
+            <div key={title} onClick={() => handleNavigateCategory(title, 'all')} className="menu-item">
+              {categoryTitles[title]}
+            </div>
+          ))}
 
-      </div>
+        </div>
+      )}
 
-      <div>
-        <AuthButton/>
-      </div>
+
+      {show && (
+        <div>
+          <AuthButton />
+        </div>
+      )}
+
 
       <button className="menu-toggle" onClick={handleMenuToggle}>
         {menuOpen ? <FaTimes /> : <FaBars />}

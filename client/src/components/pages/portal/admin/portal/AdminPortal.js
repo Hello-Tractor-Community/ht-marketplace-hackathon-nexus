@@ -9,10 +9,10 @@ import SellerMailbox from './SellerMailbox';
 import SellerDashboard from './SellerDashboard';
 import SellerProfile from './SellerProfile';
 
-import './SellerPortal.scss'; // Import CSS file for styling
+import './AdminPortal.scss'; // Import CSS file for styling
 import Button from '../../../../common/button/Button';
 
-const SellerPortal = () => {
+const AdminPortal = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -48,7 +48,7 @@ const SellerPortal = () => {
 
         <div>
 
-          <h2>Seller Portal</h2>
+          <h2>Admin Portal</h2>
           <h3 className='admin-welcome'>Welcome! You're logged in as <span>{user?.firstName} {user?.lastName}</span></h3>
         </div>
         <div className='logout-container'>
@@ -124,5 +124,5 @@ const SellerPortal = () => {
   );
 };
 
-export default SellerPortal;
+export default AdminPortal;
 

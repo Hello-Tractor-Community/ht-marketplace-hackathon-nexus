@@ -30,8 +30,11 @@ const RoleRoute = ({ children, platformRoles }) => {
     return <Navigate to="/company/login" state={{ from: location }} replace />;
   }
 
+  console.log("RoleRoute platformRoles:", user.platformRoles);
+
   // Check if user has one of the required roles
   const hasRequiredRole = platformRoles.some((role) => {
+    console.log("RoleRoute: Checking role:", role);
     if (role === "seller") {
       const isSeller = user?.platformRoles?.includes("seller");
       return isSeller;
