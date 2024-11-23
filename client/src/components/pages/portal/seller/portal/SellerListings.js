@@ -69,6 +69,12 @@ const SellerListings = () => {
 
   const [originalUrl, setOriginalUrl] = useState('');
   const [convertedUrl, setConvertedUrl] = useState('');
+  const [fetchedImageUrl, setFetchedImageUrl] = useState([]);
+
+  // You can pass this function to the child component
+  const handleFetchedImageUrls = (images) => {
+    setFetchedImageUrl(images); // Update the parent state with the new image URLs
+  };
 
 
   const convertUrl = () => {
@@ -85,16 +91,16 @@ const SellerListings = () => {
   };
 
   // Function to copy the converted URL to the clipboard
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(convertedUrl)
-      .then(() => {
-        // alert('Converted URL copied to clipboard!');
-        setIsClipboardCopied(true);
-      })
-      .catch(() => {
-        alert('Failed to copy the URL');
-      });
-  };
+  // const copyToClipboard = () => {
+  //   navigator.clipboard.writeText(convertedUrl)
+  //     .then(() => {
+  //       // alert('Converted URL copied to clipboard!');
+  //       setIsClipboardCopied(true);
+  //     })
+  //     .catch(() => {
+  //       alert('Failed to copy the URL');
+  //     });
+  // };
 
   const generateUniqueSKU = () => {
     const prefix = 'LT'; // Listing prefix
@@ -191,7 +197,13 @@ const SellerListings = () => {
   };
 
   const removeImage = (index) => {
-    const updatedImages = newListing.images.filter((_, i) => i !== index);
+    console.log("fetechedImage..", fetchedImageUrl);
+    const updatedImages = fetchedImageUrl.filter((_, i) => i !== index);
+    setFetchedImageUrl(updatedImages);
+
+
+
+    // const updatedImages = newListing.images.filter((_, i) => i !== index);
     setNewListing((prev) => ({
       ...prev,
       images: updatedImages,
@@ -203,12 +215,12 @@ const SellerListings = () => {
   const handleListingSubmit = async (e) => {
 
     e.preventDefault();
-    
-  
+
+
     const action = e.nativeEvent.submitter.value;
     // console.log("action..", action);
 
-     if (action === 'cancel') {
+    if (action === 'cancel') {
       setNewListing({
         name: '',
         sku: '',
@@ -235,7 +247,7 @@ const SellerListings = () => {
         }
       });
     }
-    else{
+    else {
       setListingCreated(false);
       try {
         const listingData = {
@@ -245,9 +257,9 @@ const SellerListings = () => {
           category: 'tractor', // Or dynamically set
           status: 'draft', // Default status
         };
-  
+
         console.log("Payload being sent to backend:", listingData);
-  
+
         const response = await listingService.createListing(listingData);
         console.log("response listing..", response);
         console.log("response listing success..", response.success);
@@ -257,7 +269,7 @@ const SellerListings = () => {
         } else {
           setListingError(true);
           setListingCreated(false);
-  
+
         }
         setNewListing({
           name: '',
@@ -294,7 +306,7 @@ const SellerListings = () => {
 
     }
 
- 
+
   };
 
   const handleListingDelete = async (id) => {
@@ -332,7 +344,10 @@ const SellerListings = () => {
     setIsNewListingsVisible(contentType === 'newListings');
     setIsListingsStatusVisible(contentType === 'listingsStatus');
 
-  }
+  };
+
+
+
 
   return (
 
@@ -392,36 +407,42 @@ const SellerListings = () => {
 
                 <div>
                   <label>Images:</label>
-                  {newListing.images.map((image, index) => (
-                    <div key={index}>
-                      <input
-                        type="url"
-                        name={`imageUrl${index}`}
-                        placeholder="Image URL"
-                        value={image.url}
-                        onChange={(e) => handleImageChange(e, index, 'url')}
-                      />
-                      <input
-                        type="text"
-                        name={`altText${index}`}
-                        placeholder="Alt text"
-                        value={image.alt || ''}
-                        onChange={(e) => handleImageChange(e, index, 'alt')}
-                      />
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={image.isPrimary || false}
-                          onChange={(e) => handleImageChange(e, index, 'isPrimary')}
-                        />
-                        Primary Image
-                      </label>
-                      <button type="button" onClick={() => removeImage(index)}>Remove</button>
+                  {fetchedImageUrl && (
+                    <div>
+                      {fetchedImageUrl.map((image, index) => (
+                        <div key={index}
+                          >
+                          
+                          <input
+                            type="text"
+                            name={`altText${index}`}
+                            placeholder="Alt text"
+                            value={image.url || ''}
+                            onChange={(e) => handleImageChange(e, index, 'alt')}
+                          />      
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>                  
+                          <Button type="button" onClick={() => removeImage(index)}
+                            variant='mini'>Remove</Button>
+                          <label>
+                            <input
+                              type="checkbox"
+                              // checked={image.isPrimary || false}
+                              defaultChecked={image.isPrimary || false}
+                              // onChange={(e) => handleImageChange(e, index, 'isPrimary')}
+                              onChange={(e) => {
+                                e.target.checked = !e.target.checked; // Toggle the checked state
+                              }}
+                              style={{display:'inline-block'}}
+                            />
+                            Primary Image
+                          </label>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                  {newListing.images.length < 3 && (
-                    <button type="button" onClick={addImage}>Add Image URLs</button>
                   )}
+
+
                 </div>
 
                 <textarea
@@ -512,10 +533,10 @@ const SellerListings = () => {
                 />
 
                 <div className="button-group">
-                  
+
                   <Button type="submit" variant='primary' name="action" value="create" >Create Listing</Button>
                   <Button type="submit" variant='secondary' name="action" value="cancel" >Cancel</Button>
-                 
+
 
                 </div>
 
@@ -524,8 +545,19 @@ const SellerListings = () => {
               </form>
             </div>
             <div className='seller-cloudinary-container'>
-              <UploadWidgetClaudinary folderName={cloudinaryFolder} />
+              <UploadWidgetClaudinary folderName={cloudinaryFolder}
+                setFetchedImageUrl={handleFetchedImageUrls} />
             </div>
+
+            {/* {fetchedImageUrl && (
+              fetchedImageUrl.map((image, index) => (
+                <div key={index}>
+                  <p>{image.url}</p>
+                  <p>{image.filename}</p>
+                </div>
+              ))
+
+            )} */}
 
           </div>
 

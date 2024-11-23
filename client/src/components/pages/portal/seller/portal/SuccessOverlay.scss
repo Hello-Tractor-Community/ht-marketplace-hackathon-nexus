@@ -1,0 +1,40 @@
+@import '../../../../../assets/styles/abstract/_variables';
+@import '../../../../../assets/styles/abstract/_mixins';
+
+
+.overlay-container {
+
+    position: fixed;        
+    top: 15%;                    
+    left: 25%;                  
+    max-width: 50%;            
+           
+    display: flex;           
+    align-items: center;      
+    justify-content: center;  
+    background-color: hsl($accent);
+    color: hsl($accent-foreground);
+    z-index: 999;
+    border: 2px solid hsl($primary);
+
+    .close-btn{
+        position: absolute;
+        top: 0;
+        right: 0;  
+        border-radius: 0;     
+        transition: color 0.2s ease-in-out;
+
+    }
+    .alert-icon{
+        color: hsl($primary);
+    }
+    .alert-icon-error{
+        color: hsl($destructive);
+    }
+    .success-title{
+        color: hsl($primary-foreground)
+    }
+}  
+
+
+  
