@@ -9,7 +9,6 @@ const conversationSchema = new mongoose.Schema({
     listing: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Listing',
-        // Only required for listing-related conversations
         required: function() {
             return this.type === 'listing_inquiry' || this.type === 'purchase_discussion';
         }
@@ -17,7 +16,6 @@ const conversationSchema = new mongoose.Schema({
     buyer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        // Only required for listing-related conversations
         required: function() {
             return this.type === 'listing_inquiry' || this.type === 'purchase_discussion';
         }
@@ -29,11 +27,10 @@ const conversationSchema = new mongoose.Schema({
     seller: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        // Only required for listing-related conversations and seller welcome messages
         required: function() {
-            return this.type === 'listing_inquiry' || 
-                   this.type === 'purchase_discussion' || 
-                   this.type === 'admin_welcome';
+            return this.type === 'listing_inquiry' ||
+                    this.type === 'purchase_discussion' ||
+                    this.type === 'admin_welcome';
         }
     },
     type: {
@@ -54,17 +51,20 @@ const conversationSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Modified index to only apply to listing-related conversations
+// Modified index to explicitly exclude admin_support type
 conversationSchema.index(
-    { 
-        listing: 1, 
-        buyer: 1, 
-        seller: 1 
-    }, 
-    { 
+    {
+        listing: 1,
+        buyer: 1,
+        seller: 1
+    },
+    {
         unique: true,
-        partialFilterExpression: { 
-            type: { $in: ['listing_inquiry', 'purchase_discussion'] } 
+        partialFilterExpression: {
+            type: { $in: ['listing_inquiry', 'purchase_discussion'] },
+            listing: { $exists: true },
+            buyer: { $exists: true },
+            seller: { $exists: true }
         }
     }
 );

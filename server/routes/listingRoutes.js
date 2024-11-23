@@ -41,7 +41,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
+const { protect,bypassSellerAuth } = require('../middleware/auth');
 const {
     createListing,
     getListings,
@@ -68,7 +68,7 @@ router.patch('/:id/inventory', protect, updateListingInventory);
 router.route('/:id')
     .put(protect,  updateListing)
     .delete(protect, deleteListing);
-router.post('/', protect, createListing);
+router.post('/', bypassSellerAuth, createListing);
 
 module.exports = router;
 

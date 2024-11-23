@@ -8,15 +8,18 @@ const asyncHandler = require('../middleware/async');
 const createListingConversation = asyncHandler(async (req, res, next) => {
     const { listingId } = req.params;
     const buyerId = req.user._id;
-
+    
     // Find the listing and verify it exists
-    const listing = await Listing.findById(listingId).populate('seller');
+    const listing = await Listing.findById(listingId).populate('user');
+    console.log(JSON.parse(JSON.stringify(listing)).user._id)
     if (!listing) {
         return next(new ErrorResponse('Listing not found', 404));
     }
-
+    
+    const sellerId = JSON.parse(JSON.stringify(listing)).user._id
+    
     // Prevent buyer from messaging their own listing
-    if (listing.seller._id.toString() === buyerId.toString()) {
+    if (sellerId === buyerId) {
         return next(new ErrorResponse('You cannot message your own listing', 400));
     }
 
@@ -24,16 +27,15 @@ const createListingConversation = asyncHandler(async (req, res, next) => {
     let conversation = await Conversation.findOne({
         listing: listingId,
         buyer: buyerId,
-        seller: listing.seller._id
+        seller: sellerId
     });
-
     // Create new conversation if it doesn't exist
     if (!conversation) {
         conversation = await Conversation.create({
             listing: listingId,
             buyer: buyerId,
-            seller: listing.seller._id,
-            participants: [buyerId, listing.seller._id]
+            seller: sellerId,
+            participants: [buyerId, sellerId]
         });
     }
 
@@ -89,7 +91,6 @@ const sendListingMessage = asyncHandler(async (req, res, next) => {
 });
 
 const getBuyerListingConversations = asyncHandler(async (req, res, next) => {
-    console.log('Request params:', req.params);
 
     const buyerId = req.user._id;
     console.log("BuyerID: ", buyerId)

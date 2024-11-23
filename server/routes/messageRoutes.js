@@ -14,12 +14,18 @@ const {
 
 const {
     getAdminConversations,
-    createWelcomeConversation
+    createWelcomeConversation,
+    sendAdminMessage, 
+    sendMessageToAdmin
 } = require('../controllers/adminMessageController')
 
 
+router.post('/message-admin', bypassSellerAuth, sendMessageToAdmin);
+
+router.post("/admin/message/:userId", bypassAdminAuth, sendAdminMessage)
+
 // Get all conversations for a seller
-router.get('/seller/conversations', protect,getSellerListingConversations);
+router.get('/seller/conversations', bypassSellerAuth,getSellerListingConversations);
 
 // Get messages for a specific conversation
 router.get('/conversation/:conversationId/messages', protect, getConversationMessages);

@@ -59,7 +59,9 @@ const sendAdminMessage = asyncHandler(async (req, res, next) => {
     const { userId } = req.params;
     const { content, attachments } = req.body;
     const adminId = req.user._id;
-
+    
+    // console.log("adminId: ",adminId)
+    
     // Verify the requesting user is an admin
     if (!req.user.platformRoles.includes('admin')) {
         return next(new ErrorResponse('Not authorized to perform this action', 403));
@@ -70,14 +72,15 @@ const sendAdminMessage = asyncHandler(async (req, res, next) => {
     if (!user) {
         return next(new ErrorResponse('User not found', 404));
     }
-
+    
     // Find existing conversation or create new one
     let conversation = await Conversation.findOne({
         participants: { $all: [adminId, userId] },
         type: 'admin_support',
         status: 'active'
     });
-
+    
+    
     if (!conversation) {
         conversation = await Conversation.create({
             participants: [adminId, userId],
@@ -88,7 +91,7 @@ const sendAdminMessage = asyncHandler(async (req, res, next) => {
             status: 'active'
         });
     }
-
+            
     // Create the message
     const message = await Message.create({
         conversation: conversation._id,
@@ -97,7 +100,7 @@ const sendAdminMessage = asyncHandler(async (req, res, next) => {
         content,
         attachments
     });
-
+    
     // Update conversation's last message
     conversation.lastMessage = message._id;
     await conversation.save();
@@ -203,10 +206,71 @@ const updateAdminConversationStatus = asyncHandler(async (req, res, next) => {
     });
 });
 
+const sendMessageToAdmin = asyncHandler(async (req, res, next) => {
+    const { content, attachments } = req.body;
+    const userId = req.user._id;
+    
+    // Find any active admin conversation for this user
+    let conversation = await Conversation.findOne({
+        participants: { $in: [userId] },
+        type: 'admin_support',
+        status: 'active'
+    }).populate('admin');
+    
+    if (!conversation) {
+        // If no active conversation exists, find an available admin
+        const admin = await User.findOne({ 
+            platformRoles: 'admin',
+            // Add any additional criteria for admin selection
+        });
+        
+        if (!admin) {
+            return next(new ErrorResponse('No admin available at the moment', 404));
+        }
+
+        console.log("User: ", req.user)
+        
+        // Create new conversation
+        conversation = await Conversation.create({
+            participants: [userId, admin._id],
+            admin: admin._id,
+            ...(req.user.platformRoles.includes('seller') && { seller: userId }),
+            ...(req.user.platformRoles.includes('buyer') && { buyer: userId }),
+            type: 'admin_support',
+            status: 'active'
+        });
+    }
+    
+    // Create the message
+    const message = await Message.create({
+        conversation: conversation._id,
+        sender: userId,
+        recipient: conversation.admin,
+        content,
+        attachments
+    });
+    
+    // Update conversation's last message
+    conversation.lastMessage = message._id;
+    await conversation.save();
+    
+    // Populate necessary fields for the response
+    const populatedMessage = await Message.findById(message._id)
+        .populate('sender', 'firstName lastName profileImage')
+        .populate('recipient', 'firstName lastName profileImage');
+    
+    res.status(201).json({
+        success: true,
+        data: populatedMessage
+    });
+});
+
+
 module.exports = {
     createWelcomeConversation,
     sendAdminMessage,
     getAdminConversations,
     getAdminConversationMessages,
-    updateAdminConversationStatus
+    updateAdminConversationStatus,
+    sendMessageToAdmin
 };
