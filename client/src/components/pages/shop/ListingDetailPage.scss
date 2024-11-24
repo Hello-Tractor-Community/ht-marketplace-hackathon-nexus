@@ -25,13 +25,16 @@
         grid-template-columns: 1fr 0.5fr;
      
         justify-content: flex-start;
-        align-items: center;
+        align-items: start;
         max-width: 98%;
-        margin: auto;
+        margin: map-get($spacing,'base') auto map-get($spacing, 'xl');
         padding: map-get($map: $spacing, $key: 'sm');
+        gap:map-get($map: $spacing, $key: 'base');
 
         
         .seller-details{
+
+            background-color: hsl($background-darker);
 
             textarea{
                 margin-bottom: map-get($map: $spacing, $key: 'sm');
@@ -44,18 +47,58 @@
 
         .card-image{
             display: flex;
-            // height: 100px;
+            height: calc(map-get($map: $font-sizes, $key:'4xl' )*10);
+          
+
+            .main-image{
+                height: 100%;
+                overflow: hidden;
+
+                img{
+                    height: 100%;
+                    object-fit: contain;
+                }
+
+            }
             
             
 
             .image-options{
-                button{
-                    display: block;
 
-                }
                 display: flex;
                 flex-direction: column;
+               
+                height: 100%;
+                gap: map-get($map: $spacing, $key: 'xs' );
+                
+                button{
+                    // display: block;
+                    height: 30%;
+                    border: $radius;
+                    overflow: hidden;
+                   
+
+                    &:hover{
+                        cursor: pointer;
+                    }
+
+                    img{
+                        height: 100%;
+                        object-fit: contain;
+                    }
+
+                }
+               
             }
+        }
+
+        .listing-details{
+            margin-top: map-get($map: $spacing, $key: 'base');
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap:map-get($map: $spacing, $key: 'xl');
+            padding: map-get($map: $spacing, $key: 'base');
         }
 
     }

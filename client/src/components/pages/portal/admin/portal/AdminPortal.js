@@ -5,6 +5,7 @@ import { logout } from '../../../../../store/slices/authSlice';
 import logo from '../../../../../assets/images/logo/logo_v_2.png';
 
 import SellerListings from './SellerListings';
+import Sellers from './Sellers';
 import SellerMailbox from './SellerMailbox';
 import SellerDashboard from './SellerDashboard';
 import SellerProfile from './SellerProfile';
@@ -23,7 +24,7 @@ const AdminPortal = () => {
   const [isDashboardVisible, setIsDashboardVisible] = useState(false);
   const [isMailboxVisible, setIsMailboxVisible] = useState(false);
   const [isProfileVisible, setIsProfileVisible] = useState(false);
-
+  const [isSellerVisible, setIsSellerVisible] = useState(false);
   const handleLogout = () => {
     dispatch(logout());
     // Redirect the user to the home page
@@ -36,6 +37,7 @@ const AdminPortal = () => {
     setIsDashboardVisible(contentType === 'dashboard');
     setIsMailboxVisible(contentType === 'mailbox');
     setIsProfileVisible(contentType === 'profile');
+    setIsSellerVisible(contentType === 'seller');
   }
 
   return (
@@ -71,6 +73,12 @@ const AdminPortal = () => {
             className={isMailboxVisible ? 'active' : ''}>
             Message
           </Button>
+          <Button onClick={() => handleToggleVisibility('seller')}
+            variant='mini'
+
+            className={isSellerVisible ? 'active' : ''}>
+            Sellers
+          </Button>
           <Button onClick={() => handleToggleVisibility('dashboard')}
             variant='mini'
 
@@ -96,6 +104,13 @@ const AdminPortal = () => {
           {isMailboxVisible && (
             <>
               <SellerMailbox />
+
+            </>
+          )
+          }
+          {isSellerVisible && (
+            <>
+              <Sellers />
 
             </>
           )

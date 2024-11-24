@@ -54,10 +54,10 @@ const SellerListings = () => {
   const [isClipboardCopied, setIsClipboardCopied] = useState(false);
   useEffect(() => {
     const token = authService.getToken();
-    console.log("User:", user);
+    // console.log("User:", user);
     const userId = user?._id;
-    console.log("User ID:", userId);
-    console.log("token:", token);
+    // console.log("User ID:", userId);
+    // console.log("token:", token);
 
     if (token) {
       if (!fetchingComplete) {
@@ -67,12 +67,15 @@ const SellerListings = () => {
     }
   }, [fetchingComplete, user]);
 
+
+
   const [originalUrl, setOriginalUrl] = useState('');
   const [convertedUrl, setConvertedUrl] = useState('');
   const [fetchedImageUrl, setFetchedImageUrl] = useState([]);
 
   // You can pass this function to the child component
   const handleFetchedImageUrls = (images) => {
+    console.log("images fetched from cloudinary widget..",images);
     setFetchedImageUrl(images); // Update the parent state with the new image URLs
   };
 
@@ -119,11 +122,11 @@ const SellerListings = () => {
 
   const fetchListings = async (userId) => {
 
-    console.log("fetchlisting.. userId", userId);
+    // console.log("fetchlisting.. userId", userId);
 
     try {
       const response = await listingService.getListingsByUser(userId);
-      console.log("response..", response);
+      // console.log("response..", response);
       if (response.success) {
         setListings(response.data);
         setIsLoading(false);
@@ -176,16 +179,20 @@ const SellerListings = () => {
   };
 
   const handleImageChange = (e, index, field) => {
+    console.log("Updating image:", newListing.images);
     const updatedImages = [...newListing.images];
     updatedImages[index] = {
-      ...updatedImages[index],
-      [field]: e.target.value,
+        ...updatedImages[index],
+        [field]: e.target.value,
     };
+    console.log("Updated image data:", updatedImages);
+
     setNewListing((prev) => ({
-      ...prev,
-      images: updatedImages,
+        ...prev,
+        images: updatedImages,
     }));
-  };
+};
+
 
   const addImage = () => {
     if (newListing.images.length < 3) {
@@ -197,7 +204,7 @@ const SellerListings = () => {
   };
 
   const removeImage = (index) => {
-    console.log("fetechedImage..", fetchedImageUrl);
+    // console.log("fetechedImage..", fetchedImageUrl);
     const updatedImages = fetchedImageUrl.filter((_, i) => i !== index);
     setFetchedImageUrl(updatedImages);
 
@@ -210,6 +217,25 @@ const SellerListings = () => {
     }));
   };
 
+  
+  // Assuming fetchedImageUrl is available and fetched successfully
+useEffect(() => {
+  if (fetchedImageUrl?.length > 0) {
+      // Transform fetchedImageUrl to match the structure of newListing.images
+      const transformedImages = fetchedImageUrl.map((image, index) => ({
+          url: image.url,
+          alt: image.filename || `Image ${index + 1}`, // Default alt text
+          isPrimary: index === 0, // Optionally set the first image as primary
+      }));
+
+      // Update newListing with the transformed images
+      setNewListing((prev) => ({
+          ...prev,
+          images: transformedImages,
+      }));
+  }
+}, [fetchedImageUrl]);
+
 
 
   const handleListingSubmit = async (e) => {
@@ -219,6 +245,7 @@ const SellerListings = () => {
 
     const action = e.nativeEvent.submitter.value;
     // console.log("action..", action);
+  
 
     if (action === 'cancel') {
       setNewListing({
@@ -248,7 +275,9 @@ const SellerListings = () => {
       });
     }
     else {
+      console.log("newlisting..",newListing);
       setListingCreated(false);
+     
       try {
         const listingData = {
           ...newListing,
@@ -258,11 +287,11 @@ const SellerListings = () => {
           status: 'draft', // Default status
         };
 
-        console.log("Payload being sent to backend:", listingData);
+        // console.log("Payload being sent to backend:", listingData);
 
         const response = await listingService.createListing(listingData);
-        console.log("response listing..", response);
-        console.log("response listing success..", response.success);
+        // console.log("response listing..", response);
+        // console.log("response listing success..", response.success);
         if (response.success) {
           setListingCreated(true);
           setListingError(false);
@@ -310,7 +339,7 @@ const SellerListings = () => {
   };
 
   const handleListingDelete = async (id) => {
-    console.log("Attempting to delete listing with ID:", id);
+    // console.log("Attempting to delete listing with ID:", id);
     try {
       const response = await listingService.deleteListing(id);
       console.log("Response data:", response.data);
@@ -426,9 +455,8 @@ const SellerListings = () => {
                           <label>
                             <input
                               type="checkbox"
-                              // checked={image.isPrimary || false}
+                              
                               defaultChecked={image.isPrimary || false}
-                              // onChange={(e) => handleImageChange(e, index, 'isPrimary')}
                               onChange={(e) => {
                                 e.target.checked = !e.target.checked; // Toggle the checked state
                               }}

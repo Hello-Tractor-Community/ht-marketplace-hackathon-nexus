@@ -14,6 +14,7 @@ import Footer from '../public/footer/Footer';
 import NavBar from '../../common/navigation/NavBar';
 import { Search } from 'lucide-react';
 import { FaExclamationTriangle } from 'react-icons/fa'
+import placeholder_img from '../../../assets/images/tructors/placeholder.png';
 import './ListingDetailPage.scss';
 
 import {
@@ -90,6 +91,13 @@ const ListingDetailPage = () => {
     }
   };
 
+  useEffect(()=>{
+
+    console.log("listing in details..",listing);
+    console.log("listing images.", listing?.images[0]);
+
+  },[listing]);
+
   const fetchSellerInfo = async ({ option = "show" }) => {
 
     if (option === "hide") {
@@ -136,6 +144,8 @@ const ListingDetailPage = () => {
       </div>
     );
   }
+
+ 
 
 
 
@@ -186,9 +196,9 @@ const ListingDetailPage = () => {
         setError(true);
       }
     }
+    };
 
 
-  };
 
   const clearStatus = () => {
     setError(null);
@@ -238,36 +248,37 @@ const ListingDetailPage = () => {
         <div className="card-details">
           {/* Image Gallery */}
           <div className="card-image">
-            <div className="border rounded-lg overflow-hidden">
+            <div className="main-image">
               <img
-                src={listing.images[selectedImage] || "/api/placeholder/800/600"}
+                src={listing.images[selectedImage].url || placeholder_img }
                 alt={`${listing.name} - Image ${selectedImage + 1}`}
-                className="w-full h-96 object-cover"
+                className=""
               />
             </div>
 
             {/* Thumbnail Strip */}
             <div className="image-options">
               {listing && listing.images.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  className={`relative overflow-hidden h-20 border ${selectedImage === index ? 'border-blue-500' : 'border-gray-200'
-                    }`}
-                >
-                  <img
-                    src={image || "/api/placeholder/150/150"}
-                    alt={`Thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
+               <button
+               key={index}
+               onClick={() => setSelectedImage(index)}
+               className={`${selectedImage === index ? 'border-blue-500' : 'border-gray-200'
+                 }`}
+             >
+               <img
+                 src={image.url || placeholder_img}
+                 alt={`Thumbnail ${index + 1}`}
+                 className=""
+               />
+             </button>
+             
               ))}
             </div>
           </div>
 
           {/* Listing Details */}
           <div className="space-y-6">
-            <div className="border rounded-lg p-6">
+            <div className="border rounded-lg p-6 listing-details">
               <div className="flex justify-between items-start">
                 <div>
                   <h1 className="text-3xl font-bold mb-2">{listing.name}</h1>

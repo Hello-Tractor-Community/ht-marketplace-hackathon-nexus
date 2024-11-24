@@ -12,6 +12,16 @@ export const userService = {
         throw error.response?.data || error.message;
       }
     },
+    getUsersByRole: async (role) => {
+      try {
+          const response = await api.get('/users/role/search', { 
+              params: { role }
+          });
+          return response.data;
+      } catch (error) {
+          throw error.response?.data || error.message;
+      }
+  },
   
     searchUsers: async (searchParams) => {
       try {

@@ -358,12 +358,43 @@ const SellerListings = () => {
     }
   };
 
+  
+  const [statusUpdated, setStatusUpdated] = useState(false);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setStatusUpdated(false);
+    }, 2000);   
+    return () => clearTimeout(timeoutId);
+  }, [statusUpdated]);
+  
   const handleListingApprove = async (id) => {
-     console.log("Approve");
+   
+    try {
+      const result = await listingService.updateListingStatus(id, "active");
+      
+      if (result.success) {
+        setStatusUpdated(true);
+      } else {
+        setListingError(result.error);
+      }
+    } catch (err) {
+      setListingError('Failed to update listing status');
+    }
   }
 
   const handleListingReject = async (id) => {
-    console.log("To reject.");
+    try {
+      const result = await listingService.updateListingStatus(id, "inactive");
+      
+      if (result.success) {
+        setStatusUpdated(true);
+      } else {
+        setListingError(result.error);
+      }
+    } catch (err) {
+      setListingError('Failed to update listing status');
+    }
   }
 
 
@@ -596,16 +627,6 @@ const SellerListings = () => {
                 setFetchedImageUrl={handleFetchedImageUrls} />
             </div>
 
-            {/* {fetchedImageUrl && (
-              fetchedImageUrl.map((image, index) => (
-                <div key={index}>
-                  <p>{image.url}</p>
-                  <p>{image.filename}</p>
-                </div>
-              ))
-
-            )} */}
-
           </div>
 
         )}
@@ -634,7 +655,7 @@ const SellerListings = () => {
                     style={{ cursor: "pointer" }}
                   >
                     {/* <td><img src={listing.image} alt={listing.name} /></td> */}
-                    <td>{listing.image ? 'Has image' : 'No image'}</td>
+                    <td>{listing.images?.length > 0 ? 'Has image' : 'No image'}</td>
                     <td>{listing.name}</td>
                     <td>{listing.category}</td>
                     <td>{listing.description.length > 50 ? `${listing.description.slice(0, 50)}...` : listing.description}</td>
@@ -663,6 +684,10 @@ const SellerListings = () => {
           />
         )}
 
+        {statusUpdated && (
+          <p className='status-success'>Success!</p>
+        )}
+
         {listingCreated && !listingError &&
           (
             <SuccessOverlay onClose={onClose} />
@@ -671,6 +696,8 @@ const SellerListings = () => {
         {!listingCreated && listingError && (
           <ErrorOverlay onClose={onClose} onRetry={handleListingSubmit} />
         )}
+
+        
 
       </div>
 

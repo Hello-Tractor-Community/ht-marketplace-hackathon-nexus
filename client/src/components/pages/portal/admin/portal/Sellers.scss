@@ -280,14 +280,6 @@ $toggle-checked-color: #2196f3;
         width: 80%;
         margin: map-get($map: $spacing, $key: 'base') auto;
 
-      
-            tr{
-                &:hover{
-                    background-color: hsl($background);
-                }
-            }
-        
-
     }
 
     thead {
@@ -315,14 +307,12 @@ $toggle-checked-color: #2196f3;
     }
 }
 
-.status-success{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    background-color: hsl($muted-foreground);
-    color: hsl($primary);
-    padding: map-get($map: $spacing, $key:'xl' ) map-get($map: $spacing, $key: '3xl');
-    font-size: map-get($map: $font-sizes, $key: '2xl' );
+table{
+    tr{
+        &:hover{
+            background-color: hsl($background);
+        }
+    }
 }
 
 .mailbox-container {

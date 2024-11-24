@@ -7,7 +7,9 @@ const {
     getAllUsers,
     updateUserProfile,
     getUser,
-    searchUser
+    searchUser,
+    createUser,
+    getUsersByRole
 } = require('../controllers/userController');
 
 
@@ -18,6 +20,7 @@ const {
 router.get('/', getAllUsers);
 router.get('/search', searchUser)
 router.get('/:id', getUser)
+router.get('/role/search', getUsersByRole);
 
 router.put('/:id', (req, res, next) => {
     updateUserProfile(req, res, next);
@@ -25,6 +28,8 @@ router.put('/:id', (req, res, next) => {
 
 // Admin only routes
 router.delete('/:id', protect, authorize, deleteUser);
+  // Add this route with your other admin routes
+router.post('/', protect, authorize('admin'), createUser);
 
 
 // Protected routes

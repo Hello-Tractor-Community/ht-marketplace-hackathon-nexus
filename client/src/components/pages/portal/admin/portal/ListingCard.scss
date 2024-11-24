@@ -1,3 +1,7 @@
+@import '../../../../../assets/styles/abstract/_variables';
+@import '../../../../../assets/styles/abstract/_mixins';
+
+
 .card {
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -8,6 +12,11 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+
+    img{
+      width: calc(map-get($font-sizes,'4xl')*2);
+      object-fit: contain;
+    }
     // position: fixed;
     // top: 50%;
     // left: 50%;

@@ -5,11 +5,12 @@ const mongoose = require('mongoose');
 const asyncHandler = require('express-async-handler');
 
 const createListing = asyncHandler(async (req, res) => {
+    console.log("req.body: ", req.body);
+    const user = req.user._id;
     const {
         name,
         sku,
         category,
-        seller,
         description,
         make,
         model,
@@ -24,13 +25,13 @@ const createListing = asyncHandler(async (req, res) => {
     } = req.body;
 
     // Validate ObjectIds
-    if (!mongoose.Types.ObjectId.isValid(seller)) {
+    if (!mongoose.Types.ObjectId.isValid(user)) {
         res.status(400);
-        throw new Error('Invalid seller ID');
+        throw new Error('Invalid user ID');
     }
 
     // Check seller exists
-    const foundSeller = await User.findById(seller);
+    const foundSeller = await User.findById(user);
     if (!foundSeller) {
         res.status(404);
         throw new Error('Seller not found');
@@ -43,14 +44,13 @@ const createListing = asyncHandler(async (req, res) => {
         throw new Error('SKU already exists');
     }
 
-    const user = req.user._id;
+
 
     const listing = await Listing.create({
         name,
         sku,
         category,
         user,
-        seller,
         description,
         make,
         model,
@@ -197,7 +197,7 @@ const getListingById = asyncHandler(async (req, res) => {
         $inc: { 'metrics.views': 1 }
     });
 
-    console.log("listing..",listing);
+    console.log("listing..", listing);
 
     res.status(200).json({
         success: true,
@@ -248,14 +248,14 @@ const updateListing = asyncHandler(async (req, res) => {
 
 const deleteListing = asyncHandler(async (req, res) => {
     console.log("Attempting to delete listing..");
-    console.log("req params..",req.params);
+    console.log("req params..", req.params);
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
         res.status(400);
         throw new Error('Invalid listing ID');
     }
 
     const listing = await Listing.findById(req.params.id);
-    console.log("listing..",listing);
+    console.log("listing..", listing);
 
     if (!listing) {
         res.status(404);
@@ -297,8 +297,9 @@ const updateListingStatus = asyncHandler(async (req, res) => {
         throw new Error('Listing not found');
     }
 
-    // Check authorization
-    if (listing.user.toString() !== req.user._id.toString()) {
+    // Authorization: Allow listing owner or platform admin to update status
+    if (listing.user.toString() !== req.user._id.toString() &&
+        !req.user.platformRoles?.includes('admin')) {
         res.status(403);
         throw new Error('Not authorized to update this listing');
     }

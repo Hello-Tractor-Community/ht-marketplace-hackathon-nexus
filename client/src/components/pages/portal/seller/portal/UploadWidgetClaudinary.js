@@ -22,6 +22,7 @@ const UploadWidgetClaudinary = ({ folderName, setFetchedImageUrl }) => {
     useEffect(() => {
         if (cloudinaryUploadSuccess) {
             setTimeout(() => {
+                // setFetchedImageUrl([]);
                 setCloudinaryUploadSuccess(false);
             }, 3000);
         }

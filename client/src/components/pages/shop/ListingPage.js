@@ -6,6 +6,7 @@ import StarRating from './StarRating';
 import { Filter, Search } from 'lucide-react';
 import Input from '../../common/input/Input';
 import Button from '../../common/button/Button';
+import placeholder_img from '../../../assets/images/tructors/placeholder.png';
 
 import './ListingPage.scss';
 
@@ -214,8 +215,8 @@ const ListingPage = () => {
             {listings && listings.map(listing => (
               <div key={listing._id} className="card"
               onClick={() => navigate(`/listing/${listing._id}`)}>
-                <img
-                  src={listing.images[0] || "/api/placeholder/400/300"}
+                <img 
+                  src={listing?.images[0].url || placeholder_img}
                   alt={listing.name}
                   className="w-full h-48 object-cover"
                 />

@@ -45,6 +45,96 @@ const getUser = asyncHandler(async (req, res) => {
     });
 });
 
+const getUsersByRole = asyncHandler(async (req, res) => {
+    const { role } = req.query;
+    
+    if (!role) {
+        res.status(400);
+        throw new Error('Role parameter is required');
+    }
+
+    const users = await User.find({ platformRoles: role })
+        .select('firstName lastName email phone accountStatus platformRoles companyAssociations');
+    
+    res.status(200).json({
+        success: true,
+        data: users
+    });
+});
+
+
+// controllers/userController.js
+
+const createUser = asyncHandler(async (req, res) => {
+    // Extract user data from request body
+    const {
+        firstName,
+        lastName,
+        email,
+        password,
+        phone,
+        platformRoles,
+        address,
+        companyAssociations
+    } = req.body;
+
+    // Check if user already exists
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+        res.status(400);
+        throw new Error('User with this email already exists');
+    }
+
+    // Validate required fields
+    if (!firstName || !lastName || !email || !password) {
+        res.status(400);
+        throw new Error('Please provide all required fields');
+    }
+
+    // Create user with admin-provided data
+    // Force these security and status settings for admin-created users
+    const userData = {
+        firstName,
+        lastName,
+        email,
+        password,
+        phone,
+        platformRoles: platformRoles || ['buyer'],
+        address,
+        companyAssociations,
+        accountStatus: 'active', // Always set to active
+        security: {
+            emailVerified: true,
+            emailVerifiedAt: new Date()
+        }
+    };
+
+    // Explicitly override any status or security fields that might have been sent
+    delete req.body.accountStatus;
+    delete req.body.security;
+
+    const user = await User.create(userData);
+
+    if (user) {
+        res.status(201).json({
+            success: true,
+            data: {
+                _id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phone: user.phone,
+                platformRoles: user.platformRoles,
+                companyAssociations: user.companyAssociations,
+                accountStatus: user.accountStatus
+            }
+        });
+    } else {
+        res.status(400);
+        throw new Error('Invalid user data');
+    }
+});
+
 // Update currently updates firstName and lastName
 const updateUserProfile = asyncHandler(async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -128,6 +218,8 @@ module.exports = {
     searchUser,
     updateUserProfile,
     getAllUsers,
-    getUser
+    getUser,
+    createUser,
+    getUsersByRole
 };
 
