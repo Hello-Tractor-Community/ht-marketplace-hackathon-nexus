@@ -19,13 +19,13 @@ const {
     sendMessageToAdmin
 } = require('../controllers/adminMessageController')
 
+// prtected routes
+router.post('/message-admin', protect, sendMessageToAdmin);
 
-router.post('/message-admin', bypassSellerAuth, sendMessageToAdmin);
-
-router.post("/admin/message/:userId", bypassAdminAuth, sendAdminMessage)
+router.post("/admin/message/:userId", protect, sendAdminMessage)
 
 // Get all conversations for a seller
-router.get('/seller/conversations', bypassSellerAuth,getSellerListingConversations);
+router.get('/seller/conversations', protect,getSellerListingConversations);
 
 // Get messages for a specific conversation
 router.get('/conversation/:conversationId/messages', protect, getConversationMessages);

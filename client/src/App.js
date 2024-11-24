@@ -13,9 +13,9 @@ import ScrollToTop from './components/common/navigation/ScrollToTop';
 
 // Import your components
 import LandingPage from './components/pages/public/landing/LandingPage';
-import ProductPage from './components/pages/shop/ProductPage';
+import ListingPage from './components/pages/shop/ListingPage';
 import Home from './components/pages/public/home/Home';
-import ProductDetailPage from './components/pages/shop/ProductDetailPage';
+import ListingDetailPage from './components/pages/shop/ListingDetailPage';
 import Favourites from './components/pages/shop/Favourites';
 import RoleRoute from './components/common/protectedRoute/RoleRoute';
 
@@ -62,8 +62,8 @@ const AppContent = () => {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/listing/*" element={<ProductPage />} />
-            <Route path="/listingDetail/:id" element={<ProductDetailPage />} />
+            <Route path="/listing/*" element={<ListingPage />} />
+            <Route path="/listing/:id" element={<ListingDetailPage />} />
             <Route path="/favs" element={<Favourites />} />
             
             <Route path="login" element={<LoginPage />} />

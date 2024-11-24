@@ -114,7 +114,7 @@ const performanceMiddleware = () => {
 const configureRoutes = () => {
     // API Endpoints
     app.use('/api/v1/auth', authRoutes);
-    app.use('/api/v1/user', userRoutes)
+    app.use('/api/v1/users', userRoutes);
     app.use('/api/v1/companys', companyRoutes);
     app.use('/api/v1/listings', listingRoutes);
     app.use('/api/v1/onboarding', companyOnboardingRoutes);

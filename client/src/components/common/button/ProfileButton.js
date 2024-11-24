@@ -62,7 +62,7 @@ const ProfileButton = () => {
       <Button
         variant="primary"
         onClick={() => setShowDropdown((prev) => !prev)}
-        
+        style={{marginBottom:'20px'}}
       >
         <FaUserCircle />
         {businessDetails ? 'Portal' : 'My Account'}
@@ -70,23 +70,24 @@ const ProfileButton = () => {
       {showDropdown && (
        
           <div className='__options'>
-            <div>
-            <a
+           
+            <a className='link'
               href="#"
               onClick={getProfileLink}
               
             >
               Profile
             </a>
-            </div>
-            <div>
-            <Button
-        variant="secondary"
-        onClick={handleLogout}       
-      >
-        Logout
-        </Button>
-            </div>
+            
+            
+            <a className='link'
+              href="#"
+              onClick={handleLogout}  
+              
+            >
+              Logout
+            </a>
+            
           </div>
         
       )}

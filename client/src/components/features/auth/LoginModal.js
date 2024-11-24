@@ -18,8 +18,6 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
       ? process.env.REACT_APP_API_URL_DEV
       : process.env.REACT_APP_API_URL_PROD;
 
-
-
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -36,7 +34,7 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (loginModalRef.current && !loginModalRef.current.contains(event.target)) {
-        setShowLoginModal(false);
+        // setShowLoginModal(false);
       }
     };
 

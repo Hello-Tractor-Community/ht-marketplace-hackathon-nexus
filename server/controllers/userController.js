@@ -13,6 +13,8 @@ const getAllUsers = asyncHandler(async (req, res) => {
 
 
 const getUser = asyncHandler(async (req, res) => {
+    console.log("Inside getUser..");
+    console.log("req.params.id: ", req.params.id);
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
         res.status(400);
         throw new Error('Invalid User ID');
@@ -24,10 +26,22 @@ const getUser = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('User not found');
     }
+
+    console.log("user: ", user);
     
     res.status(200).json({
         success: true,
-        data: user
+        data: {
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phone: user.phone,
+            comapanyAssociations: user.companyAssociations,
+            platformRoles: user.platformRoles,
+            lastLogin: user.lastLogin
+
+        }
     });
 });
 

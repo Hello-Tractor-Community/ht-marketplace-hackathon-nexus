@@ -3,6 +3,8 @@ import { replace, useNavigate } from 'react-router-dom';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 import CartItem from '../shop/CartItem';
 import NavBar from '../../common/navigation/NavBar';
+import Button from '../../common/button/Button';
+import './ErrorPage.scss';
 
 const ErrorPage = () => {
  
@@ -16,17 +18,20 @@ const ErrorPage = () => {
 
 
     return (
-        <div style={styles.mainContainer}>
+        <div className='error-page-container'>
             <NavBar />
             <CartItem />
-            <div style={styles.container}>
-            <IoCheckmarkCircleOutline size={80} color="#75A358" />
-                <p style={styles.message}>
+            <div className='message-container'>
+            <IoCheckmarkCircleOutline size={80} color="#75A358" className='icon'/>
+                <p className='message'>
                     <b>Oops! the page you are looking for does not exist.</b>
                 </p>
-                <button style={styles.button} onClick={handleContinueShopping}>
+                {/* <button style={styles.button} onClick={handleContinueShopping}>
                     Continue Shopping
-                </button>
+                </button> */}
+                <Button variant='secondary' onClick={handleContinueShopping}>
+                    Continue to Store
+                </Button>
             </div>
         </div>
     );

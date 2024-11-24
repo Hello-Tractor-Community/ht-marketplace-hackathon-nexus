@@ -197,6 +197,8 @@ const getListingById = asyncHandler(async (req, res) => {
         $inc: { 'metrics.views': 1 }
     });
 
+    console.log("listing..",listing);
+
     res.status(200).json({
         success: true,
         data: listing

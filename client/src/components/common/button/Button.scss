@@ -146,3 +146,37 @@
         }
     }
 }
+
+.profilebtn-container{
+    position: relative;
+ 
+     .__options{
+
+        position: absolute;
+        top: 100%;
+        right: 0%;
+        z-index: 10;
+        width: 100%;
+
+        .link{
+            text-decoration: none;
+            display: block;
+            color: hsl($foreground);
+            background-color: hsl($muted);
+            width: 100%;
+            margin-bottom: map-get($map: $spacing, $key: 'sm');
+            border-radius: $radius;
+            &:hover{
+                background-color: hsl($muted-foreground);
+                color: hsl($background);
+
+            }
+            
+            
+        }
+        
+     }
+
+      
+    
+}

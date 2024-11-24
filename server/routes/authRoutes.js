@@ -1,6 +1,7 @@
 // authRoutes.js
 const express = require('express');
 const router = express.Router();
+const { protect } = require('../middleware/auth');
 const { 
     registerUser, 
     loginUser, 
@@ -17,7 +18,6 @@ const {
     facebookAuth,
     facebookCallback
 } = require('../controllers/authController');
-const { protect } = require('../middleware/auth');
 
 // Public routes
 router.post('/register', registerUser);

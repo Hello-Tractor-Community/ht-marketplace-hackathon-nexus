@@ -1,6 +1,7 @@
 // authRoutes.js
 const express = require('express');
 const router = express.Router();
+const { protect, authorize } = require('../middleware/auth');
 const { 
     deleteUser,
     getAllUsers,
@@ -8,7 +9,7 @@ const {
     getUser,
     searchUser
 } = require('../controllers/userController');
-const { protect } = require('../middleware/auth');
+
 
 // router.use(protect);
 
@@ -23,7 +24,7 @@ router.put('/:id', (req, res, next) => {
 });
 
 // Admin only routes
-router.delete('/:id', deleteUser);
+router.delete('/:id', protect, authorize, deleteUser);
 
 
 // Protected routes

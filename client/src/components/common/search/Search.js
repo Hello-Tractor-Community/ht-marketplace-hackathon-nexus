@@ -8,7 +8,12 @@ import './Search.scss';
 
 const Search = () => {
   const dispatch = useDispatch();
-  const { items: institutes, loading, error } = useSelector(state => state.institutes);
+  // const { items: listings, loading, error } = useSelector(state => state.listings);
+  const [listings, setListings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+
   const [filters, setFilters] = useState({
     type: '',
     location: ''
@@ -26,21 +31,21 @@ const Search = () => {
       </div>
       
       <div className="search-page__content">
-        {loading && <div className="loading">Loading...</div>}
+        {isLoading && <div className="loading">Loading...</div>}
         {error && <div className="error">{error}</div>}
         
         <div className="search-results">
-          {institutes.map(institute => (
-            <Card key={institute._id} className="institute-card">
-              <h2>{institute.name}</h2>
-              <p>{institute.type}</p>
-              <p>{institute.description}</p>
-              <div className="institute-card__footer">
+          {listings.map(listing => (
+            <Card key={listing._id} className="listing-card">
+              <h2>{listing.name}</h2>
+              <p>{listing.type}</p>
+              <p>{listing.description}</p>
+              <div className="listing-card__footer">
                 <button 
                   className="btn btn--secondary"
-                  onClick={() => window.location.href = `/institute/${institute._id}`}
+                  onClick={() => window.location.href = `/listing/${listing._id}`}
                 >
-                  View Details
+                  See More
                 </button>
               </div>
             </Card>

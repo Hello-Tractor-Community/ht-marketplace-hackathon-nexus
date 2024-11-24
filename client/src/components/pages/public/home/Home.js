@@ -7,6 +7,7 @@ import Prompt from '../../shop/Prompt';
 import About from '../about/About';
 import StarRating from '../../shop/StarRating';
 import CartItem from '../../shop/CartItem';
+import ListingPage from '../../shop/ListingPage';
 import Footer from '../footer/Footer'
 import './Home.scss';
 
@@ -19,7 +20,8 @@ const Home = ({ history }) => {
         <div className="home">
             <NavBar history={history} />
             {/* <CartItem /> */}
-            <Search />        
+            {/* <Search />         */}
+            <ListingPage />
             <About />
             <Footer />
         </div>

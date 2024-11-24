@@ -377,7 +377,10 @@ const loginUser = async (req, res) => {
         const user = await User.findOne({ email }).select('+password');
 
         if (user && (await user.matchPassword(password))) {
-            console.log("User found.")
+            console.log("User found.");
+             // Update the lastLogin timestamp
+             user.lastLogin = new Date();
+             await user.save();
             const token = generateToken(user._id);
             // Get the most recent company association
             const latestCompany = user.companyAssociations[user.companyAssociations.length - 1];
@@ -489,6 +492,9 @@ const googleCallback = (req, res, next) => {
           console.error("Failed to generate token for user.");
           return res.redirect(`${CLIENT_URL}/login?error=token_generation_failed`);
         }
+         // Update the lastLogin timestamp
+         user.lastLogin = new Date();
+         await user.save();
   
         // Redirect to frontend with the token
         console.log("Google authentication successful, redirecting with token.");

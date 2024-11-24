@@ -5,7 +5,7 @@
     width: 40%;
     // position: relative;
     position: fixed; 
-    top: 10%;          
+    top: 5%;          
     left: 40%;
     color: hsl($popover-foreground);
     border-radius: $radius;
@@ -70,9 +70,10 @@
     flex-direction: row;     // Aligns items in a horizontal row
     justify-content: space-between; // Adjusts spacing between items
     align-items: center;     // Vertically centers the items
-    gap: 1rem;               // Adds consistent spacing between buttons
+    width: 50%;
+                 // Adds consistent spacing between buttons
    
-    padding: 1rem;           // Optional: Adds spacing inside the container
+    padding: map-get($map: $spacing , $key:'sm' ) 0;         // Optional: Adds spacing inside the container
   }
   
 

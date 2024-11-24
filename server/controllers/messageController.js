@@ -6,6 +6,7 @@ const asyncHandler = require('../middleware/async');
 
 
 const createListingConversation = asyncHandler(async (req, res, next) => {
+    console.log("Inside createListingConversation..");
     const { listingId } = req.params;
     const buyerId = req.user._id;
     

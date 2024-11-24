@@ -42,12 +42,12 @@
     max-width: 600px;
 
     .menu-item {
-      color: hsl($muted-foreground);
+      color: hsl($background);
 
       text-decoration: none;
 
       &:hover {
-        color: hsl($primary-foreground);
+        color: hsl($primary);
         cursor: pointer;
       }
 
