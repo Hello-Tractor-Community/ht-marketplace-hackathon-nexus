@@ -19,16 +19,30 @@ const Input = ({
   };
 
   return (
-    <input
-      className={`input input--${variant} ${className}`} // Combine internal and custom classes
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      name = {name}
-      onChange={handleChange}
-      disabled={disabled}
-      {...props}
-    />
+    <>
+      {type === "textarea" ? (
+        <textarea
+          className={`input input--${variant} ${className}`}
+          placeholder={placeholder}
+          value={value}
+          name={name}
+          onChange={handleChange}
+          disabled={disabled}
+          {...props}
+        />
+      ) : (
+        <input
+          className={`input input--${variant} ${className}`} // Combine internal and custom classes
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          name={name}
+          onChange={handleChange}
+          disabled={disabled}
+          {...props}
+        />
+      )}
+    </>
   );
 };
 

@@ -22,6 +22,8 @@ const session = require('express-session');
 const compression = require('compression');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
+const http = require('http');
+const process = require('process');
 
 // Utility Imports
 const { Telegraf } = require('telegraf');
@@ -48,45 +50,46 @@ const PORT = process.env.PORT || 5000;
 
 // Initialize Express
 const app = express();
+const server = http.createServer(app);
 
 // Security Middleware Configuration
 const securityMiddleware = () => {
 
-        // CORS Configuration
-        app.use(cors({
-            origin: CLIENT_URL,
-            credentials: true
-        }));
+    // CORS Configuration
+    app.use(cors({
+        origin: CLIENT_URL,
+        credentials: true
+    }));
 
-        
+
     app.use(helmet()); // Security headers
     app.use(mongoSanitize()); // Prevent NoSQL injections
     app.use(xss()); // Prevent XSS attacks
     app.use(hpp()); // Prevent HTTP Parameter Pollution
 
-       
 
-    
+
+
     // Rate Limiting
     app.use('/api/', rateLimit({
         windowMs: 10 * 60 * 1000, // 10 minutes
         max: 100, // limit each IP to 100 requests per windowMs
         message: 'Too many requests from this IP, please try again later.'
     }));
-    
+
     // Session Configuration
     app.use(session({
         secret: process.env.SESSION_SECRET || 'secret-key',
         resave: false,
         saveUninitialized: true,
-        cookie: { 
+        cookie: {
             secure: production,
             httpOnly: true,
             sameSite: production ? 'strict' : 'lax'
         }
     }));
 
-   
+
 
     // Passport Configuration
     app.use(passport.initialize());
@@ -136,8 +139,8 @@ const configureRoutes = () => {
 };
 
 // Connect to MongoDB
-const connectMongoDB = () =>{
-      if (process.env.NODE_ENV !== 'test') {
+const connectMongoDB = () => {
+    if (process.env.NODE_ENV !== 'test') {
         connectWithRetry();
     }
 }
@@ -145,14 +148,30 @@ const connectMongoDB = () =>{
 // Telegram Bot Configuration
 // const configureTelegramBot = () => {
 //     const bot = new Telegraf(process.env.BOT_TOKEN);
-    
+
 //     bot.start((ctx) => ctx.reply('Welcome to hello tractor commerce store!'));
 //     bot.command('shop', (ctx) => {
 //         ctx.reply('Hi! Please visit our shop: https://hello-tractor-commerce.onrender.com');
 //     });
-    
+
 //     return bot;
 // };
+// Add a timeout to hanging requests
+const TIMEOUT = 30000; // 30 seconds
+
+// Uncaught Exception Handler
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+    // Attempt graceful shutdown
+    shutdown();
+});
+
+// Unhandled Promise Rejection Handler
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    // Attempt graceful shutdown
+    shutdown();
+});
 
 // Server Startup Configuration
 const startServer = () => {
@@ -163,8 +182,11 @@ const startServer = () => {
         }
 
         cluster.on('exit', (worker, code, signal) => {
-            console.log(`Worker ${worker.process.pid} died`);
-            cluster.fork(); // Replace the dead worker
+            console.log(`Worker ${worker.process.pid} died with code ${code} and signal ${signal}`);
+            if (signal !== 'SIGTERM') {
+                console.log('Starting a new worker...');
+                cluster.fork(); // Replace the dead worker
+            }
         });
     } else {
         // Initialize middleware
@@ -172,29 +194,87 @@ const startServer = () => {
         parserMiddleware();
         staticFilesMiddleware();
         performanceMiddleware();
-        
+
+        // Add request timeout middleware
+        app.use((req, res, next) => {
+            res.setTimeout(TIMEOUT, () => {
+                console.error('Request timeout: ', req.url);
+                res.status(408).send('Request Timeout');
+            });
+            next();
+        });
+
         // Configure routes
         configureRoutes();
 
         // Connect to MongoDB
         connectMongoDB();
-        
-        // Initialize Telegram bot
-        // const bot = configureTelegramBot();
-        // bot.launch();
 
-        // Start server
-        app.listen(PORT, () => {
+        // Start server with error handling
+        server.listen(PORT, () => {
             console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
         });
 
-        // Graceful shutdown
-        process.on('SIGTERM', () => {
-            console.log('SIGTERM received. Shutting down gracefully...');
-            closeConnection();
-            process.exit(0);
+        server.on('error', (error) => {
+            console.error('Server error:', error);
+            if (error.code === 'EADDRINUSE') {
+                console.log('Address in use, retrying...');
+                setTimeout(() => {
+                    server.close();
+                    server.listen(PORT);
+                }, 1000);
+            }
         });
+
+        
+        // Monitor event loop lag 
+        let lastLoop = Date.now();
+        const LAG_THRESHOLD = process.env.NODE_ENV === 'production' ? 1000 : 5000; // 1s in prod, 5s in dev
+
+        setInterval(() => {
+            const now = Date.now();
+            const lag = now - lastLoop;
+            if (lag > LAG_THRESHOLD) {
+                console.warn(`Significant event loop lag detected: ${lag}ms`);
+
+                // Optional: Add some context about what might be happening
+                const memoryUsage = process.memoryUsage();
+                console.warn('Memory usage:', {
+                    heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
+                    heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)}MB`,
+                    rss: `${Math.round(memoryUsage.rss / 1024 / 1024)}MB`
+                });
+            }
+            lastLoop = now;
+        }, 1000);
     }
+};
+
+// Graceful shutdown function
+const shutdown = () => {
+    console.log('Initiating graceful shutdown...');
+
+    // Stop accepting new requests
+    server.close(() => {
+        console.log('Server closed');
+
+        // Close database connection
+        closeConnection()
+            .then(() => {
+                console.log('Database connection closed');
+                process.exit(1);
+            })
+            .catch((err) => {
+                console.error('Error during database disconnection:', err);
+                process.exit(1);
+            });
+    });
+
+    // Force shutdown after 30 seconds if graceful shutdown fails
+    setTimeout(() => {
+        console.error('Could not close connections in time, forcefully shutting down');
+        process.exit(1);
+    }, 30000);
 };
 
 // Initialize server

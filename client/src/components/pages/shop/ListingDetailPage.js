@@ -9,9 +9,12 @@ import StarRating from './StarRating';
 import Button from '../../common/button/Button';
 import Input from '../../common/input/Input';
 import MessageStatus from './MessageStatus';
-import { format } from 'date-fns';
+
 import Footer from '../public/footer/Footer';
 import NavBar from '../../common/navigation/NavBar';
+import { Search } from 'lucide-react';
+import { FaExclamationTriangle } from 'react-icons/fa'
+import './ListingDetailPage.scss';
 
 import {
   Phone,
@@ -41,21 +44,33 @@ const ListingDetailPage = () => {
   const { user } = useSelector((state) => state.auth);
   const [notLoggedIn, setNotLoggedIn] = useState(true);
   const [sellerInquiry, setSellerInquiry] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [listings, setListings] = useState([]);
+
+  const [filters, setFilters] = useState({
+    name: '',
+    category: '',
+    make: '',
+    model: '',
+    serviceHours: '',
+    minPrice: 0,
+    maxPrice: 100000,
+    location: '',
+    isFeatured: false,
+    isNewArrival: false
+  });
+
 
   useEffect(() => {
     fetchListingDetails(id);
-    if(!user){
+    if (!user) {
       setNotLoggedIn(true);
       setMessageToSeller('');
-    }else{
+    } else {
       setNotLoggedIn(false);
       setMessageToSeller('');
     }
   }, [id, user]);
-
- 
-
-
 
   const fetchListingDetails = async (id) => {
     try {
@@ -75,8 +90,11 @@ const ListingDetailPage = () => {
     }
   };
 
-  const fetchSellerInfo = async () => {    
+  const fetchSellerInfo = async ({option="show"}) => {
 
+    if(option==="hide"){
+      setShowSellerInfo(false);
+    }else{
       console.log("trying to fetch seller info..", listing);
       const sellerId = listing.user._id;
       console.log("seller id..", sellerId);
@@ -94,9 +112,13 @@ const ListingDetailPage = () => {
         console.error('Failed to fetch seller information:', err);
       }
 
-  
+    }
 
-    
+ 
+
+
+
+
   };
 
   if (isLoading) {
@@ -126,20 +148,20 @@ const ListingDetailPage = () => {
 
     setSellerInquiry(true);
 
-    if(!notLoggedIn){
+    if (!notLoggedIn) {
       if (messageToSeller) {
         // Show loading state if needed
         setIsLoading(true);
-  
+
         try {
           const response = await messageService.handleMessageFlow(
             id,
             messageToSeller,
-  
+
           );
-  
+
           console.log("messageflow response.. ", response);
-  
+
           if (response.success) {
             // Clear the message input
             setMessageToSeller('');
@@ -160,12 +182,12 @@ const ListingDetailPage = () => {
         } finally {
           setIsLoading(false);
         }
-      }else{
+      } else {
         setError(true);
       }
     }
 
- 
+
   };
 
   const clearStatus = () => {
@@ -173,84 +195,117 @@ const ListingDetailPage = () => {
     setMessageSendSuccess(false);
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-      <NavBar/>
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Image Gallery */}
-          <div className="space-y-4">
-            <div className="border rounded-lg overflow-hidden">
-              <img
-                src={listing.images[selectedImage] || "/api/placeholder/800/600"}
-                alt={`${listing.name} - Image ${selectedImage + 1}`}
-                className="w-full h-96 object-cover"
-              />
-            </div>
 
-            {/* Thumbnail Strip */}
-            <div className="grid grid-cols-6 gap-2">
-              {listing && listing.images.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  className={`relative overflow-hidden h-20 border ${selectedImage === index ? 'border-blue-500' : 'border-gray-200'
-                    }`}
-                >
-                  <img
-                    src={image || "/api/placeholder/150/150"}
-                    alt={`Thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
+  const handleSearch = async () => {
+    try {
+      setIsLoading(true);
+      const response = await listingService.searchListings({
+        q: searchTerm,
+        ...filters
+      });
+      const activeListings = response.data.filter(listing =>
+        listing.inventory.quantity > 0
+      );
+      setListings(activeListings);
+    } catch (err) {
+      setError('Search failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="listing-detail">
+      <NavBar />
+      <div className="search-bar-container">
+        <Input
+          type="text"
+          placeholder="Search by name, make, or model..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+
+        />
+        <Button
+          onClick={handleSearch}
+          variant='secondary'
+        >
+          <Search className="w-4 h-4" />
+          Search
+        </Button>
+
+      </div>
+      <div className='main-container'>
+      <div className="card-details">
+        {/* Image Gallery */}
+        <div className="card-image">
+          <div className="border rounded-lg overflow-hidden">
+            <img
+              src={listing.images[selectedImage] || "/api/placeholder/800/600"}
+              alt={`${listing.name} - Image ${selectedImage + 1}`}
+              className="w-full h-96 object-cover"
+            />
           </div>
 
-          {/* Listing Details */}
-          <div className="space-y-6">
-            <div className="border rounded-lg p-6">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h1 className="text-3xl font-bold mb-2">{listing.name}</h1>
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <StarRating value={listing.metrics?.averageRating || 0} />
-                    <span>({listing.metrics?.totalReviews || 0} reviews)</span>
-                  </div>
-                </div>
-                <div className="text-2xl font-bold text-blue-600">
-                  ${listing.price?.amount}
+          {/* Thumbnail Strip */}
+          <div className="image-options">
+            {listing && listing.images.map((image, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedImage(index)}
+                className={`relative overflow-hidden h-20 border ${selectedImage === index ? 'border-blue-500' : 'border-gray-200'
+                  }`}
+              >
+                <img
+                  src={image || "/api/placeholder/150/150"}
+                  alt={`Thumbnail ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Listing Details */}
+        <div className="space-y-6">
+          <div className="border rounded-lg p-6">
+            <div className="flex justify-between items-start">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">{listing.name}</h1>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <StarRating value={listing.metrics?.averageRating || 0} />
+                  <span>({listing.metrics?.totalReviews || 0} reviews)</span>
                 </div>
               </div>
+              <div className="text-2xl font-bold text-blue-600">
+                ${listing.price?.amount}
+              </div>
+            </div>
 
-              <div className="mt-6 space-y-4">
-                {/* Product Details Section */}
-                <div className="border-b pb-4">
+            <div className="mt-6 space-y-4">
+              {/* Product Details Section */}
+              <div className="card-detail">
 
 
 
-                  <div className="mt-4 space-y-4">
-                    <div className="flex items-center gap-2">
-                      <Tag className="w-5 h-5 text-gray-500" />
-                      <span>Make: {listing.make}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Package className="w-5 h-5 text-gray-500" />
-                      <span>Model: {listing.model}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-5 h-5 text-gray-500" />
-                      <span>Service Hours: {listing.serviceHours}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-5 h-5 text-gray-500" />
-                      <span>Location: {listing.location?.city}, {listing.location?.state}, {listing.location?.country}</span>
-
-                    </div>
+                <div className="mt-4 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Tag className="w-5 h-5 text-gray-500" />
+                    <span>Make: {listing.make}</span>
                   </div>
+                  <div className="flex items-center gap-2">
+                    <Package className="w-5 h-5 text-gray-500" />
+                    <span>Model: {listing.model}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-gray-500" />
+                    <span>Service Hours: {listing.serviceHours}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-5 h-5 text-gray-500" />
+                    <span>Location: {listing.location?.city}, {listing.location?.state}, {listing.location?.country}</span>
 
+                  </div>
                 </div>
-
                 {/* Description Section */}
                 <div className="border-b pb-4">
 
@@ -260,78 +315,93 @@ const ListingDetailPage = () => {
 
                 </div>
 
-                {/* Seller Information Section */}
-                <div className="mt-6">
-                  {!showSellerInfo ? (
-                    <button
-                      onClick={fetchSellerInfo}
-                      className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
-                    >
-                      <User className="w-4 h-4" />
-                      Display Seller Information
-                    </button>
-                  ) : (
-                    <div className="border rounded-lg p-4 mt-4">
-                      <h3 className="text-lg font-semibold mb-4">Seller Information</h3>
-                      {seller && (
-                        <>
-                          <div className="space-y-3">
-                            <div className="flex items-center gap-2">
-                              <User className="w-4 h-4 text-gray-500" />
-                              <span>{seller.firstName} {seller.lastName}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Mail className="w-4 h-4 text-gray-500" />
-                              <span>{seller.email}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Phone className="w-4 h-4 text-gray-500" />
-                              <span>{seller.phoneNumber}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4 text-gray-500" />
-                              {seller && seller.lastLogin && (
-                                <span>
-                                  {new Intl.DateTimeFormat("en-KE", {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    second: "2-digit",
-                                    timeZone: "Africa/Nairobi",
-                                  }).format(new Date(seller.lastLogin))}
-                                </span>
-                              )}
-                            </div>
-
-                          </div>
-                          <Input variant='primary'
-                            placeholder='Write message to Seller'
-                            onChange={updateMessageToSeller}
-                          />
-                          <Button variant='primary'
-                            onClick={handleSendMessage}
-                            disabled={isLoading || !messageToSeller}
-                          >{isLoading ? 'Sending...' : 'Send Message'}</Button>
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
-                <MessageStatus
-                  error={error}
-                  success={messageSendSuccess}
-                  onClose={clearStatus}
-                />
-                {sellerInquiry && notLoggedIn && (
-                  <p>Please Register or Login to your account first to send messages.</p>
-                )}
               </div>
             </div>
           </div>
         </div>
       </div>
+        {/* Seller Information Section */}
+        <div className='seller-details'>
+        <div className="mt-6">
+          {!showSellerInfo ? (
+            <button
+            onClick={() => fetchSellerInfo({ option: "show" })}
+              className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
+            >
+              <User className="w-4 h-4" />
+              Display Seller Information
+            </button>
+          ) : (
+            <div className="border rounded-lg p-4 mt-4">
+                 <button
+              onClick={() => fetchSellerInfo({ option: "hide" })}
+              className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
+            >
+              <User className="w-4 h-4" />
+              Hide Seller Information
+            </button>
+              <h3 className="text-lg font-semibold mb-4">Seller Information</h3>
+              {seller && (
+                <>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <User className="w-4 h-4 text-gray-500" />
+                      <span>{seller.firstName} {seller.lastName}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-gray-500" />
+                      <span>{seller.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-gray-500" />
+                      <span>{seller.phoneNumber}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-gray-500" />
+                      {seller && seller.lastLogin && (
+                        <span>
+                          {new Intl.DateTimeFormat("en-KE", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                            timeZone: "Africa/Nairobi",
+                          }).format(new Date(seller.lastLogin))}
+                        </span>
+                      )}
+                    </div>
+
+                  </div>
+                  <Input variant='primary'
+                  type='textarea'
+                    placeholder='Write message to Seller'
+                    onChange={updateMessageToSeller}
+                  />
+                  <Button variant='primary'
+                    onClick={handleSendMessage}
+                    disabled={isLoading || !messageToSeller}
+                  >{isLoading ? 'Sending...' : 'Send Message'}</Button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+        <MessageStatus
+          error={error}
+          success={messageSendSuccess}
+          onClose={clearStatus}
+        />
+       {sellerInquiry && notLoggedIn && showSellerInfo && (
+  <p className="flex items-center text-yellow-600">
+    <FaExclamationTriangle className="mr-2" />
+    Please Register or Login to your account first to send messages.
+  </p>
+)}
+        </div>
+      </div>
+      
       <Footer />
     </div>
   );

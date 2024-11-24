@@ -1,0 +1,110 @@
+// src/components/shop/ListingPage.scss
+@import '../../../assets/styles/abstract/variables';
+@import '../../../assets/styles/abstract/mixins';
+
+
+.listings {
+    min-height: 100vh;
+    background-color: hsl($background);
+    padding: map-get($map: $spacing, $key: 'base');
+
+    margin: map-get($map: $spacing, $key: 'base');
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: map-get($map: $spacing, $key: 'sm');
+
+    @media (min-width: 768px) {
+        /* For md:p-8 */
+        padding: map-get($map: $spacing, $key: 'xl');
+    }
+
+    .search-bar-container {
+        
+        padding: map-get($map: $spacing, $key: 'sm');
+        display: flex;
+        gap: map-get($map: $spacing, $key: 'sm');
+        width: 100%;
+        margin: auto;
+        button{
+            padding: map-get($map: $spacing, $key: 'xs');
+        }
+
+    }
+
+
+
+    .main-container {
+   
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        // flex-wrap: wrap;
+
+        .listing-control{
+            
+            display: flex;
+            flex-direction: column;
+            background-color: hsl($muted);
+            padding: map-get($map: $spacing, $key: 'sm');
+            border-radius: $radius;
+          
+        }
+      
+
+        .listings-container {
+            display: flex;
+            gap: map-get($map: $spacing, $key: 'xs');
+           
+            .cards-container {
+                display: grid;
+                grid-template-columns: repeat(1, 1fr);
+                gap: map-get($map: $spacing, $key: 'base');
+               
+
+
+                @media (min-width: 768px) {
+
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                @media (min-width: 1024px) {
+
+                    grid-template-columns: repeat(3, 1fr);
+                }
+
+                .card {
+                    border: 1px solid;
+                    border-radius: 0.5rem;
+                    overflow: hidden;
+                    border: 1px solid hsl($muted);
+                    transition: border 0.3s ease;
+
+                    &:hover{
+                        border: 1.2px solid hsl($muted-foreground);
+                        cursor: pointer;
+                    }
+
+                    button{
+                        transition: background-color 0.3s ease;
+                        color: hsl($accent);
+                        border-width: 1px;
+                        &:hover{
+                            background-color: hsl($accent);
+                            color: hsl($accent-foreground);
+
+                        }
+                    }
+
+                }
+
+            }
+        }
+      
+
+    }
+
+
+
+}

@@ -1,0 +1,62 @@
+// src/components/shop/ListingPage.scss
+@import '../../../assets/styles/abstract/variables';
+@import '../../../assets/styles/abstract/mixins';
+
+
+.listing-detail{
+    min-height: 100vh;
+    
+    padding: map-get($map: $spacing, $key: 'sm');
+
+    .search-bar-container {
+        
+        padding: map-get($map: $spacing, $key: 'sm');
+        display: flex;
+        gap: map-get($map: $spacing, $key: 'sm');
+        width: 50%;
+        margin: auto;
+        button{
+            padding: map-get($map: $spacing, $key: 'xs');
+        }
+
+    }
+    .main-container{
+        display: grid;
+        grid-template-columns: 1fr 0.5fr;
+     
+        justify-content: flex-start;
+        align-items: center;
+        max-width: 98%;
+        margin: auto;
+        padding: map-get($map: $spacing, $key: 'sm');
+
+        
+        .seller-details{
+
+            textarea{
+                margin-bottom: map-get($map: $spacing, $key: 'sm');
+                width: 80%;
+                margin: auto;
+                height: 100px;
+            }
+          
+        }
+
+        .card-image{
+            display: flex;
+            // height: 100px;
+            
+            
+
+            .image-options{
+                button{
+                    display: block;
+
+                }
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+    }
+}
