@@ -43,12 +43,15 @@
 
     .menu-item {
       color: hsl($background);
-
       text-decoration: none;
+      transition: text-decoration 0.3s ease;
 
       &:hover {
         color: hsl($primary);
         cursor: pointer;
+        text-decoration: underline;
+        text-decoration-thickness: 2px;  
+        text-underline-offset: 4px
       }
 
      

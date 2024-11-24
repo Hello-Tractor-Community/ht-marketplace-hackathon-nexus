@@ -14,21 +14,21 @@ const Navbar = ({ show = true }) => {
 
 
   const categoryTitles = {
-    tractor: 'Tractor',
-    service: 'Service Centers',
+   
+    service: 'Services',
+    home: 'Home Official',
 
 
 
   };
 
 
-  const handleNavigateCategory = (category, subCategory) => {
-    navigate('/listing', {
-      state: {
-        category: category,
-        subCategory: subCategory
-      }
-    });
+  const handleNavigateCategory = (category) => {
+    if(category==='home'){
+      window.open('https://hellotractor.com/', '_blank');
+
+    }
+    navigate(`/${category}`);
   };
 
   const handleMenuToggle = () => {
@@ -47,7 +47,7 @@ const Navbar = ({ show = true }) => {
         <div className={`menu ${menuOpen ? 'open' : ''}`}>
 
           {categoryTitles && Object.keys(categoryTitles).map((title) => (
-            <div key={title} onClick={() => handleNavigateCategory(title, 'all')} className="menu-item">
+            <div key={title} onClick={() => handleNavigateCategory(title)} className="menu-item">
               {categoryTitles[title]}
             </div>
           ))}

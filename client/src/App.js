@@ -29,6 +29,7 @@ import SocialAuthSuccess from './components/features/socialAuth/SocialAuthSucces
 // Protected Components
 import ProtectedRoute from './components/common/protectedRoute/ProtectedRoute';
 import ErrorPage from './components/pages/error/ErrorPage';
+import Service from './components/pages/public/service/Service';
 
 //Portals
 import BuyerPortal from './components/pages/portal/buyer/BuyerPortal';
@@ -62,6 +63,7 @@ const AppContent = () => {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/service" element={<Service />}/>
             <Route path="/listing/*" element={<ListingPage />} />
             <Route path="/listing/:id" element={<ListingDetailPage />} />
             <Route path="/favs" element={<Favourites />} />

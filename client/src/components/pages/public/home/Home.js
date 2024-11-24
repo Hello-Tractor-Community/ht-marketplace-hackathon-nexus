@@ -22,7 +22,7 @@ const Home = ({ history }) => {
             {/* <CartItem /> */}
             {/* <Search />         */}
             <ListingPage />
-            <About />
+       
             <Footer />
         </div>
     );
