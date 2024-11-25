@@ -20,7 +20,8 @@ const ENVIRONMENTS = {
 const detectEnvironment = () => {
   // Check if window.Telegram exists or any other Telegram-specific objects
   if (window.Telegram?.WebApp) {
-    return ENVIRONMENTS.TELEGRAM;
+    // return ENVIRONMENTS.TELEGRAM;
+    return ENVIRONMENTS.WEB;
   }
   return ENVIRONMENTS.WEB;
 };
