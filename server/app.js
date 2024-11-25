@@ -47,7 +47,9 @@ const errorHandler = require('./middleware/errorHandler');
 
 // Environment Configuration
 const production = process.env.NODE_ENV === 'production';
-const CLIENT_URL = production ? process.env.CLIENT_URL_PROD : process.env.CLIENT_URL_DEV;
+const CLIENT_URL = production
+    ? process.env.CLIENT_URL_PROD
+    : process.env.CLIENT_URL_DEV;
 const PORT = process.env.PORT || 5000;
 
 // Initialize Express
@@ -59,16 +61,14 @@ const securityMiddleware = () => {
 
     // CORS Configuration
 
-    // app.use(cors({
-    //     origin: CLIENT_URL,
-    //     credentials: true
-    // }));
-    app.use(cors({
-        origin: process.env.CLIENT_URL_PROD || '*',
+    const corsOptions = {
+        origin: CLIENT_URL,
         credentials: true,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization']
-    }));
+        optionsSuccessStatus: 200
+    };
+    
+    app.use(cors(corsOptions));
+
 
 
     app.use(helmet()); // Security headers

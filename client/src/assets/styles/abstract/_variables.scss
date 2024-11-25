@@ -25,23 +25,24 @@ $radius: 0.5rem;
 
 
 // Typography
-$font-header: 'Rooney', serif; // For headers
-$font-subheading: 'Avenir', sans-serif; // For subheadings
-$font-body: 'Avenir', sans-serif; // For body text
-$font-cta: 'Avenir', sans-serif; // Default for CTAs
+$font-header: 'Merriweather', serif; // For headers
+$font-subheading: 'Merriweather', serif;  // For subheadings
+$font-body: 'Manrope', sans-serif; // For body text
+$font-cta: 'Manrope', sans-serif; // Default for CTAs
 
 
 $font-sizes: (
-  'xs': 0.75rem,    // 12px
-  'sm': 0.875rem,   // 14px
-  'base': 1rem,     // 16px
-  'lg': 1.125rem,   // 18px
-  'xl': 1.25rem,    // 20px
-  '2xl': 1.5rem,    // 24px
-  '3xl': 1.875rem,  // 30px
-  '4xl': 2.25rem ,   // 36px
-  '10xl': 5.65rem, // 90px
+  'xs': 0.6rem,     // ~9.6px
+  'sm': 0.696rem,   // ~11.1px
+  'base': 0.85rem, // ~12.7px
+  'lg': 1rem,   // ~14.3px
+  'xl': 1.2rem,   // ~15.9px
+  '2xl': 1.5rem,  // ~19.1px
+  '3xl': 1.875rem,  // ~23.9px
+  '4xl': 2rem,  // ~28.7px
+  '10xl': 4rem,   // 72px
 );
+
 
 // Breakpoints
 $breakpoints: (
@@ -129,10 +130,6 @@ h1, h2, h3, h4, h5, h6 {
   @include header-font;
 }
 
-h2, h3, h4 {
-  @include subheading-font;
-}
-
 // Body Text
 body {
   @include body-font;
@@ -157,3 +154,5 @@ body {
   border-radius: $radius;
   padding: 1rem;
 }
+
+

@@ -2,7 +2,12 @@
 import axios from 'axios';
 import { authService } from './auth';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL_PROD || 'http://localhost:5000/api/v1';
+// const API_BASE_URL = 
+//   process.env.REACT_APP_ENVIRONMENT === 'production'
+//     ? process.env.REACT_APP_API_URL_PROD
+//     : 'http://localhost:5000/api/v1';
+
+const API_BASE_URL = 'http://localhost:5000/api/v1';
 
 // const api = axios.create({
 //   baseURL: API_BASE_URL,
