@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import './SellerListings.scss'; // Import CSS file for styling
+import './Listings.scss'; // Import CSS file for styling
 import { FaEye, FaEyeSlash, FaCopy, FaTrash } from 'react-icons/fa';
 
 
-const SellerDashboard = () => {
+const Profile = () => {
 
   const [searchResults, setSearchResults] = useState([]);
   const { user } = useSelector((state) => state.auth);
@@ -15,7 +15,7 @@ const SellerDashboard = () => {
       <div className='sub-container'>
         <div className='seller-listing-controller'>
           <div className='seller-content-form'>
-            <h3>Your Dashboard</h3>  
+            <h3>Admin Profile</h3>  
           </div>
         </div>
 
@@ -26,4 +26,4 @@ const SellerDashboard = () => {
   );
 };
 
-export default SellerDashboard;
+export default Profile;

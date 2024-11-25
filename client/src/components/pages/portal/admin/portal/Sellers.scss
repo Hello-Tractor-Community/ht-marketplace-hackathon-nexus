@@ -73,7 +73,7 @@ $toggle-checked-color: #2196f3;
 
 }
 
-.listings-container {
+.sellers-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -94,13 +94,13 @@ $toggle-checked-color: #2196f3;
         }
     }
 
-    .listings-content {
+    .sellers-content {
         display: flex;
         height: 100%;
 
         width: 100%;
 
-        .new-listing-container {
+        .new-seller-container {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -267,7 +267,7 @@ $toggle-checked-color: #2196f3;
 
 
 
-.listings-status-container {
+.sellers-status-container {
     width: 90%;
     display: flex;
     margin: map-get($map: $spacing, $key: 'xs') auto;
@@ -279,41 +279,99 @@ $toggle-checked-color: #2196f3;
     table {
         width: 80%;
         margin: map-get($map: $spacing, $key: 'base') auto;
+        border-collapse: collapse;
+        align-items: left;
 
-    }
+        thead {
+            font-size: map-get($map: $font-sizes, $key: 'xl');
+            font-weight: bold;
+            background-color: red;
 
-    thead {
-        font-size: map-get($map: $font-sizes, $key: 'sm');
-        font-weight: bold;
+            th {
+                font-size: map-get($map: $font-sizes, $key: 'base');
+                font-weight: bold;
 
-        th {
-            font-size: map-get($map: $font-sizes, $key: 'xs');
-        }
-    }
+            }
 
-    tbody {
-        font-size: map-get($map: $font-sizes, $key: 'sm');
-
-        button {
-            font-size: map-get($map: $font-sizes, $key: 'xs');
-            background-color: $secondary;
-            color: $secondary-foreground;
-            padding: map-get($map: $spacing, $key: 'xs');
-
-            &:hover {
-                background-color: red;
+            tr {
+                border-bottom: 1px solid hsl($muted-foreground);
             }
         }
-    }
-}
 
-table{
-    tr{
+        tbody {
+            font-size: map-get($map: $font-sizes, $key: 'sm');
+
+            tr {
+                &:hover {
+                    background-color: hsl($background);
+                }
+            }
+
+            button {
+                font-size: map-get($map: $font-sizes, $key: 'xs');
+                background-color: $secondary;
+                color: $secondary-foreground;
+                padding: map-get($map: $spacing, $key: 'xs');
+
+
+
+                &.action {
+
+                    &:hover {
+                        background-color: hsl($muted);
+                        color: hsl($primary);
+                    }
+                }
+
+                &.approve {
+
+                    &:hover {
+                        background-color: hsl($accent);
+                        color: hsl($background);
+                    }
+                }
+
+                &.reject {
+
+                    &:hover {
+                        background-color: hsl($destructive);
+                        color: hsl($background);
+                    }
+                }
+
+
+            }
+        }
+
+        th,td{
+            border: 1px solid hsl($muted-foreground); // Border for each cell
+            padding: map-get($map: $spacing, $key: 'xs')
+        }
+
+
+    }
+
+    button{
+        width: map-get($map: $spacing, $key:'4xl' );
+        padding: map-get($map: $spacing, $key: 'xs' );
+
         &:hover{
-            background-color: hsl($background);
+            color: hsl($primary);
         }
     }
 }
+.status-success {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background-color: hsl($muted-foreground);
+    color: hsl($primary);
+    padding: map-get($map: $spacing, $key: 'xl') map-get($map: $spacing, $key: '3xl');
+    font-size: map-get($map: $font-sizes, $key: '2xl');
+    z-index: 999;
+}
+
+
 
 .mailbox-container {
     border: 1px solid red;

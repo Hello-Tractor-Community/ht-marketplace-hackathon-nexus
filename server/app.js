@@ -39,6 +39,8 @@ const imageProxyRoutes = require('./routes/imageProxyRoutes');
 const cloudinaryRoutes = require('./routes/cloudinaryRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 
+const dashboardRoutes = require('./routes/dashboardRoutes');
+
 // Middleware Imports
 const errorHandler = require('./middleware/errorHandler');
 // const { protect } = require('./middleware/auth');
@@ -117,12 +119,14 @@ const performanceMiddleware = () => {
 const configureRoutes = () => {
     // API Endpoints
     app.use('/api/v1/auth', authRoutes);
+    app.use('/api/v1/dashboard', dashboardRoutes);
     app.use('/api/v1/users', userRoutes);
     app.use('/api/v1/companys', companyRoutes);
     app.use('/api/v1/listings', listingRoutes);
     app.use('/api/v1/onboarding', companyOnboardingRoutes);
     app.use('/api/v1/images', imageProxyRoutes);
     app.use('/api/cloudinary', cloudinaryRoutes);
+    
 
     // Base Routes
     app.get('/', (req, res) => {

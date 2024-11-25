@@ -3,7 +3,7 @@
 @import '../../../assets/styles/abstract/mixins';
 
 
-.listings {
+.listings-page {
     min-height: 100vh;
     background-color: hsl($background);
     padding: map-get($map: $spacing, $key: 'base');
@@ -61,7 +61,7 @@
                 display: grid;
                 grid-template-columns: repeat(1, 1fr);
                 gap: map-get($map: $spacing, $key: 'base');
-               
+                
 
 
                 @media (min-width: 768px) {
@@ -75,11 +75,16 @@
                 }
 
                 .card {
-                    border: 1px solid;
+                    
                     border-radius: 0.5rem;
                     overflow: hidden;
                     border: 1px solid hsl($muted);
                     transition: border 0.3s ease;
+                    img{
+                        
+                        height: map-get($map: $font-sizes, $key: '10xl');
+                        object-fit: contain;
+                    }
 
                     &:hover{
                         border: 1.2px solid hsl($muted-foreground);

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import './SellerListings.scss'; // Import CSS file for styling
+import './Listings.scss'; // Import CSS file for styling
 import { FaEye, FaEyeSlash, FaCopy, FaTrash } from 'react-icons/fa';
 import { authService } from '../../../../../services/api/auth';
 import { messageService } from '../../../../../services/api/messages';
 import MessageBox from './MessageBox';
 
-const SellerMailbox = () => {
+const Mailbox = () => {
 
     const [searchResults, setSearchResults] = useState([]);
     const { user } = useSelector((state) => state.auth);
@@ -57,7 +57,7 @@ const SellerMailbox = () => {
 
         try {
             const response = await messageService.getSellerConversations(userId);
-            console.log("in sellermailbox..", response);
+            console.log("in Mailbox..", response);
             if (response.success) {
                 setIsLoading(false);
                 setConversationFetched(true);
@@ -80,7 +80,7 @@ const SellerMailbox = () => {
 
         try {
             const response = await messageService.getConversationMessages(conversationId);
-            console.log("SellerMailbox messages..", response);
+            console.log("Mailbox messages..", response);
             if (response.success) {
                 setIsLoading(false);
                 setMessageFetched(true);
@@ -101,7 +101,7 @@ const SellerMailbox = () => {
         <div className='sub-container'>
             <div className='seller-listing-controller'>
                 
-                    <h3>Your Messages</h3>
+                    <h3>Messages</h3>
                
                 <div className='mailbox'>
                     <h2>Conversations</h2>
@@ -163,4 +163,4 @@ const SellerMailbox = () => {
     );
 };
 
-export default SellerMailbox;
+export default Mailbox;

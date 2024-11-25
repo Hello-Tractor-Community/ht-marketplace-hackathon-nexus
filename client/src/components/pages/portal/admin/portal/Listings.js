@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import './SellerListings.scss'; // Import CSS file for styling
-import { FaEye, FaEyeSlash, FaCopy, FaTrash, FaCheck, FaEllipsisV } from 'react-icons/fa';
+import './Listings.scss'; // Import CSS file for styling
+import {  FaSync, FaTrash, FaCheck, FaEllipsisV } from 'react-icons/fa';
 
 import { authService } from '../../../../../services/api/auth';
 import { listingService } from '../../../../../services/api/listing';
@@ -14,7 +14,7 @@ import Input from '../../../../common/input/Input';
 
 import ListingCard from './ListingCard';
 
-const SellerListings = () => {
+const Listings = () => {
 
   const [searchResults, setSearchResults] = useState([]);
   const { user } = useSelector((state) => state.auth);
@@ -27,7 +27,7 @@ const SellerListings = () => {
   // const cloudinaryFolder = 'products';
   const [isNewListingsVisible, setIsNewListingsVisible] = useState(true);
   const [isListingsStatusVisible, setIsListingsStatusVisible] = useState(false);
-
+  const tableRef = useRef(null); 
   const [newListing, setNewListing] = useState({
     name: '',
     sku: '',
@@ -63,11 +63,17 @@ const SellerListings = () => {
 
     if (token) {
       if (!fetchingComplete) {
-        fetchListings(userId);
+        fetchListings();
       }
 
     }
   }, [fetchingComplete, user]);
+
+  const handleRefresh = () =>{
+    setIsLoading(true);
+    fetchListings();
+
+  }
 
   const [originalUrl, setOriginalUrl] = useState('');
   const [convertedUrl, setConvertedUrl] = useState('');
@@ -79,30 +85,7 @@ const SellerListings = () => {
   };
 
 
-  const convertUrl = () => {
-    // Regular expression to extract the file ID from the original URL
-    const fileIdMatch = originalUrl.match(/https:\/\/drive\.google\.com\/file\/d\/(.+?)\/view/);
-    if (fileIdMatch) {
-      const fileId = fileIdMatch[1];
-      // Construct the converted URL in thumbnail format
-      const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
-      setConvertedUrl(thumbnailUrl);
-    } else {
-      setConvertedUrl('Invalid URL');
-    }
-  };
 
-  // Function to copy the converted URL to the clipboard
-  // const copyToClipboard = () => {
-  //   navigator.clipboard.writeText(convertedUrl)
-  //     .then(() => {
-  //       // alert('Converted URL copied to clipboard!');
-  //       setIsClipboardCopied(true);
-  //     })
-  //     .catch(() => {
-  //       alert('Failed to copy the URL');
-  //     });
-  // };
   const [selectedListing, setSelectedListing] = useState(null);
   const [selectedListingFetched, setSelectedListingFetched] = useState(false);
 
@@ -151,9 +134,7 @@ const SellerListings = () => {
     }
   }, [isClipboardCopied]);
 
-  const fetchListings = async (userId) => {
-
-    console.log("fetchlisting.. userId", userId);
+  const fetchListings = async () => {   
 
     try {
       const response = await listingService.getListings();
@@ -332,7 +313,7 @@ const SellerListings = () => {
         });
         // Trigger fetchListings with a delay
         setTimeout(() => {
-          fetchListings(user._id);
+          fetchListings();
         }, 2000); // 2-second delay
       } catch (error) {
         console.error('Error creating listing:', error);
@@ -346,8 +327,13 @@ const SellerListings = () => {
   const handleListingDelete = async (id) => {
     console.log("Attempting to delete listing with ID:", id);
     try {
-      const response = await listingService.deleteListing(id);
-      console.log("Response data:", response.data);
+      const result = await listingService.deleteListing(id);
+      console.log("Response data:", result);
+      if (result.success) {
+        setStatusUpdated(true);
+      } else {
+        setListingError(result.error);
+      }
 
       // Trigger fetchListings with a delay
       setTimeout(() => {
@@ -358,21 +344,31 @@ const SellerListings = () => {
     }
   };
 
-  
+
   const [statusUpdated, setStatusUpdated] = useState(false);
+  const [listingAction, setListingAction] = useState({}); // Initialize as an object
+
+  const toggleListingAction = (index) => {
+    setListingAction((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index], // Toggle only the specific index
+    }));
+  };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setStatusUpdated(false);
-    }, 2000);   
+    }, 2000);
     return () => clearTimeout(timeoutId);
   }, [statusUpdated]);
-  
+
   const handleListingApprove = async (id) => {
-   
+
+    console.log("handlelistingapprove.");
+
     try {
       const result = await listingService.updateListingStatus(id, "active");
-      
+
       if (result.success) {
         setStatusUpdated(true);
       } else {
@@ -386,7 +382,7 @@ const SellerListings = () => {
   const handleListingReject = async (id) => {
     try {
       const result = await listingService.updateListingStatus(id, "inactive");
-      
+
       if (result.success) {
         setStatusUpdated(true);
       } else {
@@ -422,7 +418,27 @@ const SellerListings = () => {
 
   const closeOverlay = () => {
     setSelectedListing(null); // Close the overlay
-};
+  };
+
+  const resetListingActions = () => {
+    setListingAction({}); // Reset all indexes to false
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (tableRef.current && !tableRef.current.contains(event.target)) {
+        resetListingActions(); // Reset actions if clicked outside the table
+      }
+    };
+
+    // Add event listener to detect clicks outside
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      // Clean up the event listener
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
 
 
@@ -633,9 +649,20 @@ const SellerListings = () => {
 
         {isListingsStatusVisible && (
           <div className='listings-status-container'>
-            {isLoading && <p>Loading...</p>}
+            <Button variant='mini' onClick={handleRefresh}
+
+          
+            >
+              <FaSync/>
+            </Button>
+
+            {isLoading && <p style={{position:"fixed", top:'50%',left:'50%',
+              color:"hsl(218 69% 1%)", backgroundColor:"hsl(0 0% 99%)", 
+              padding:"4px 8px"
+            }}>Loading...</p>}
+
             <h4>Listings on database</h4>
-            <table>
+            <table ref={tableRef}>
               <thead>
                 <tr>
                   <th>Image</th>
@@ -649,12 +676,14 @@ const SellerListings = () => {
                 </tr>
               </thead>
               <tbody>
-                {listings.map((listing) => (
+                {listings.map((listing, index) => (
                   <tr key={listing._id}
-                    onClick={() => handleRowClick(listing)}
+                    onClick={(e) => {
+                      if (!e.defaultPrevented) handleRowClick(listing); // Ensures the row click is isolated
+                    }}
                     style={{ cursor: "pointer" }}
                   >
-                    {/* <td><img src={listing.image} alt={listing.name} /></td> */}
+
                     <td>{listing.images?.length > 0 ? 'Has image' : 'No image'}</td>
                     <td>{listing.name}</td>
                     <td>{listing.category}</td>
@@ -663,9 +692,38 @@ const SellerListings = () => {
                     <td>{listing.location?.city}, {listing.location?.state}, {listing.location?.country}</td>
                     <td>{listing.status}</td>
                     <td>
-                      <button onClick={() => handleListingDelete(listing._id)}><FaEllipsisV /> </button>
-                      {/* <button onClick={() => handleListingDelete(listing._id)}><FaTrash /> </button>
-                      <button onClick={() => handleListingApprove(listing._id)}><FaCheck /> </button> */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation(); 
+                          toggleListingAction(index);
+                        }}
+                        className='action'
+                      >
+                        <FaEllipsisV />
+                      </button>
+
+                      {listingAction[index] && (
+                        <div style={{ display: "flex" }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}>
+                          <button onClick={(e) => {
+                            e.stopPropagation();
+                            handleListingDelete(listing._id);
+                          }}
+                          className='reject'>
+                            <FaTrash />
+                          </button>
+                          <button onClick={(e) => {
+                            e.stopPropagation();
+                            handleListingApprove(listing._id);
+                          }}
+                          className='approve'>
+                            <FaCheck />
+                          </button>
+                        </div>
+                      )}
+
                     </td>
 
                   </tr>
@@ -680,7 +738,7 @@ const SellerListings = () => {
             listing={selectedListing}
             closeOverlay={closeOverlay}
             handleApprove={handleListingApprove}
-            handleReject={handleListingReject}            
+            handleReject={handleListingReject}
           />
         )}
 
@@ -697,7 +755,7 @@ const SellerListings = () => {
           <ErrorOverlay onClose={onClose} onRetry={handleListingSubmit} />
         )}
 
-        
+
 
       </div>
 
@@ -710,4 +768,4 @@ const SellerListings = () => {
   );
 };
 
-export default SellerListings;
+export default Listings;

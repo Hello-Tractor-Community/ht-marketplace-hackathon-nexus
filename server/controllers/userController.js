@@ -165,26 +165,91 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     });
 });
 
+// Enhanced deleteUser controller
 const deleteUser = asyncHandler(async (req, res) => {
+    console.log('Delete controller reached');
     const { id } = req.params;
     
+    // Log authentication info
+    console.log('User attempting delete:', {
+        requestingUserId: req.user?._id,
+        userRole: req.user?.role,
+        targetUserId: id
+    });
+
     // Validate the provided ID
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ success: false, message: 'Invalid User ID' });
+        console.log('Invalid User ID provided:', id);
+        return res.status(400).json({ 
+            success: false, 
+            message: 'Invalid User ID' 
+        });
     }
     
     // Check if the user exists
     const user = await User.findById(id);
     if (!user) {
-        return res.status(404).json({ success: false, message: 'User not found' });
+        console.log('User not found:', id);
+        return res.status(404).json({ 
+            success: false, 
+            message: 'User not found' 
+        });
     }
     
-    // Delete the user (triggers cascading delete if configured in schema)
-    await user.deleteOne();
+    try {
+        // Delete the user
+        await user.deleteOne();
+        console.log('User successfully deleted:', id);
+        
+        res.status(200).json({
+            success: true,
+            message: 'User removed successfully',
+        });
+    } catch (error) {
+        console.error('Error during user deletion:', error);
+        throw error;
+    }
+});
+
+
+const updateUserStatus = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { accountStatus } = req.body;
     
+    
+    // Validate the status value
+    const validStatuses = ['pending', 'active', 'suspended', 'deactivated'];
+    if (!validStatuses.includes(accountStatus)) {
+        res.status(400);
+        throw new Error('Invalid account status value');
+    }
+
+    // Validate user ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400);
+        throw new Error('Invalid User ID');
+    }
+
+    // Find and update the user
+    const user = await User.findById(id);
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found');
+    }
+
+    // Update the status
+    user.accountStatus = accountStatus;
+    await user.save();
+
     res.status(200).json({
         success: true,
-        message: 'User removed successfully',
+        data: {
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            accountStatus: user.accountStatus
+        }
     });
 });
 
@@ -214,6 +279,7 @@ const searchUser = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+    updateUserStatus,
     deleteUser,
     searchUser,
     updateUserProfile,

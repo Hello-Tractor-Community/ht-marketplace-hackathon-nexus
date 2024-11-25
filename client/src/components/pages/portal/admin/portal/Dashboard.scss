@@ -1,0 +1,96 @@
+@import '../../../../../assets/styles/abstract/_variables';
+@import '../../../../../assets/styles/abstract/_mixins';
+
+.dashboard-container{
+    border: 1px solid red;
+
+    padding: map-get($map: $spacing, $key: 'base' );
+
+    h3{
+        
+    }
+
+   
+    .user-metrics{
+        display: grid;
+        grid-template-columns: repeat(5,1fr);
+        gap: map-get($map: $spacing, $key: 'sm' );
+
+               
+           
+           >div{
+          
+            border-radius: $radius;
+            margin: map-get($map: $spacing, $key: 'xs' );
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            display: flex;
+            gap: map-get($map: $spacing, $key: 'sm');
+            &:nth-child(even){
+                background-color: hsl($background-darker);
+            }
+            &:nth-child(odd){
+                background-color: hsl($muted-foreground);
+                h3{
+                    font-size: map-get($map: $font-sizes, $key: '4xl' );
+                    color: hsl($muted);
+                }
+                p{
+                    color: hsl($background);
+                }
+            }
+            h3{
+                font-size: map-get($map: $font-sizes, $key: '4xl' );
+                color: hsl($primary);
+            }
+            p{
+                text-transform: capitalize;
+            }
+           }
+        
+    }
+
+    .listing-metrics{
+        display: flex;
+        flex-direction: column;
+
+        >div{
+            display: grid;
+            grid-template-columns: repeat(5,1fr);
+            gap: map-get($map: $spacing, $key: 'sm' );
+           
+           >div{
+           
+            border-radius: $radius;
+            margin: map-get($map: $spacing, $key: 'xs' );
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            display: flex;
+            gap: map-get($map: $spacing, $key: 'sm');
+          
+            h3{
+                font-size: map-get($map: $font-sizes, $key: '4xl' );
+                color: hsl($primary);
+            }
+            p{
+                text-transform: capitalize;
+            }
+            &:nth-child(even){
+                background-color: hsl($background-darker);
+            }
+            &:nth-child(odd){
+                background-color: hsl($muted-foreground);
+                h3{
+                    font-size: map-get($map: $font-sizes, $key: '4xl' );
+                    color: hsl($muted);
+                }
+                p{
+                    color: hsl($background);
+                }
+            }
+           }
+        }
+    }
+}

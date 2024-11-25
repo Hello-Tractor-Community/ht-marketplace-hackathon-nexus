@@ -155,11 +155,11 @@ $toggle-checked-color: #2196f3;
 
                         &:focus {
                             background-color: hsl($muted-foreground);
-                             color: hsl($background);
+                            color: hsl($background);
                         }
                     }
 
-                    .button-group{
+                    .button-group {
                         display: flex;
                     }
 
@@ -177,11 +177,13 @@ $toggle-checked-color: #2196f3;
                         align-items: left;
                         border-radius: $radius;
                         color: hsl($muted-foreground);
-                        padding: map-get($map: $spacing, $key: 'sm' );
+                        padding: map-get($map: $spacing, $key: 'sm');
 
-                        option{
-                            background-color: white; /* Default background for options */
-                            color: black; /* Default text color */
+                        option {
+                            background-color: white;
+                            /* Default background for options */
+                            color: black;
+                            /* Default text color */
                         }
 
                         option:hover {
@@ -279,50 +281,100 @@ $toggle-checked-color: #2196f3;
     table {
         width: 80%;
         margin: map-get($map: $spacing, $key: 'base') auto;
+        border-collapse: collapse;
+        align-items: left;
 
-      
-            tr{
-                &:hover{
+        thead {
+            font-size: map-get($map: $font-sizes, $key: 'xl');
+            font-weight: bold;
+            background-color: red;
+
+            th {
+                font-size: map-get($map: $font-sizes, $key: 'base');
+                font-weight: bold;
+
+            }
+
+            tr {
+                border-bottom: 1px solid hsl($muted-foreground);
+            }
+        }
+
+        tbody {
+            font-size: map-get($map: $font-sizes, $key: 'sm');
+
+            tr {
+                &:hover {
                     background-color: hsl($background);
                 }
             }
-        
 
-    }
+            button {
+                font-size: map-get($map: $font-sizes, $key: 'xs');
+                background-color: $secondary;
+                color: $secondary-foreground;
+                padding: map-get($map: $spacing, $key: 'xs');
 
-    thead {
-        font-size: map-get($map: $font-sizes, $key: 'sm');
-        font-weight: bold;
 
-        th {
-            font-size: map-get($map: $font-sizes, $key: 'xs');
-        }
-    }
 
-    tbody {
-        font-size: map-get($map: $font-sizes, $key: 'sm');
+                &.action {
 
-        button {
-            font-size: map-get($map: $font-sizes, $key: 'xs');
-            background-color: $secondary;
-            color: $secondary-foreground;
-            padding: map-get($map: $spacing, $key: 'xs');
+                    &:hover {
+                        background-color: hsl($muted);
+                        color: hsl($primary);
+                    }
+                }
 
-            &:hover {
-                background-color: red;
+                &.approve {
+
+                    &:hover {
+                        background-color: hsl($accent);
+                        color: hsl($background);
+                    }
+                }
+
+                &.reject {
+
+                    &:hover {
+                        background-color: hsl($destructive);
+                        color: hsl($background);
+                    }
+                }
+
+
             }
         }
+
+        th,td{
+            border: 1px solid hsl($muted-foreground); // Border for each cell
+            padding: map-get($map: $spacing, $key: 'xs')
+        }
+
+
     }
+
+    button{
+        width: map-get($map: $spacing, $key:'4xl' );
+        padding: map-get($map: $spacing, $key: 'xs' );
+
+        &:hover{
+            color: hsl($primary);
+        }
+    }
+
+
+
 }
 
-.status-success{
+.status-success {
     position: fixed;
     top: 50%;
     left: 50%;
     background-color: hsl($muted-foreground);
     color: hsl($primary);
-    padding: map-get($map: $spacing, $key:'xl' ) map-get($map: $spacing, $key: '3xl');
-    font-size: map-get($map: $font-sizes, $key: '2xl' );
+    padding: map-get($map: $spacing, $key: 'xl') map-get($map: $spacing, $key: '3xl');
+    font-size: map-get($map: $font-sizes, $key: '2xl');
+    z-index: 999;
 }
 
 .mailbox-container {

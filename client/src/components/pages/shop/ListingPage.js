@@ -81,7 +81,7 @@ const ListingPage = () => {
   }, [listings]);
 
   return (
-    <div className="listings">
+    <div className="listings-page">
       {/* Header Section */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-4">Find Second Hand Tractors</h1>
@@ -200,7 +200,8 @@ const ListingPage = () => {
 
 
         {/* Listings Grid */}
-        <div className="listings-container">
+        <div className="listings-container"
+        >
           {isLoading && (
             <p>Loading..</p>
           )}
@@ -218,7 +219,7 @@ const ListingPage = () => {
                 <img 
                   src={listing?.images[0].url || placeholder_img}
                   alt={listing.name}
-                  className="w-full h-48 object-cover"
+                  
                 />
                 <div className="p-4">
                   <h3 className="text-lg font-semibold mb-2">{listing.name}</h3>

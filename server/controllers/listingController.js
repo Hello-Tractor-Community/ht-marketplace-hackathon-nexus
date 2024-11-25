@@ -256,6 +256,7 @@ const deleteListing = asyncHandler(async (req, res) => {
 
     const listing = await Listing.findById(req.params.id);
     console.log("listing..", listing);
+    console.log("user..",req.user);
 
     if (!listing) {
         res.status(404);
@@ -263,9 +264,10 @@ const deleteListing = asyncHandler(async (req, res) => {
     }
 
     // Check authorization
-    if (listing.user.toString() !== req.user._id.toString()) {
+    // Authorization: Allow listing platform admin to delete listing
+    if (!req.user.platformRoles?.includes('admin')) {
         res.status(403);
-        throw new Error('Not authorized to delete this listing');
+        throw new Error('Not authorized to update this listing');
     }
 
     await Listing.findByIdAndDelete(req.params.id);
@@ -291,6 +293,7 @@ const updateListingStatus = asyncHandler(async (req, res) => {
     }
 
     const listing = await Listing.findById(req.params.id);
+    console.log("listing..",listing);
 
     if (!listing) {
         res.status(404);
@@ -309,6 +312,8 @@ const updateListingStatus = asyncHandler(async (req, res) => {
         { status },
         { new: true }
     );
+
+    console.log("status to be updated.");
 
     res.status(200).json({
         success: true,

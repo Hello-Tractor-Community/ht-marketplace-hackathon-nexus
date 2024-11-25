@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../../../../store/slices/authSlice';
 import logo from '../../../../../assets/images/logo/logo_v_2.png';
 
-import SellerListings from './SellerListings';
+import Listings from './Listings';
 import Sellers from './Sellers';
-import SellerMailbox from './SellerMailbox';
-import SellerDashboard from './SellerDashboard';
-import SellerProfile from './SellerProfile';
+import Mailbox from './Mailbox';
+import Dashboard from './Dashboard';
+import Profile from './Profile';
 
 import './AdminPortal.scss'; // Import CSS file for styling
 import Button from '../../../../common/button/Button';
@@ -96,14 +96,14 @@ const AdminPortal = () => {
 
           {isListingsVisible && (
             <>
-              <SellerListings />
+              <Listings />
 
             </>
           )
           }
           {isMailboxVisible && (
             <>
-              <SellerMailbox />
+              <Mailbox />
 
             </>
           )
@@ -118,14 +118,14 @@ const AdminPortal = () => {
 
           {isDashboardVisible && (
             <>
-              <SellerDashboard />
+              <Dashboard />
 
             </>
           )
           }
           {isProfileVisible && (
             <>
-              <SellerProfile />
+              <Profile />
 
             </>
           )

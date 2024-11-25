@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import './Sellers.scss'; // Import CSS file for styling
-import {FaTrash, FaCheck, FaEllipsisV } from 'react-icons/fa';
+import { FaTrash, FaCheck, FaEllipsisV, FaSync } from 'react-icons/fa';
 
 import { authService } from '../../../../../services/api/auth';
 import { userService } from '../../../../../services/api/user';
@@ -10,7 +10,7 @@ import ErrorOverlay from './ErrorOverlay';
 import Button from '../../../../common/button/Button';
 import Input from '../../../../common/input/Input';
 
-import ListingCard from './ListingCard';
+import SellerCard from './SellerCard';
 
 const Sellers = () => {
 
@@ -21,10 +21,13 @@ const Sellers = () => {
     const [sellerCreated, setSellerCreated] = useState(false);
     const [sellerError, setSellerError] = useState(false);
     const [fetchingComplete, setFetchingComplete] = useState(false);
-
+    const [statusUpdated, setStatusUpdated] = useState(false);
+    const [sellerAction, setSellerAction] = useState({});
     const [isAddSellerVisible, setIsAddSellerVisible] = useState(true);
     const [isSellersStatusVisible, setIsSellersStatusVisible] = useState(false);
-
+    const tableRef = useRef(null);
+    const [selectedSeller, setSelectedSeller] = useState(null);
+    const [selectedSellerFetched, setSelectedSellerFetched] = useState(false);
     const [newSeller, setNewSeller] = useState({
         firstName: '',  // For first name input
         lastName: '',   // For last name input
@@ -38,7 +41,7 @@ const Sellers = () => {
             state: '',   // For state input
             country: '', // For country input
         },
-       
+
         platformRoles: ['seller'], // Default platform role as 'seller'
     });
     const [isClipboardCopied, setIsClipboardCopied] = useState(false);
@@ -51,36 +54,56 @@ const Sellers = () => {
 
         if (token) {
             if (!fetchingComplete) {
-                fetchSellers(userId);
+                fetchSellers();
             }
 
         }
     }, [fetchingComplete, user]);
 
+    const handleRefresh = () => {
+        setIsLoading(true);
+        fetchSellers();
 
-    const [selectedListing, setSelectedListing] = useState(null);
-    const [selectedListingFetched, setSelectedListingFetched] = useState(false);
+    }
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+          setStatusUpdated(false);
+        }, 2000);
+        return () => clearTimeout(timeoutId);
+      }, [statusUpdated]);
+
+      useEffect(()=>{
+        console.log("Selected seller is..",selectedSeller);
+      },[selectedSeller]);
 
 
-    const handleRowClick = (listing) => {
+   
 
-        fetchSelectedSellers(listing._id);
-        setSelectedListing(listing); // Open overlay with the selected conversation
+    const toggleSellerAction = (index) => {
+        setSellerAction((prevState) => ({
+            ...prevState,
+            [index]: !prevState[index], // Toggle only the specific index
+        }));
     };
 
-    const fetchSelectedSellers = async (listingId) => {
+    const handleRowClick = (seller) => {
 
-        console.log("fetch listing..", listingId);
+        fetchSelectedSellers(seller._id);
+        setSelectedSeller(seller); // Open overlay with the selected conversation
+    };
+
+    const fetchSelectedSellers = async (sellerId) => {
+
+        console.log("fetch seller..", sellerId);
 
         try {
-            const response = await userService.getListingById(listingId);
-            console.log("selected listing..", response);
+            const response = await userService.getUserById(sellerId);
+            console.log("selected seller..", response);
             if (response.success) {
                 setIsLoading(false);
-                setSelectedListingFetched(true);
-                // setMsgCount(response.data.count);
-                // setMessages(response.data);
-
+                setSelectedSellerFetched(true);
+             
 
             }
 
@@ -91,7 +114,7 @@ const Sellers = () => {
         }
     };
 
-  
+
     useEffect(() => {
         if (isClipboardCopied) {
             setTimeout(() => {
@@ -100,9 +123,7 @@ const Sellers = () => {
         }
     }, [isClipboardCopied]);
 
-    const fetchSellers = async (userId) => {
-
-        console.log("fetch sellers.. userId", userId);
+    const fetchSellers = async () => {
 
         try {
             const response = await userService.getUsersByRole('seller');
@@ -140,9 +161,9 @@ const Sellers = () => {
             console.error('Invalid event object:', e);
             return;
         }
-    
+
         const { name, value } = e.target;
-    
+
         setNewSeller((prevSeller) => {
             const keys = name.split('.'); // Split the name (e.g., "phone.number" => ["phone", "number"])
             if (keys.length === 1) {
@@ -164,7 +185,26 @@ const Sellers = () => {
             }
         });
     };
-    
+
+    const resetSellerActions = () => {
+        setSellerAction({}); // Reset all indexes to false
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (tableRef.current && !tableRef.current.contains(event.target)) {
+                resetSellerActions(); // Reset actions if clicked outside the table
+            }
+        };
+
+        // Add event listener to detect clicks outside
+        document.addEventListener("click", handleClickOutside);
+
+        return () => {
+            // Clean up the event listener
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
 
 
     const onClose = () => {
@@ -173,7 +213,7 @@ const Sellers = () => {
 
     };
 
-   
+
     const handleSellerSubmit = async (e) => {
 
         e.preventDefault();
@@ -196,7 +236,7 @@ const Sellers = () => {
                     state: '',   // For state input
                     country: '', // For country input
                 },
-               
+
                 platformRoles: ['seller'], // Default platform role as 'seller'
             });
 
@@ -206,14 +246,14 @@ const Sellers = () => {
             try {
                 const sellerData = {
                     ...newSeller,
-                    
+
                 };
 
                 console.log("Payload being sent to backend:", sellerData);
 
                 const response = await userService.createUser(sellerData);
-                console.log("response listing..", response);
-                console.log("response listing success..", response.success);
+                console.log("response seller..", response);
+                console.log("response seller success..", response.success);
                 if (response.success) {
                     setSellerCreated(true);
                     setSellerError(false);
@@ -235,7 +275,7 @@ const Sellers = () => {
                         state: '',   // For state input
                         country: '', // For country input
                     },
-                    
+
                     platformRoles: ['seller'], // Default platform role as 'seller'
                 });
                 // Trigger fetchSellers with a delay
@@ -243,7 +283,7 @@ const Sellers = () => {
                     fetchSellers(user._id);
                 }, 2000); // 2-second delay
             } catch (error) {
-                console.error('Error creating listing:', error);
+                console.error('Error creating seller:', error);
             }
 
         }
@@ -262,17 +302,41 @@ const Sellers = () => {
                 fetchSellers(user._id);
             }, 2000); // 2-second delay
         } catch (error) {
-            console.error('Error deleting listing:', error);
+            console.error('Error deleting seller:', error);
         }
     };
 
-    const handleListingApprove = async (id) => {
-        console.log("Approve");
+    const handleSellerApprove = async (id) => {
+
+        try {
+
+            const result = await userService.updateUserStatus(id, 'active');
+            if (result.success) {
+                setStatusUpdated(true);
+            } else {
+                setSellerError(result.error);
+            }
+        } catch (err) {
+            setSellerError('Failed to update seller status');
+        }
     }
 
-    const handleListingReject = async (id) => {
-        console.log("To reject.");
+
+    const handleSellerReject = async (id) => {
+        try {
+
+            const result = await userService.updateUserStatus(id, 'suspended');
+            if (result.success) {
+                setStatusUpdated(true);
+            } else {
+                setSellerError(result.error);
+            }
+        } catch (err) {
+            setSellerError('Failed to update seller status');
+        }
     }
+
+
 
 
     function handleToggleVisibility(contentType) {
@@ -283,7 +347,7 @@ const Sellers = () => {
     };
 
     const closeOverlay = () => {
-        setSelectedListing(null); // Close the overlay
+        setSelectedSeller(null); // Close the overlay
     };
 
 
@@ -292,7 +356,7 @@ const Sellers = () => {
     return (
 
 
-        <div className='listings-container'>
+        <div className='sellers-container'>
 
             <div className='buttons-container'>
                 <Button onClick={() => handleToggleVisibility('addSeller')}
@@ -309,10 +373,10 @@ const Sellers = () => {
                 </Button>
             </div>
 
-            <div className='listings-content' >
+            <div className='sellers-content' >
 
                 {isAddSellerVisible && (
-                    <div className='new-listing-container'>
+                    <div className='new-seller-container'>
                         <div className='seller-content-form'>
                             <h3>Add new Seller</h3>
                             <form onSubmit={handleSellerSubmit}>
@@ -387,7 +451,7 @@ const Sellers = () => {
                                     variant="secondary"
                                     onChange={handleSellerChange}
                                 />
-                             
+
                                 {/* Set platformRoles to default to 'seller' */}
                                 <select
                                     name="platformRoles"
@@ -417,8 +481,17 @@ const Sellers = () => {
                 )}
 
                 {isSellersStatusVisible && (
-                    <div className='listings-status-container'>
-                        {isLoading && <p>Loading...</p>}
+                    <div className='sellers-status-container'>
+                        <Button variant='mini' onClick={handleRefresh}
+                        >
+                            <FaSync />
+                        </Button>
+
+                        {isLoading && <p style={{
+                            position: "fixed", top: '50%', left: '50%',
+                            color: "hsl(218 69% 1%)", backgroundColor: "hsl(0 0% 99%)",
+                            padding: "4px 8px"
+                        }}>Loading...</p>}
                         <h4>Sellers on database</h4>
                         {/* <select
                             name="platformRoles"
@@ -430,7 +503,7 @@ const Sellers = () => {
                             <option value="seller">Seller</option>
                             <option value="admin">Admin</option>
                         </select> */}
-                        <table>
+                        <table ref={tableRef}>
                             <thead>
                                 <tr>
                                     <th>First Name</th>
@@ -439,24 +512,54 @@ const Sellers = () => {
                                     <th>Phone</th>
                                     <th>Status</th>
                                     <th>Action</th>
-                                   
+
                                 </tr>
                             </thead>
                             <tbody>
-                                {sellers.map((seller) => (
+                                {sellers.map((seller, index) => (
                                     <tr key={seller._id}
                                         onClick={() => handleRowClick(seller)}
-                                        style={{ cursor: "pointer" }}
+                                        style={{ cursor: "pointer", }}
                                     >
-                                       
+
                                         <td>{seller.firstName}</td>
                                         <td>{seller.lastName}</td>
                                         <td>{seller.email}</td>
                                         <td>{seller.phone?.number || 'N/A'}</td>
                                         <td>{seller.accountStatus}</td>
                                         <td>
-                                            <button onClick={() => handleSellerDelete(seller._id)}><FaEllipsisV /> </button>
-                                           
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    toggleSellerAction(index);
+                                                }}
+                                                className='action'
+                                            >
+                                                <FaEllipsisV />
+                                            </button>
+
+                                            {sellerAction[index] && (
+                                                <div style={{ display: "flex" }}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                    }}>
+                                                    <button onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleSellerDelete(seller._id);
+                                                    }}
+                                                        className='reject'>
+                                                        <FaTrash />
+                                                    </button>
+                                                    <button onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleSellerApprove(seller._id);
+                                                    }}
+                                                        className='approve'>
+                                                        <FaCheck />
+                                                    </button>
+                                                </div>
+                                            )}
+
                                         </td>
 
                                     </tr>
@@ -466,13 +569,17 @@ const Sellers = () => {
                     </div>
                 )}
 
-                {selectedListingFetched && selectedListing && (
-                    <ListingCard
-                        listing={selectedListing}
+                {selectedSellerFetched && selectedSeller && (
+                    <SellerCard
+                        seller={selectedSeller}
                         closeOverlay={closeOverlay}
-                        handleApprove={handleListingApprove}
-                        handleReject={handleListingReject}
+                        handleApprove={handleSellerApprove}
+                        handleReject={handleSellerReject}
                     />
+                )}
+
+                {statusUpdated && (
+                    <p className='status-success'>Success!</p>
                 )}
 
                 {sellerCreated && !sellerError &&
