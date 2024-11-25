@@ -1,0 +1,79 @@
+@import '../../../../assets/styles/abstract/_variables';
+@import '../../../../assets/styles/abstract/_mixins';
+
+.admin-login-page,
+.admin-portal{
+    background-color: hsl($muted);
+    color: hsl($muted-foreground);
+    // font-family: $montserrat-font-family;
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: map-get($spacing, 'sm' );
+    align-items: center;
+    gap: map-get($spacing, 'xs' );
+    position: relative;
+
+    .header-container{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 98%;
+        padding: map-get($map: $spacing, $key: 'sm' );
+        background-color: hsl($background);
+
+        .logo-container{
+
+            width: calc(map-get($map: $font-sizes, $key: '4xl') * 4);
+            // position: absolute;
+            // top: map-get($map: $spacing, $key: 'sm' );
+            left: map-get($map: $spacing, $key: 'base' );
+            background-color: hsl($background);
+            color: hsl($muted);
+            border-radius: $radius;
+            overflow: hidden;
+            img{
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+        }
+        }
+        .admin-welcome{
+            color: hsl($primary);
+            font-size: map-get($map: $font-sizes, $key: 'lg');
+            span{
+                color: hsl($muted-foreground);
+            }
+        }
+        .logout-container{
+            width: 10%;
+            .admin-button-logout{
+                // position: absolute;
+                // top: map-get($map: $spacing, $key: 'base' );
+                right: map-get($map: $spacing, $key: 'lg' );
+            }
+        }
+      
+    }
+
+
+
+   
+   
+    }
+
+.admin-login-page{
+
+    input{
+        font-size:map-get($map: $font-sizes, $key:'sm' );
+        padding: map-get($map: $spacing, $key: 'lg');
+        border-radius: map-get($map: $spacing, $key: 'xs' );
+        
+ 
+        margin-right: map-get($map: $spacing, $key: 'sm')
+    }
+   
+}

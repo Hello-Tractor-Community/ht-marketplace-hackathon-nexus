@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 
 import AppWrapper from './AppWrapper';
-import AppProvider from './store/AppContext';
+
 import ScrollToTop from './components/common/navigation/ScrollToTop';
 
 // Import your components
@@ -16,7 +16,7 @@ import LandingPage from './components/pages/public/landing/LandingPage';
 import ListingPage from './components/pages/shop/ListingPage';
 import Home from './components/pages/public/home/Home';
 import ListingDetailPage from './components/pages/shop/ListingDetailPage';
-import Favourites from './components/pages/shop/Favourites';
+
 import RoleRoute from './components/common/protectedRoute/RoleRoute';
 
 // Auth Components
@@ -56,7 +56,7 @@ const AppContent = () => {
   return (
     <Router>
      
-      <AppProvider>
+   
         <div className="app">
           <ScrollToTop />
           <RedirectHandler />
@@ -66,7 +66,7 @@ const AppContent = () => {
             <Route path="/service" element={<Service />}/>
             <Route path="/listing/*" element={<ListingPage />} />
             <Route path="/listing/:id" element={<ListingDetailPage />} />
-            <Route path="/favs" element={<Favourites />} />
+           
             
             <Route path="login" element={<LoginPage />} />
               {/* <Route path="register" element={<UserRegister />} /> */}
@@ -111,7 +111,9 @@ const AppContent = () => {
               element={
                 <ProtectedRoute>
                   <RoleRoute platformRoles={['buyer']}>
+                    <Routes>
                   <Route path="portal" element={<BuyerPortal />} />
+                  </Routes>
                   
                   </RoleRoute>
                 </ProtectedRoute>
@@ -135,7 +137,7 @@ const AppContent = () => {
             <Route path='*' element={<ErrorPage />} />
           </Routes>
         </div>
-      </AppProvider>
+    
     </Router>
   );
 };

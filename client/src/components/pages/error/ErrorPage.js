@@ -1,7 +1,7 @@
 import React from 'react';
 import { replace, useNavigate } from 'react-router-dom';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
-import CartItem from '../shop/CartItem';
+
 import NavBar from '../../common/navigation/NavBar';
 import Button from '../../common/button/Button';
 import './ErrorPage.scss';
@@ -20,7 +20,7 @@ const ErrorPage = () => {
     return (
         <div className='error-page-container'>
             <NavBar />
-            <CartItem />
+     
             <div className='message-container'>
             <IoCheckmarkCircleOutline size={80} color="#75A358" className='icon'/>
                 <p className='message'>
