@@ -58,8 +58,13 @@ const server = http.createServer(app);
 const securityMiddleware = () => {
 
     // CORS Configuration
+    
+    // app.use(cors({
+    //     origin: CLIENT_URL,
+    //     credentials: true
+    // }));
     app.use(cors({
-        origin: CLIENT_URL,
+        origin: 'https://hellotractor-commerce-nexus.onrender.com',
         credentials: true
     }));
 
