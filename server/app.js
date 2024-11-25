@@ -58,14 +58,16 @@ const server = http.createServer(app);
 const securityMiddleware = () => {
 
     // CORS Configuration
-    
+
     // app.use(cors({
     //     origin: CLIENT_URL,
     //     credentials: true
     // }));
     app.use(cors({
-        origin: 'https://hellotractor-commerce-nexus.onrender.com',
-        credentials: true
+        origin: process.env.CLIENT_URL_PROD || '*',
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization']
     }));
 
 
@@ -131,16 +133,18 @@ const configureRoutes = () => {
     app.use('/api/v1/onboarding', companyOnboardingRoutes);
     app.use('/api/v1/images', imageProxyRoutes);
     app.use('/api/cloudinary', cloudinaryRoutes);
-    
+
 
     // Base Routes
     app.get('/', (req, res) => {
         res.send('<h1>hello tractor commerce server</h1>');
     });
 
-    // Catch-all route
+    // Redirect unknown routes
     app.use('*', (req, res) => {
-        res.redirect(`${CLIENT_URL}/*`);
+        res.status(404).json({
+            message: 'Route not found'
+        });
     });
 
     // Error handling middleware
@@ -235,27 +239,27 @@ const startServer = () => {
             }
         });
 
-        
+
         // Monitor event loop lag 
         let lastLoop = Date.now();
         const LAG_THRESHOLD = process.env.NODE_ENV === 'production' ? 1000 : 5000; // 1s in prod, 5s in dev
 
-        setInterval(() => {
-            const now = Date.now();
-            const lag = now - lastLoop;
-            if (lag > LAG_THRESHOLD) {
-                console.warn(`Significant event loop lag detected: ${lag}ms`);
-
-                // Optional: Add some context about what might be happening
-                const memoryUsage = process.memoryUsage();
-                console.warn('Memory usage:', {
-                    heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
-                    heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)}MB`,
-                    rss: `${Math.round(memoryUsage.rss / 1024 / 1024)}MB`
-                });
-            }
-            lastLoop = now;
-        }, 1000);
+        if (process.env.NODE_ENV !== 'production') {
+            setInterval(() => {
+                const now = Date.now();
+                const lag = now - lastLoop;
+                if (lag > LAG_THRESHOLD) {
+                    console.warn(`Significant event loop lag detected: ${lag}ms`);
+                    const memoryUsage = process.memoryUsage();
+                    console.warn('Memory usage:', {
+                        heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
+                        heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)}MB`,
+                        rss: `${Math.round(memoryUsage.rss / 1024 / 1024)}MB`
+                    });
+                }
+                lastLoop = now;
+            }, 1000);
+        }
     }
 };
 
