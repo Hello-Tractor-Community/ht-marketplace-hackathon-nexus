@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { FaGoogle } from 'react-icons/fa';
+import { FaGoogle, FaEyeSlash, FaEye } from 'react-icons/fa';
 import Button from '../../common/button/Button';
 import { registerUser, loginUser, setEmailVerified } from '../../../store/slices/authSlice';
 
@@ -10,8 +10,15 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const loginModalRef = useRef(null);
+  const [error, setError] = useState(false);
+  const errorMessage = 'Error logging user. Please try again.';
 
   const [passwordMismatch, setPasswordMismatch] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   const REACT_APP_API_URL =
     process.env.REACT_APP_ENVIRONMENT === 'development'
@@ -52,6 +59,15 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
     setPasswordMismatch(false);
   };
 
+  useEffect(() => {
+    if(error || passwordMismatch){
+      setTimeout(() => {
+        setError(false);
+        setPasswordMismatch(false);
+      }, 2000); 
+    }
+  }, [error, passwordMismatch]);
+
   const handleEmailSubmit = async (e) => {
 
     e.preventDefault();
@@ -64,6 +80,7 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
 
           return;
         }
+        
 
         const response = await dispatch(
           registerUser({
@@ -73,14 +90,18 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
         );
 
         if (!response.payload?.success || !response.payload.data?.user?._id) {
+          setError(true);
           throw new Error(response.payload?.data?.error || 'User registration failed');
+          
         }
+        onClose();
 
         navigate('/email-verification', {
           state: { email: formData.email, userId: response.payload.data?.user?._id },
         });
       } else {
         const result = await dispatch(loginUser(formData));
+       
 
         if (result.payload?.success) {
           const { user, businessDetails } = result.payload;
@@ -92,12 +113,27 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
               verifiedAt: user?.verifiedAt || new Date().toISOString(),
             })
           );
+          onClose();
+        }
+        else{
+          console.log("here.")
+          setError(true);
+          setFormData({
+            email: '',
+            password: '',
+            firstName: '',
+            lastName: '',
+            phone: '',
+            confirmPassword: '',
+            platformRoles: 'buyer',
+          });
+
         }
       }
-      onClose();
+      
     } catch (error) {
       console.error('Auth failed:', error);
-      alert(error.message || 'Authentication failed. Please try again.');
+     
     }
   };
 
@@ -137,20 +173,36 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
               placeholder="Email"
               value={formData.email}
               onChange={(e) => handleInputChange('email', e.target.value)}
+              style={{width: '70%'}}
             />
-            <input
-              type="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={(e) => handleInputChange('password', e.target.value)}
-            />
-            {isRegisterMode && (
+            <div>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={formData.password}
+                onChange={(e) => handleInputChange('password', e.target.value)}
+                style={{width: '70%'}}
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+            {isRegisterMode && (
+              <div>
+              <input
+                type={showPassword ? "text" : "password"}
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                style={{width: '70%'}}
               />
+           
+              </div>
+              
             )}
             {isRegisterMode && (
               <div className="role-selection">
@@ -177,7 +229,7 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
             </div>
 
             <Button variant="quaternary" onClick={handleGoogleAuth} className="w-full"
-            style={{marginBottom:'24px'}}>
+              style={{ marginBottom: '24px' }}>
               <FaGoogle />
               <span>{isRegisterMode ? '    Register with Google' : '    Continue with Google'}</span>
             </Button>
@@ -199,6 +251,7 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
             </div>
           )}
         </div>
+        {error && <div className="errorMessage"><p>{errorMessage}</p></div>}
       </div>
     )
   );

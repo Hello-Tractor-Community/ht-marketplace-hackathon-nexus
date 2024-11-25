@@ -28,7 +28,7 @@ const AdminPortal = () => {
   const handleLogout = () => {
     dispatch(logout());
     // Redirect the user to the home page
-    navigate('/home');
+    navigate('/');
   };
 
   function handleToggleVisibility(contentType) {

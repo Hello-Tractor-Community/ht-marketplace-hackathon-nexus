@@ -54,6 +54,7 @@ const ListingPage = () => {
   };
 
   const handleSearch = async () => {
+    setError(null);
     try {
       setIsLoading(true);
       const response = await listingService.searchListings({
@@ -93,11 +94,16 @@ const ListingPage = () => {
             placeholder="Search by name, make, or model..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch();
+              }
+            }}
 
           />
           <Button
-            onClick={handleSearch}
-            variant='secondary'
+            onClick={handleSearch} 
+                        variant='secondary'
           >
             <Search className="w-4 h-4" />
             Search
@@ -123,27 +129,27 @@ const ListingPage = () => {
               <h2 className="text-xl font-semibold mb-4">Filters</h2>
 
               <div className="space-y-4">
-                <div>
+                <div style={{display:"flex",flexDirection:'column'}}>
                   <label className="block text-sm font-medium mb-1">Category</label>
                   <input
                     type="text"
                     value={filters.category}
                     onChange={(e) => handleFilterChange('category', e.target.value)}
-                    className="w-full px-3 py-2 border rounded"
+                    className="w-full px-3 py-2 border rounded block"
                   />
                 </div>
 
-                <div>
+                <div style={{display:"flex",flexDirection:'column'}}>
                   <label className="block text-sm font-medium mb-1">Make</label>
                   <input
                     type="text"
                     value={filters.make}
                     onChange={(e) => handleFilterChange('make', e.target.value)}
-                    className="w-full px-3 py-2 border rounded"
+                    className="w-full px-3 py-2 border rounded "
                   />
                 </div>
 
-                <div>
+                <div style={{display:"flex",flexDirection:'column'}}>
                   <label className="block text-sm font-medium mb-1">Model</label>
                   <input
                     type="text"
@@ -193,6 +199,8 @@ const ListingPage = () => {
                     <span className="ml-2">New Arrivals</span>
                   </label>
                 </div>
+                <Button variant='mini' onClick={handleSearch}
+                style={{width: '50%', margin: '0 auto', padding:'40px auto'}}>Go</Button>
               </div>
             </div>
           </div>

@@ -179,7 +179,7 @@ const SellerListings = () => {
   };
 
   const handleImageChange = (e, index, field) => {
-    console.log("Updating image:", newListing.images);
+    // console.log("Updating image:", newListing.images);
     const updatedImages = [...newListing.images];
     updatedImages[index] = {
         ...updatedImages[index],
@@ -295,6 +295,10 @@ useEffect(() => {
         if (response.success) {
           setListingCreated(true);
           setListingError(false);
+          setNewListing((prev) => ({
+            ...prev,
+            images: [],
+        }));
         } else {
           setListingError(true);
           setListingCreated(false);

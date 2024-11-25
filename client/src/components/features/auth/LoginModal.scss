@@ -61,7 +61,16 @@
     margin: 0 10px; /* Space between the text and lines */
   }
   
-      
+    .errorMessage{
+        background-color: hsl($accent);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%); 
+        color:hsl($accent-foreground);
+        width: 75%;
+        margin: auto;
+    }  
 
 }
 

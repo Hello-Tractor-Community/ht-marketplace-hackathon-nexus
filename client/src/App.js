@@ -61,8 +61,8 @@ const AppContent = () => {
           <ScrollToTop />
           <RedirectHandler />
           <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<Home />} />
+            {/* <Route path="/" element={<LandingPage />} /> */}
+            <Route path="/" element={<Home />} />
             <Route path="/service" element={<Service />}/>
             <Route path="/listing/*" element={<ListingPage />} />
             <Route path="/listing/:id" element={<ListingDetailPage />} />

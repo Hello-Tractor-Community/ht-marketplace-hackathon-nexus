@@ -13,7 +13,7 @@ const ErrorPage = () => {
 
    const handleContinueShopping = () => {
         
-        navigate('/home', { replace: true });
+        navigate('/', { replace: true });
     };
 
 

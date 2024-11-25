@@ -26,19 +26,24 @@ const Footer = () => {
                     <h4>COMPANY</h4>
                     <ul>
                         <li>
-                            <Link to="https://hellotractor.com/" className="company-link">Home</Link>
+                            <a href="https://hellotractor.com/" className="company-link"
+                            target="_blank" rel="noopener noreferrer">Home Official</a>
                         </li>
                         <li>
-                            <Link to="https://hellotractor.com/team/" className="company-link">Team</Link>
+                            <a href="https://hellotractor.com/team/" className="company-link"
+                            target="_blank" rel="noopener noreferrer">Team</a>
                         </li>
                         <li>
-                            <Link to="https://hellotractor.com/blog/" className="company-link">Blog</Link>
+                            <a href="https://hellotractor.com/blog/" className="company-link"
+                            target="_blank" rel="noopener noreferrer">Blog</a>
                         </li>
                         <li>
-                            <Link to="https://hellotractor.com/careers/" className="company-link">Careers</Link>
+                            <a href="https://hellotractor.com/careers/" className="company-link"
+                            target="_blank" rel="noopener noreferrer">Careers</a>
                         </li>    
                         <li>
-                            <Link to="https://hellotractor.com/contact/" className="company-link">Contact</Link>
+                            <a href="https://hellotractor.com/contact/" className="company-link"
+                            target="_blank" rel="noopener noreferrer">Contact</a>
                         </li>                        
                     </ul>
                 </div>
@@ -46,16 +51,20 @@ const Footer = () => {
                     <h4>SOLUTIONS</h4>
                     <ul>
                         <li>
-                            <Link to="https://hellotractor.com/equipment-owners/" className='company-link'>Buy Technology</Link>
+                            <a href="https://hellotractor.com/equipment-owners/" className='company-link'
+                            target="_blank" rel="noopener noreferrer">Buy Technology</a>
                         </li>
                         <li>
-                            <Link to="https://hellotractor.com/dealer-pilot/" className='company-link'>Dealer Pilot Program</Link>
+                            <a href="https://hellotractor.com/dealer-pilot/" className='company-link'
+                            target="_blank" rel="noopener noreferrer">Dealer Pilot Program</a>
                         </li>
                         <li>
-                            <Link to="https://hellotractor.com/booking-agent/" className='company-link'>Become a Booking Agent</Link>
+                            <a href="https://hellotractor.com/booking-agent/" className='company-link'
+                            target="_blank" rel="noopener noreferrer">Become a Booking Agent</a>
                         </li>
                         <li>
-                            <Link to="https://hellotractor.com/financing/" className='company-link'>Calculate Equipment Returns</Link>
+                            <a href="https://hellotractor.com/financing/" className='company-link'
+                            target="_blank" rel="noopener noreferrer">Calculate Equipment Returns</a>
                         </li>
 
                     </ul>

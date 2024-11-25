@@ -13,7 +13,7 @@ import MessageStatus from './MessageStatus';
 import Footer from '../public/footer/Footer';
 import NavBar from '../../common/navigation/NavBar';
 import { Search } from 'lucide-react';
-import { FaExclamationTriangle } from 'react-icons/fa'
+import { FaExclamationTriangle, FaArrowLeft } from 'react-icons/fa'
 import placeholder_img from '../../../assets/images/tructors/placeholder.png';
 import './ListingDetailPage.scss';
 
@@ -335,22 +335,24 @@ const ListingDetailPage = () => {
         <div className='seller-details'>
           <div className="mt-6">
             {!showSellerInfo ? (
-              <button
+              <Button
                 onClick={() => fetchSellerInfo({ option: "show" })}
+                variant='secondary'
                 className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
               >
                 <User className="w-4 h-4" />
                 Display Seller Information
-              </button>
+              </Button>
             ) : (
               <div className="border rounded-lg p-4 mt-4">
-                <button
+                <Button
                   onClick={() => fetchSellerInfo({ option: "hide" })}
+                  variant='secondary'
                   className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
                 >
                   <User className="w-4 h-4" />
                   Hide Seller Information
-                </button>
+                </Button>
                 <h3 className="text-lg font-semibold mb-4">Seller Information</h3>
                 {seller && (
                   <>
@@ -412,6 +414,10 @@ const ListingDetailPage = () => {
           )}
         </div>
       </div>
+      <Button variant='tertiary'
+      onClick={() => window.history.back()}
+      style={{margin:'20px auto'}}
+      ><FaArrowLeft className="w-4 h-4" /> Go Back</Button>
 
       <Footer />
     </div>

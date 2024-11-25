@@ -5,9 +5,7 @@ const { protect } = require('../middleware/auth');
 const {
     createListing,
     getListings,
-
     getListingById,
-
     searchListings,
     updateListingStatus,
     updateListingInventory,
@@ -17,9 +15,9 @@ const {
 
 // Public routes
 router.get('/', getListings);
-router.get('/:id', getListingById);
 router.get('/search', searchListings);
-router.get('/listing', searchListings);
+router.get('/:id', getListingById);
+
 
 // Protected routes
 router.patch('/:id/status', protect, updateListingStatus);

@@ -140,6 +140,8 @@ const searchListings = asyncHandler(async (req, res) => {
     const { q, category, make, model, minPrice, maxPrice } = req.query;
     const query = {};
 
+    console.log("searchListings request..",req.query);
+
     // Text search
     if (q) {
         query.$text = { $search: q };

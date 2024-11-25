@@ -30,7 +30,7 @@ const LoginPage = () => {
       e.preventDefault();
       try {
         await dispatch(loginUser(formData)).unwrap();
-        navigate('/user/dashboard');
+        navigate('/');
       } catch (err) {
         // Error handled by Redux
       }

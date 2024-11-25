@@ -121,7 +121,7 @@ useEffect(() => {
   };
 
   const handleContinue = async () => {
-    navigate('/home', { replace: true });
+    navigate('/', { replace: true });
   }
 
 

@@ -38,7 +38,7 @@ const Navbar = ({ show = true }) => {
   return (
     <div className="navbar">
       <div className="navbar-content">
-        <Link to="/home" className="logo-link">
+        <Link to="/" className="logo-link">
           <img src={logo} alt="Logo" className="logo" />
         </Link>
       </div>
