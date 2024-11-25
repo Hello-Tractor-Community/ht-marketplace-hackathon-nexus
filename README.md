@@ -60,7 +60,7 @@ Complete this section in a separate ReadMe file `report.md`:
 ## **Submission Process 📥**
 
 1. Complete your project and ensure all deliverables are present in this repository.
-2. **Submission Deadline**: All submissions must be finalized by **Friday, Nov 22nd, 23:59 EAT**.
+2. **Submission Deadline**: All submissions must be finalized by **Tuesday, Nov 26th, 11:59 EAT**.
 3. Submit your repository by ensuring all deliverables are present in this repository and locked by the deadline.
 
 ---
