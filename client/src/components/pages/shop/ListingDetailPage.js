@@ -154,7 +154,9 @@ const ListingDetailPage = () => {
     console.log('Message to seller:', event.target.value);
   };
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (e) => {
+
+    e.preventDefault();
 
     setSellerInquiry(true);
 
@@ -178,11 +180,7 @@ const ListingDetailPage = () => {
             setMessageSendSuccess(true);
             // Hide success message after 5 seconds
             setTimeout(() => setMessageSendSuccess(false), 5000);
-            // Maybe update the UI to show the new message
-            // If you have a messages list, you might want to update it
-            // if (onMessageSent) {
-            //     onMessageSent(response.data);
-            // }
+           
           } else {
             // Handle error
             setError(response.error || 'Failed to send message');
@@ -393,7 +391,7 @@ const ListingDetailPage = () => {
                       onChange={updateMessageToSeller}
                     />
                     <Button variant='primary'
-                      onClick={handleSendMessage}
+                      onClick={ (e)=>{handleSendMessage(e)}}
                       disabled={isLoading || !messageToSeller}
                     >{isLoading ? 'Sending...' : 'Send Message'}</Button>
                   </>

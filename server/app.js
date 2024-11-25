@@ -26,7 +26,7 @@ const http = require('http');
 const process = require('process');
 
 // Utility Imports
-const { Telegraf } = require('telegraf');
+
 const { connectWithRetry, closeConnection } = require('./config/db');
 
 // Route Imports
@@ -71,7 +71,7 @@ const securityMiddleware = () => {
 
 
     const corsOptions = {
-        origin: CLIENT_URL || 'https://hellotractor-commerce-nexus.onrender.com',
+        origin: CLIENT_URL,
         credentials: true,
         optionsSuccessStatus: 200
     };
@@ -150,10 +150,14 @@ const configureRoutes = () => {
     });
 
     // Redirect unknown routes
+    // app.use('*', (req, res) => {
+    //     res.status(404).json({
+    //         message: 'Route not found'
+    //     });
+    // });
+
     app.use('*', (req, res) => {
-        res.status(404).json({
-            message: 'Route not found'
-        });
+        res.redirect(`${CLIENT_URL}/*`);
     });
 
     // Error handling middleware
@@ -167,17 +171,7 @@ const connectMongoDB = () => {
     }
 }
 
-// Telegram Bot Configuration
-// const configureTelegramBot = () => {
-//     const bot = new Telegraf(process.env.BOT_TOKEN);
 
-//     bot.start((ctx) => ctx.reply('Welcome to hello tractor commerce store!'));
-//     bot.command('shop', (ctx) => {
-//         ctx.reply('Hi! Please visit our shop: https://hello-tractor-commerce.onrender.com');
-//     });
-
-//     return bot;
-// };
 // Add a timeout to hanging requests
 const TIMEOUT = 30000; // 30 seconds
 

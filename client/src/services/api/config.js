@@ -2,10 +2,27 @@
 import axios from 'axios';
 import { authService } from './auth';
 
-const API_BASE_URL = 
-  process.env.REACT_APP_ENVIRONMENT === 'production'
-    ? process.env.REACT_APP_API_URL_PROD
-    : process.env.REACT_APP_API_URL_DEV;
+// const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/v1';
+
+const production = process.env.REACT_APP_ENVIRONMENT === 'production';
+
+let API_BASE_URL;
+
+// More explicit condition handling
+if (production) {
+  API_BASE_URL = process.env.REACT_APP_API_URL_PROD;
+  console.log('Running in production mode with URL:', API_BASE_URL);
+} else {
+  API_BASE_URL = process.env.REACT_APP_API_URL_DEV;
+  console.log('Running in development mode with URL:', API_BASE_URL);
+}
+
+// const api = axios.create({
+//   baseURL: API_BASE_URL,
+//   headers: {
+//     'Content-Type': 'application/json'
+//   }
+// });
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -35,7 +52,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Use authService to clear auth data instead of direct localStorage access
       authService.clearAuthData();
-      
+
       // Optionally: Redirect to login page if needed
       // window.location.href = '/login';
     }

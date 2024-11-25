@@ -5,9 +5,18 @@ import Button from '../../../../common/button/Button';
 import { FaCopy } from 'react-icons/fa';
 
 import axios from 'axios';
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
+const production = process.env.REACT_APP_ENVIRONMENT === 'production';
+let API_URL;
 
+// More explicit condition handling
+if (production) {
+    API_URL = process.env.REACT_APP_API_URL_CLOUDINARY_PROD;
+    console.log('Running in production mode with URL:', API_URL);
+  } else {
+    API_URL = process.env.REACT_APP_API_URL_CLOUDINARY_DEV;
+    console.log('Running in development mode with URL:', API_URL);
+  }
 
 const UploadWidgetClaudinary = ({ folderName, setFetchedImageUrl }) => {
 

@@ -37,21 +37,6 @@ import SellerPortal from './components/pages/portal/seller/portal/SellerPortal';
 import AdminPortal from './components/pages/portal/admin/portal/AdminPortal';
 import './App.css';
 
-function RedirectHandler() {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  React.useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    if (searchParams.get('tx_ref') || location.hash.includes('orderConfirmation')) {
-      console.log('Redirecting (App.js)...');
-      navigate('/orderConfirmation', { replace: true });
-    }
-  }, [location, navigate]);
-
-  return null;
-}
-
 const AppContent = () => {
   return (
     <Router>
@@ -59,7 +44,7 @@ const AppContent = () => {
    
         <div className="app">
           <ScrollToTop />
-          <RedirectHandler />
+          
           <Routes>
             {/* <Route path="/" element={<LandingPage />} /> */}
             <Route path="/" element={<Home />} />
