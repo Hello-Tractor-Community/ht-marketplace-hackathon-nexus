@@ -43,13 +43,23 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 
 // Middleware Imports
 const errorHandler = require('./middleware/errorHandler');
-// const { protect } = require('./middleware/auth');
+
 
 // Environment Configuration
 const production = process.env.NODE_ENV === 'production';
-const CLIENT_URL = production
-    ? process.env.CLIENT_URL_PROD
-    : process.env.CLIENT_URL_DEV;
+
+
+let CLIENT_URL;
+
+// More explicit condition handling
+if (production) {
+    CLIENT_URL = process.env.CLIENT_URL_PROD;
+    console.log('Running in production mode with URL:', CLIENT_URL);
+} else {
+    CLIENT_URL = process.env.CLIENT_URL_DEV;
+    console.log('Running in development mode with URL:', CLIENT_URL);
+}
+
 const PORT = process.env.PORT || 5000;
 
 // Initialize Express
@@ -59,10 +69,9 @@ const server = http.createServer(app);
 // Security Middleware Configuration
 const securityMiddleware = () => {
 
-    // CORS Configuration
 
     const corsOptions = {
-        origin: CLIENT_URL,
+        origin: CLIENT_URL || 'https://hellotractor-commerce-nexus.onrender.com',
         credentials: true,
         optionsSuccessStatus: 200
     };
