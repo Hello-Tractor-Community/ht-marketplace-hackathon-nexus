@@ -1,0 +1,239 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Hello tractor Marketplace API",
+    "version": "1.0.0",
+    "description": "API documentation for the Tractor Marketplace application"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000/api/v1",
+      "description": "Local Development"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "required": true
+          },
+          "lastName": {
+            "type": "string",
+            "required": true
+          },
+          "email": {
+            "type": "string",
+            "required": true
+          },
+          "platformRoles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "buyer",
+                "seller",
+                "admin"
+              ]
+            }
+          },
+          "accountStatus": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "active",
+              "suspended",
+              "deactivated"
+            ]
+          }
+        }
+      },
+      "Listing": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "sku": {
+            "type": "string",
+            "required": true
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "tractor",
+              "spare parts"
+            ],
+            "required": true
+          },
+          "description": {
+            "type": "string"
+          },
+          "make": {
+            "type": "string",
+            "required": true
+          },
+          "model": {
+            "type": "string",
+            "required": true
+          },
+          "price": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "required": true
+              },
+              "currency": {
+                "type": "string",
+                "default": "USD"
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "active",
+              "inactive",
+              "archived"
+            ],
+            "default": "draft"
+          }
+        }
+      },
+      "LoginCredentials": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "required": true
+          },
+          "password": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "Conversation": {
+        "type": "object",
+        "properties": {
+          "participants": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "User IDs participating in the conversation"
+            }
+          },
+          "listing": {
+            "type": "string",
+            "description": "Listing ID associated with the conversation"
+          },
+          "buyer": {
+            "type": "string",
+            "description": "Buyer User ID"
+          },
+          "seller": {
+            "type": "string",
+            "description": "Seller User ID"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "listing_inquiry",
+              "purchase_discussion",
+              "admin_welcome",
+              "admin_support"
+            ],
+            "default": "listing_inquiry"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "resolved",
+              "closed"
+            ],
+            "default": "active"
+          },
+          "lastMessage": {
+            "type": "string",
+            "description": "ID of the last message in the conversation"
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "conversation": {
+            "type": "string",
+            "description": "Conversation ID",
+            "required": true
+          },
+          "sender": {
+            "type": "string",
+            "description": "Sender User ID",
+            "required": true
+          },
+          "recipient": {
+            "type": "string",
+            "description": "Recipient User ID",
+            "required": true
+          },
+          "content": {
+            "type": "string",
+            "description": "Message content",
+            "required": true
+          },
+          "readBy": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "User IDs who have read the message"
+            }
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "fileType": {
+                  "type": "string",
+                  "enum": [
+                    "image",
+                    "document",
+                    "video"
+                  ]
+                }
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "sent",
+              "delivered",
+              "read"
+            ],
+            "default": "sent"
+          }
+        }
+      }
+    }
+  },
+  "paths": {},
+  "tags": []
+}

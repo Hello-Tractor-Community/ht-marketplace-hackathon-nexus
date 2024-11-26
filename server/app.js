@@ -28,6 +28,9 @@ const process = require('process');
 // Utility Imports
 
 const { connectWithRetry, closeConnection } = require('./config/db');
+// API documentation imports
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 
 // Route Imports
 const authRoutes = require('./routes/authRoutes');
@@ -58,6 +61,16 @@ if (production) {
 } else {
     CLIENT_URL = process.env.CLIENT_URL_DEV;
     console.log('Running in development mode with URL:', CLIENT_URL);
+}
+
+
+// Swagger Configuration
+if (production) {
+    SERVER_URL = process.env.SERVER_URL_PROD;
+    console.log('Running in production mode with URL:', SERVER_URL);
+} else {
+    SERVER_URL = process.env.SERVER_URL_DEV;
+    console.log('Running in development mode with URL:', SERVER_URL);
 }
 
 const PORT = process.env.PORT || 5000;
@@ -133,7 +146,23 @@ const performanceMiddleware = () => {
 
 // API Routes Configuration
 const configureRoutes = () => {
-    // API Endpoints
+   
+
+      // swagger UI endpoint
+    if (process.env.NODE_ENV !== 'production') {
+        app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+      } else if (process.env.ENABLE_SWAGGER === 'true') {
+        // Optional: Enable in production with an explicit env flag
+        app.use('/api-docs', 
+          protect,
+          authorize('admin'),
+          swaggerUi.serve, 
+          swaggerUi.setup(swaggerSpec)
+        );
+      }
+
+       // API Endpoints
+
     app.use('/api/v1/auth', authRoutes);
     app.use('/api/v1/dashboard', dashboardRoutes);
     app.use('/api/v1/users', userRoutes);

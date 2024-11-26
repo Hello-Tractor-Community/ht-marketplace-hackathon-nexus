@@ -99,6 +99,8 @@ The project is configured for deployment on Render. The client is hosted at: htt
 - Authentication: JWT
 - Deployment: Render
 
+## API End points
+Project's api end points documentation can be found here: https://hellotractor-commerce-nexus.onrender.com/api-docs
 ## Troubleshooting
 - Ensure all environment variables are correctly set
 - Check that MongoDB connection is stable
