@@ -82,6 +82,9 @@ The UI/UX elements are reflect the color and font style picks suggested for us t
 
 Upon joining this hackathon, we knew we would be in for a major week-long ride. And we did! We faced challenges including deciding which technology stack will suit our skillsets best, is scalable and will give us the best result in the short available week. But most of all, the biggest challenge was finding secure, fast and efficient ways for client-server side communication specially related to user roles and database data handling.
 
+# **! Side Info**
+We deployed the store on render for free. According to Render and our experiences, the server spins down with less activity. Meaning, it might take more time than needed to fetch data from the server. Render says, that could be upto 60 seconds. And so please be wary that there might be lags during listing fetches. 
+
 # **Lessons Learned**
 
 Here are few,
