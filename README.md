@@ -35,7 +35,7 @@ Please organize and complete the following deliverables within this repository:
 
 ### 2. **Demo Video**
 - Upload your video to YouTube, Vimeo, or as an mp4 file.
-- **Link to Demo Video**: [Insert your video link here]
+- **Link to Demo Video**: [[Insert your video link here](https://www.loom.com/share/623f66cbab8a4aa99a6919fabcbdc78f?sid=ed4fd291-bac2-4d53-865d-159fc0b88192)]
 
 ### 3. **Live Application URL**
 - Deploy your application to a platform like Vercel, Netlify, or AWS.
