@@ -28,9 +28,6 @@ const process = require('process');
 // Utility Imports
 
 const { connectWithRetry, closeConnection } = require('./config/db');
-// API documentation imports
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./config/swagger');
 
 // Route Imports
 const authRoutes = require('./routes/authRoutes');
@@ -77,6 +74,10 @@ const PORT = process.env.PORT || 5000;
 
 // Initialize Express
 const app = express();
+// API documentation imports
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
+
 const server = http.createServer(app);
 
 // Security Middleware Configuration
@@ -148,18 +149,8 @@ const performanceMiddleware = () => {
 const configureRoutes = () => {
    
 
-      // swagger UI endpoint
-    if (process.env.NODE_ENV !== 'production') {
-        app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-      } else if (process.env.ENABLE_SWAGGER === 'true') {
-        // Optional: Enable in production with an explicit env flag
-        app.use('/api-docs', 
-          protect,
-          authorize('admin'),
-          swaggerUi.serve, 
-          swaggerUi.setup(swaggerSpec)
-        );
-      }
+   // Swagger API endpoint for both development and production
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
        // API Endpoints
 
