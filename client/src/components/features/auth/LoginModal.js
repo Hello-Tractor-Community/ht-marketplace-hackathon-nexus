@@ -138,7 +138,7 @@ const LoginModal = ({ authType, onClose, handleAuthTypeSelect, showLoginModal, s
   };
 
   const handleGoogleAuth = () => {
-    window.location.href = `${REACT_APP_API_URL}/api/v1/auth/google`;
+    window.location.href = `${REACT_APP_API_URL}/auth/google`;
   };
 
   return (

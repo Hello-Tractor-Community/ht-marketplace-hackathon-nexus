@@ -36,7 +36,7 @@ const SocialAuthSuccess = () => {
         }));
 
         // Redirect to dashboard
-        navigate('/home');
+        navigate('/');
       } catch (error) {
         console.error('Error completing social auth:', error);
         navigate('/login?error=fetch_failed');
